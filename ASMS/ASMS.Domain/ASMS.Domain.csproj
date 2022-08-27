@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ASMS.Domain.Abstractions\ASMS.Domain.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
