@@ -6,17 +6,19 @@ namespace ASMS.Persistence.Abstractions
 {
     public interface IComplexQueryRespository<TEntity, in TKey> : IQueryRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
-        Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                               Expression<Func<TEntity, object>>? orderBy = null,
-                                               int? take = null);
+        IQueryable<TEntity> GetAll(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                   Expression<Func<TEntity, object>>? orderBy = null,
+                                   int? skip = null,
+                                   int? take = null);
 
-        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> query,
-                                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                             Expression<Func<TEntity, object>>? orderBy = null,
-                                             int? take = null);
+        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> query,
+                                 Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                 Expression<Func<TEntity, object>>? orderBy = null,
+                                 int? skip = null,
+                                 int? take = null);
 
         Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> query,
-                                      Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
+                                       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
 
         Task<bool> FindExistAsync(Expression<Func<TEntity, bool>> query,
                                   Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);

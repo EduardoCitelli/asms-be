@@ -9,14 +9,15 @@ namespace ASMS.Persistence
     public abstract class ComplexQueryRepository<TEntity, TKey>
         : QueryRepository<TEntity, TKey>, IComplexQueryRespository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
-        public ComplexQueryRepository(ASMSDbContext dbContext) 
+        public ComplexQueryRepository(ASMSDbContext dbContext)
             : base(dbContext)
         {
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                                            Expression<Func<TEntity, object>>? orderBy = null,
-                                                            int? take = null)
+        public IQueryable<TEntity> GetAll(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                          Expression<Func<TEntity, object>>? orderBy = null,
+                                          int? skip = null,
+                                          int? take = null)
         {
             var response = _dbSet.AsNoTracking();
 
@@ -26,29 +27,36 @@ namespace ASMS.Persistence
             if (orderBy != null)
                 response.OrderBy(orderBy);
 
+            if (skip != null)
+                response.Skip(skip.Value);
+
             if (take != null)
                 response.Take(take.Value);
 
-            return await response.ToListAsync();
+            return response;
         }
 
-        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> query,
-                                                          Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                                          Expression<Func<TEntity, object>>? orderBy = null,
-                                                          int? take = null)
+        public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> query,
+                                        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                        Expression<Func<TEntity, object>>? orderBy = null,
+                                        int? skip = null,
+                                        int? take = null)
         {
-            var queryable = _dbSet.AsNoTracking().Where(query);
+            var response = _dbSet.AsNoTracking().Where(query);
 
             if (include != null)
-                queryable = include(queryable);
+                response = include(response);
 
             if (orderBy != null)
-                queryable = queryable.OrderBy(orderBy);
+                response = response.OrderBy(orderBy);
+
+            if (skip != null)
+                response.Skip(skip.Value);
 
             if (take != null)
-                queryable = queryable.Take(take.Value);
+                response = response.Take(take.Value);
 
-            return await queryable.ToListAsync();
+            return response;
         }
 
         public async Task<bool> FindExistAsync(Expression<Func<TEntity, bool>> query,
