@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ASMS.Persistence\ASMS.Persistence.csproj" />
+    <ProjectReference Include="..\ASMS.QueryBuilders\ASMS.QueryBuilders.csproj" />
+  </ItemGroup>
+
 </Project>

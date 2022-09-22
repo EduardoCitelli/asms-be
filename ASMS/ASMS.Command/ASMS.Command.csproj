@@ -12,4 +12,8 @@
     <Folder Include="Requests\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ASMS.Services\ASMS.Services.csproj" />
+  </ItemGroup>
+
 </Project>

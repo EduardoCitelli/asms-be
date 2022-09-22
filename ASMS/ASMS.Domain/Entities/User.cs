@@ -15,5 +15,7 @@
         public bool IsEmailConfirmed { get; set; }
 
         public bool IsBlocked { get; set; }
+
+        public IEnumerable<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }

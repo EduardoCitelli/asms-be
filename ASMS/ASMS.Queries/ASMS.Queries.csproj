@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ASMS.Services\ASMS.Services.csproj" />
+  </ItemGroup>
+
 </Project>

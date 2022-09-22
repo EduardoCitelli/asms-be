@@ -3,8 +3,9 @@
     public enum RoleTypeEnum
     {
         SuperAdmin = 1,
-        Admin,
         Manager,
-        Client,
+        StaffMember,
+        Coach,
+        Member,
     }
 }
