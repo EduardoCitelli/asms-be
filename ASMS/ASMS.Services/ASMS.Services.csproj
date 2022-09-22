@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ASMS.Persistence\ASMS.Persistence.csproj" />
     <ProjectReference Include="..\ASMS.QueryBuilders\ASMS.QueryBuilders.csproj" />
+    <ProjectReference Include="..\ASMS.Services.Abstractions\ASMS.Services.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -80,5 +80,15 @@ namespace ASMS.Persistence
 
             return await queryable.SingleOrDefaultAsync(query);
         }
+
+        public int GetCount(Expression<Func<TEntity, bool>>? query = null)
+        {
+            var response = _dbSet.AsNoTracking();
+            
+            if (query != null)                
+                response.Where(query);
+
+            return response.Count();
+        }
     }
 }
