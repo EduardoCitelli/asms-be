@@ -15,9 +15,7 @@ namespace ASMS.Persistence
         }
 
         public IQueryable<TEntity> GetAll(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                          Expression<Func<TEntity, object>>? orderBy = null,
-                                          int? skip = null,
-                                          int? take = null)
+                                          Expression<Func<TEntity, object>>? orderBy = null)
         {
             var response = _dbSet.AsNoTracking();
 
@@ -27,20 +25,12 @@ namespace ASMS.Persistence
             if (orderBy != null)
                 response.OrderBy(orderBy);
 
-            if (skip != null)
-                response.Skip(skip.Value);
-
-            if (take != null)
-                response.Take(take.Value);
-
             return response;
         }
 
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> query,
                                         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                        Expression<Func<TEntity, object>>? orderBy = null,
-                                        int? skip = null,
-                                        int? take = null)
+                                        Expression<Func<TEntity, object>>? orderBy = null)
         {
             var response = _dbSet.AsNoTracking().Where(query);
 
@@ -49,12 +39,6 @@ namespace ASMS.Persistence
 
             if (orderBy != null)
                 response = response.OrderBy(orderBy);
-
-            if (skip != null)
-                response.Skip(skip.Value);
-
-            if (take != null)
-                response = response.Take(take.Value);
 
             return response;
         }

@@ -1,4 +1,6 @@
-﻿using ASMS.Domain;
+﻿using ASMS.CrossCutting.Extensions;
+using ASMS.CrossCutting.Utils;
+using ASMS.Domain;
 using ASMS.Infrastructure;
 using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
@@ -26,11 +28,9 @@ namespace ASMS.Services
             _isAuditEntity = typeof(TEntity) is AuditEntity<TKey>;
         }
 
-        protected async Task<BaseApiResponse<IEnumerable<TListDto>>> GetAllDtosBaseAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                                                                         int? skip = null,
-                                                                                         int? take = null)
+        protected async Task<BaseApiResponse<IEnumerable<TListDto>>> GetAllDtosBaseAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
-            var result = _repository.GetAll(include, null, skip, take);
+            var result = _repository.GetAll(include, null);
 
             var dtos = await _mapper.ProjectTo<TListDto>(result)
                                     .ToListAsync();
@@ -38,9 +38,22 @@ namespace ASMS.Services
             return new BaseApiResponse<IEnumerable<TListDto>>(dtos);
         }
 
+        protected async Task<BaseApiResponse<PagedList<TListDto>>> GetAllDtosBaseAsync(int pageNumber,
+                                                                                       int pageSize,
+                                                                                       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        {
+            var result = _repository.GetAll(include, null);
+
+            var dtos = _mapper.ProjectTo<TListDto>(result);
+
+            var pagedResponse = await ListExtensions.ToPagedList(dtos, pageNumber, pageSize);
+
+            return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
+        }
+
         protected async Task<BaseApiResponse<TSimpleDto>> GetOneDtoBaseAsync(TKey key)
         {
-            var result = await TryGetExistentEntityAsync(key);
+            var result = await TryGetExistentEntityByIdAsync(key);
 
             var dto = _mapper.Map<TSimpleDto>(result);
 
@@ -48,16 +61,28 @@ namespace ASMS.Services
         }
 
         protected async Task<BaseApiResponse<IEnumerable<TListDto>>> GetDtosByQueryBaseAsync(Expression<Func<TEntity, bool>> query,
-                                                                                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                                                                             int? skip = null,
-                                                                                             int? take = null)
+                                                                                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
-            var result = _repository.Find(query, include, null, skip, take);
+            var result = _repository.Find(query, include, null);
 
             var dtos = await _mapper.ProjectTo<TListDto>(result)
                                     .ToListAsync();
 
             return new BaseApiResponse<IEnumerable<TListDto>>(dtos);
+        }
+
+        protected async Task<BaseApiResponse<PagedList<TListDto>>> GetDtosByQueryBaseAsync(int pageNumber,
+                                                                                           int pageSize,
+                                                                                           Expression<Func<TEntity, bool>> query,
+                                                                                           Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        {
+            var result = _repository.Find(query, include, null);
+
+            var dtos = _mapper.ProjectTo<TListDto>(result);
+
+            var pagedResponse = await ListExtensions.ToPagedList(dtos, pageNumber, pageSize);
+
+            return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
         }
 
         protected async Task<BaseApiResponse<TSimpleDto>> CreateBaseAsync<TCreateDto>(TCreateDto request)
@@ -81,7 +106,7 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSimpleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, TKey key, Action<TUpdateDto, TEntity>? beforeAction = null)
         {
-            var entity = await TryGetExistentEntityAsync(key);
+            var entity = await TryGetExistentEntityByIdAsync(key);
 
             beforeAction?.Invoke(request, entity);
 
@@ -104,7 +129,7 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSimpleDto>> DeleteBaseAsync(TKey key)
         {
-            var entity = await TryGetExistentEntityAsync(key);
+            var entity = await TryGetExistentEntityByIdAsync(key);
 
             await _repository.DeleteAsync(entity);
 
@@ -121,7 +146,7 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
-        protected async Task<TEntity> TryGetExistentEntityAsync(TKey key)
+        protected async Task<TEntity> TryGetExistentEntityByIdAsync(TKey key)
         {
             var existentEntity = await _repository.GetByIdAsync(key);
 
