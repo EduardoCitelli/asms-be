@@ -1,4 +1,4 @@
-﻿namespace ASMS.Domain
+﻿namespace ASMS.CrossCutting.Enums
 {
     public enum RoleTypeEnum
     {

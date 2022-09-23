@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ASMS.CrossCutting\ASMS.CrossCutting.csproj" />
+  </ItemGroup>
+
 </Project>
