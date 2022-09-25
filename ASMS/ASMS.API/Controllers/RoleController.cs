@@ -8,6 +8,7 @@
 
     [ApiController]
     [Route("api/[controller]")]
+    [ServiceFilter(typeof(ValidateModelAttribute))]
     public class RoleController : ControllerBase
     {
         private readonly ILogger<RoleController> _logger;

@@ -54,7 +54,7 @@ namespace ASMS.Infrastructure
 
             var bodyAsText = await new StreamReader(httpContext.Request.Body).ReadToEndAsync();
 
-            httpContext.Request.Body.Position = 0;
+            //httpContext.Request.Body.Position = 0;
 
             return bodyAsText;
         }

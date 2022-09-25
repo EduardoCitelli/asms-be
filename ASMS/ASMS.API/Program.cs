@@ -1,39 +1,52 @@
 using ASMS.API.Extensions;
-using ASMS.Persistence;
-using ASMS.Persistence.Abstractions;
-using ASMS.Services;
+using ASMS.Infrastructure;
+using ASMS.Infrastructure.Automapper;
+using ASMS.Queries.Handlers;
 using MediatR;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var services = builder.Services;
 
-services.AddControllers();
+services.AddControllers()
+        .ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
+services.AddContext(builder.Configuration);
+
+services.InitializeCors();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-services.AddContext(builder.Configuration);
-services.AddMediatR(Assembly.GetExecutingAssembly());
+services.AddMediatR(typeof(GetAllRolesQueryHandler).Assembly);
+services.AddAutoMapper(typeof(ASMSProfile));
+services.AddSwagger();
 
-services.AddTransient<IRoleService, RoleService>();
-services.AddTransient<IUnitOfWork, UnitOfWork>();
+services.ConfigureServices();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    app.UseDeveloperExceptionPage();
+
+app.UseCors("CorsPolicy");
+
+app.UseSwaggerApplication();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseMiddleware<ExceptionsMiddleware>();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

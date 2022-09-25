@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ASMS.Command\ASMS.Command.csproj" />
+    <ProjectReference Include="..\ASMS.Infrastructure.Automapper\ASMS.Infrastructure.Automapper.csproj" />
     <ProjectReference Include="..\ASMS.Queries\ASMS.Queries.csproj" />
   </ItemGroup>
 
