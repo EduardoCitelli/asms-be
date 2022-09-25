@@ -2,7 +2,7 @@
 {
     using ASMS.DTOs.Roles;
     using ASMS.Infrastructure;
-    using ASMS.Queries.Requests.Roles;
+    using ASMS.Queries.Requests;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
 

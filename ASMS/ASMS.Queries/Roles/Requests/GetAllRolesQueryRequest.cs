@@ -1,4 +1,4 @@
-﻿namespace ASMS.Queries.Requests.Roles
+﻿namespace ASMS.Queries.Requests
 {
     using ASMS.DTOs.Roles;
     using ASMS.Infrastructure;
