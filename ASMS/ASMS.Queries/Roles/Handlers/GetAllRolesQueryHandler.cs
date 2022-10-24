@@ -3,7 +3,7 @@
     using ASMS.DTOs.Roles;
     using ASMS.Infrastructure;
     using ASMS.Queries.Requests;
-    using ASMS.Services;
+    using ASMS.Services.Abstractions;
     using MediatR;
     using System.Collections.Generic;
     using System.Threading;

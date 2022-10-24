@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ASMS.Command\ASMS.Command.csproj" />
     <ProjectReference Include="..\ASMS.Domain\ASMS.Domain.csproj" />
     <ProjectReference Include="..\ASMS.DTOs\ASMS.DTOs.csproj" />
   </ItemGroup>

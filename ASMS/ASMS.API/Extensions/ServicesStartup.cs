@@ -2,6 +2,7 @@
 using ASMS.Persistence;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services;
+using ASMS.Services.Abstractions;
 
 namespace ASMS.API.Extensions
 {
@@ -12,6 +13,8 @@ namespace ASMS.API.Extensions
             services.AddTransient<ValidateModelAttribute>();
 
             services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IUserService, UserService>();
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;

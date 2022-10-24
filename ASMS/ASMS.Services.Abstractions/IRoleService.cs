@@ -1,4 +1,4 @@
-﻿namespace ASMS.Services
+﻿namespace ASMS.Services.Abstractions
 {
     using ASMS.DTOs.Roles;
     using ASMS.Infrastructure;

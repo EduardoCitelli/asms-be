@@ -8,6 +8,7 @@ namespace ASMS.Infrastructure.Automapper
         public ASMSProfile()
         {
             this.AddRoleCofig();
+            this.AddUserCofig();
         }
     }
 }

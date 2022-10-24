@@ -1,6 +1,4 @@
 ﻿using ASMS.Infrastructure.Exceptions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
 
@@ -50,11 +48,11 @@ namespace ASMS.Infrastructure
 
         private async Task<string> GetRequest(HttpContext httpContext)
         {
-            //httpContext.Request.EnableBuffering();
+            httpContext.Request.EnableBuffering();
 
             var bodyAsText = await new StreamReader(httpContext.Request.Body).ReadToEndAsync();
 
-            //httpContext.Request.Body.Position = 0;
+            httpContext.Request.Body.Position = 0;
 
             return bodyAsText;
         }

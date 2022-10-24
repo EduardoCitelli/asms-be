@@ -85,12 +85,14 @@ namespace ASMS.Services
             return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
         }
 
-        protected async Task<BaseApiResponse<TSimpleDto>> CreateBaseAsync<TCreateDto>(TCreateDto request)
+        protected async Task<BaseApiResponse<TSimpleDto>> CreateBaseAsync<TCreateDto>(TCreateDto request, Action<TEntity>? actionBeforeSave = null)
         {
             var newEntity = _mapper.Map<TEntity>(request);
 
-            await _repository.AddAsync(newEntity);
+            if (actionBeforeSave != null)
+                actionBeforeSave.Invoke(newEntity);
 
+            await _repository.AddAsync(newEntity);
             var success = await _uow.SaveChangesAsync() > 0;
 
             if (success)

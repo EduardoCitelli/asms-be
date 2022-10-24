@@ -5,6 +5,7 @@
     using ASMS.DTOs.Roles;
     using ASMS.Infrastructure;
     using ASMS.Persistence.Abstractions;
+    using ASMS.Services.Abstractions;
     using AutoMapper;
     using System.Collections.Generic;
     using System.Threading.Tasks;

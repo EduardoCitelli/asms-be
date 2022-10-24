@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\" />
-    <Folder Include="Responses\" />
-    <Folder Include="Requests\" />
+    <Folder Include="Users\Responses\" />
   </ItemGroup>
 
   <ItemGroup>

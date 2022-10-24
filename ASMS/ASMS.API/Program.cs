@@ -1,4 +1,5 @@
 using ASMS.API.Extensions;
+using ASMS.Command.Users.Handlers;
 using ASMS.Infrastructure;
 using ASMS.Infrastructure.Automapper;
 using ASMS.Queries.Handlers;
@@ -22,8 +23,10 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
 services.AddMediatR(typeof(GetAllRolesQueryHandler).Assembly);
+services.AddMediatR(typeof(UserCreateHandler).Assembly);
 services.AddAutoMapper(typeof(ASMSProfile));
 services.AddSwagger();
+services.AddJwt(builder.Configuration);
 
 services.ConfigureServices();
 

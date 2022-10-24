@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using System;
 
 namespace ASMS.API.Extensions
 {
@@ -15,7 +12,7 @@ namespace ASMS.API.Extensions
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "ASMS API", Version = "v1" });
 
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme.",
@@ -39,7 +36,7 @@ namespace ASMS.API.Extensions
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
+                                Id = JwtBearerDefaults.AuthenticationScheme,
                             }
                         },
                         Array.Empty<string>()
