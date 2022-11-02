@@ -2,7 +2,6 @@
 using ASMS.DTOs.Users;
 using ASMS.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASMS.API.Controllers
@@ -20,7 +19,6 @@ namespace ASMS.API.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<BaseApiResponse<UserBasicDto>> Create([FromBody] UserCreateCommand createCommand)
         {
             return await _mediator.Send(createCommand);

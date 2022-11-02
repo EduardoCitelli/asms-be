@@ -1,28 +1,27 @@
-﻿using ASMS.Infrastructure.Exceptions;
+﻿using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using System.Net;
 using System.Text.Json;
 
-namespace ASMS.Infrastructure
+namespace ASMS.API.Middlewares
 {
-    public class ExceptionsMiddleware
+    public class ExceptionsMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly ILogger _logger;
         private string _request;
 
-        public ExceptionsMiddleware(RequestDelegate next, ILogger<ExceptionsMiddleware> logger)
+        public ExceptionsMiddleware(ILogger<ExceptionsMiddleware> logger)
         {
-            _next = next;
             _logger = logger;
             _request = string.Empty;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
         {
             try
             {
                 _request = await GetRequest(httpContext);
-                await _next(httpContext);
+                await next(httpContext);
             }
             catch (Exception ex)
             {

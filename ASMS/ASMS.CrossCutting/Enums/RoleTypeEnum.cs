@@ -7,5 +7,6 @@
         StaffMember,
         Coach,
         Member,
+        something
     }
 }

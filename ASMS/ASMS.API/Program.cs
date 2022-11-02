@@ -1,13 +1,11 @@
 using ASMS.API.Extensions;
 using ASMS.Command.Users.Handlers;
-using ASMS.Infrastructure;
 using ASMS.Infrastructure.Automapper;
 using ASMS.Queries.Handlers;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var services = builder.Services;
 
 services.AddControllers()
@@ -45,11 +43,13 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseMiddleware<ExceptionsMiddleware>();
+app.ConfigMiddlewares();
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
 
-app.Run();
+await app.CheckAndRunMigrations();
+
+await app.RunAsync();

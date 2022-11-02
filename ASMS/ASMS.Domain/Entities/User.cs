@@ -17,5 +17,7 @@
         public bool IsBlocked { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+
+        public ICollection<InstituteMemberNote> Notes { get; set; } = new List<InstituteMemberNote>();
     }
 }

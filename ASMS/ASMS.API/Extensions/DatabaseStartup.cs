@@ -14,5 +14,18 @@ namespace ASMS.API.Extensions
 
             return services;
         }
+
+        public async static Task<WebApplication> CheckAndRunMigrations(this WebApplication app)
+        {
+            var context = app.Services.CreateScope()
+                             .ServiceProvider.GetRequiredService<ASMSDbContext>();
+
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+
+            if (pendingMigrations != null && pendingMigrations.Any())
+                await context.Database.MigrateAsync();
+
+            return app;
+        }
     }
 }

@@ -15,8 +15,6 @@ namespace ASMS.Persistence.Configurations
             builder.Property(x => x.Description)
                    .IsRequired();
 
-            builder.HasQueryFilter(x => !x.IsDelete);
-
             builder.HasData(
                 new Role
                 {

@@ -1,5 +1,7 @@
-﻿using ASMS.Domain.Abstractions;
-using ASMS.Domain.Entities;
+﻿using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.Domain.Abstractions;
+using ASMS.Persistence.Conventions;
+using ASMS.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Reflection;
@@ -8,20 +10,29 @@ namespace ASMS.Persistence
 {
     public partial class ASMSDbContext : DbContext
     {
-        public ASMSDbContext(DbContextOptions options) 
+        private const string DateBdTypeName = "date";
+
+        private readonly IInstituteService _instituteService;
+
+        public ASMSDbContext(DbContextOptions options, IInstituteService instituteService)
             : base(options)
         {
+            _instituteService = instituteService;
         }
-
-        public virtual DbSet<User> Users => Set<User>();
-        public virtual DbSet<Role> Roles => Set<Role>();
-        public virtual DbSet<UserRole> UserRoles => Set<UserRole>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyApplicationQueryFilter(_instituteService.InstituteId);
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+            configurationBuilder.Properties<DateOnly>()
+                                .HaveConversion<DateOnlyConverter, DateOnlyComparer>()
+                                .HaveColumnType(DateBdTypeName);
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)

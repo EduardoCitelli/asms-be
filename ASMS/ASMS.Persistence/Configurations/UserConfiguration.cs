@@ -22,8 +22,6 @@ namespace ASMS.Persistence.Configurations
 
             builder.Property(x => x.Email)
                    .IsRequired();
-
-            builder.HasQueryFilter(x => !x.IsDelete);
         }
     }
 }

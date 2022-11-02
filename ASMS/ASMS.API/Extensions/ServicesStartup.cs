@@ -1,4 +1,7 @@
-﻿using ASMS.Infrastructure;
+﻿using ASMS.API.Middlewares;
+using ASMS.CrossCutting.Services;
+using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.Infrastructure;
 using ASMS.Persistence;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services;
@@ -16,6 +19,9 @@ namespace ASMS.API.Extensions
             services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IInstituteService, InstituteService>();
+            services.AddScoped<InstituteTenantMiddleware>();
+            services.AddScoped<ExceptionsMiddleware>();
 
             return services;
         }
