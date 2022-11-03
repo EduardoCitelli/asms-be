@@ -11,13 +11,18 @@ namespace ASMS.Persistence
     public partial class ASMSDbContext : DbContext
     {
         private const string DateBdTypeName = "date";
+        private const string DefaultEditedByUser = "admin";
 
         private readonly IInstituteService _instituteService;
+        private readonly IUserInfoService _userInfoService;
 
-        public ASMSDbContext(DbContextOptions options, IInstituteService instituteService)
+        public ASMSDbContext(DbContextOptions options,
+                             IInstituteService instituteService,
+                             IUserInfoService userInfoService)
             : base(options)
         {
             _instituteService = instituteService;
+            _userInfoService = userInfoService;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -52,6 +57,7 @@ namespace ASMS.Persistence
                     ((IAuditEntity)entry.Entity).CreatedAt = DateTime.UtcNow;
 
                 ((IAuditEntity)entry.Entity).UpdatedAt = DateTime.UtcNow;
+                ((IAuditEntity)entry.Entity).LastEditedBy = _userInfoService.Value?.UserName ?? DefaultEditedByUser;
             }
 
             var deletedEntries = ChangeTracker.Entries()
@@ -63,6 +69,7 @@ namespace ASMS.Persistence
 
                 ((IAuditEntity)entry.Entity).IsDelete = true;
                 ((IAuditEntity)entry.Entity).UpdatedAt = DateTime.UtcNow;
+                ((IAuditEntity)entry.Entity).LastEditedBy = _userInfoService.Value?.UserName ?? DefaultEditedByUser;
             }
         }
 

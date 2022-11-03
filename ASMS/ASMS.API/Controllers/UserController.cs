@@ -1,24 +1,22 @@
 ﻿using ASMS.Command.Users.Requests;
+using ASMS.CrossCutting.Enums;
 using ASMS.DTOs.Users;
 using ASMS.Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASMS.API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    [ServiceFilter(typeof(ValidateModelAttribute))]
-    public class UserController : ControllerBase
+    public class UserController : DefaultController
     {
-        private readonly IMediator _mediator;
-
         public UserController(IMediator mediator)
+            : base(mediator)
         {
-            _mediator = mediator;
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin}")]
         public async Task<BaseApiResponse<UserBasicDto>> Create([FromBody] UserCreateCommand createCommand)
         {
             return await _mediator.Send(createCommand);

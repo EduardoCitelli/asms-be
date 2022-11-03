@@ -27,6 +27,7 @@ services.AddSwagger();
 services.AddJwt(builder.Configuration);
 
 services.ConfigureServices();
+services.ConfigureMiddlewares();
 
 var app = builder.Build();
 
@@ -43,7 +44,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.ConfigMiddlewares();
+app.UseMiddlewares();
 
 app.UseEndpoints(endpoints =>
 {

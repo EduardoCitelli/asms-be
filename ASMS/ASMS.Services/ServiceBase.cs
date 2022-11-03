@@ -53,7 +53,7 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSimpleDto>> GetOneDtoBaseAsync(TKey key)
         {
-            var result = await TryGetExistentEntityByIdAsync(key);
+            var result = await TryGetExistentEntity(key);
 
             var dto = _mapper.Map<TSimpleDto>(result);
 
@@ -108,7 +108,7 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSimpleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, TKey key, Action<TUpdateDto, TEntity>? beforeAction = null)
         {
-            var entity = await TryGetExistentEntityByIdAsync(key);
+            var entity = await TryGetExistentEntity(key);
 
             beforeAction?.Invoke(request, entity);
 
@@ -131,7 +131,7 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSimpleDto>> DeleteBaseAsync(TKey key)
         {
-            var entity = await TryGetExistentEntityByIdAsync(key);
+            var entity = await TryGetExistentEntity(key);
 
             await _repository.DeleteAsync(entity);
 
@@ -148,7 +148,7 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
-        protected async Task<TEntity> TryGetExistentEntityByIdAsync(TKey key)
+        protected async Task<TEntity> TryGetExistentEntity(TKey key)
         {
             var existentEntity = await _repository.GetByIdAsync(key);
 
@@ -159,6 +159,19 @@ namespace ASMS.Services
             }
 
             return existentEntity;
+        }
+
+        protected async Task<TEntity> TryGetExistentEntity(Expression<Func<TEntity, bool>> expression)
+        {
+            var entity = await _repository.FindSingleAsync(expression);
+
+            if (entity == null)
+            {
+                var message = $"Entity: {_entityName} with expression: {expression.Name} does not exist";
+                throw new NotFoundException(message);
+            }
+
+            return entity;
         }
     }
 }
