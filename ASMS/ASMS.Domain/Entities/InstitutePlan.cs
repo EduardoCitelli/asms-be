@@ -8,7 +8,7 @@ namespace ASMS.Domain.Entities
 
         public long InstituteId { get; set; }
 
-        public bool IsCurrentPlan { get; set; }
+        public bool IsCurrentPlan { get; set; } = true;
 
         public DateOnly StartDate { get; set; }
 

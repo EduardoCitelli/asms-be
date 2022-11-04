@@ -14,4 +14,8 @@
     <ProjectReference Include="..\ASMS.Services\ASMS.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Plans\Handlers\" />
+  </ItemGroup>
+
 </Project>

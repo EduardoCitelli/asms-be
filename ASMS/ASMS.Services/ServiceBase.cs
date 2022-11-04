@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 
 namespace ASMS.Services
 {
-    public abstract class ServiceBase<TEntity, TKey, TSimpleDto, TListDto> where TEntity : BaseEntity<TKey>
+    public abstract class ServiceBase<TEntity, TKey, TSingleDto, TListDto> where TEntity : BaseEntity<TKey>
     {
         protected readonly IUnitOfWork _uow;
         protected readonly IRepository<TEntity, TKey> _repository;
@@ -38,9 +38,9 @@ namespace ASMS.Services
             return new BaseApiResponse<IEnumerable<TListDto>>(dtos);
         }
 
-        protected async Task<BaseApiResponse<PagedList<TListDto>>> GetAllDtosBaseAsync(int pageNumber,
-                                                                                       int pageSize,
-                                                                                       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        protected async Task<BaseApiResponse<PagedList<TListDto>>> GetAllDtosPaginatedBaseAsync(int pageNumber = 1,
+                                                                                                int pageSize = 10,
+                                                                                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
             var result = _repository.GetAll(include, null);
 
@@ -51,13 +51,13 @@ namespace ASMS.Services
             return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
         }
 
-        protected async Task<BaseApiResponse<TSimpleDto>> GetOneDtoBaseAsync(TKey key)
+        protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key)
         {
             var result = await TryGetExistentEntity(key);
 
-            var dto = _mapper.Map<TSimpleDto>(result);
+            var dto = _mapper.Map<TSingleDto>(result);
 
-            return new BaseApiResponse<TSimpleDto>(dto);
+            return new BaseApiResponse<TSingleDto>(dto);
         }
 
         protected async Task<BaseApiResponse<IEnumerable<TListDto>>> GetDtosByQueryBaseAsync(Expression<Func<TEntity, bool>> query,
@@ -71,10 +71,10 @@ namespace ASMS.Services
             return new BaseApiResponse<IEnumerable<TListDto>>(dtos);
         }
 
-        protected async Task<BaseApiResponse<PagedList<TListDto>>> GetDtosByQueryBaseAsync(int pageNumber,
-                                                                                           int pageSize,
-                                                                                           Expression<Func<TEntity, bool>> query,
-                                                                                           Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        protected async Task<BaseApiResponse<PagedList<TListDto>>> GetDtoPaginatedsByQueryBaseAsync(Expression<Func<TEntity, bool>> query,
+                                                                                                    int pageNumber = 1,
+                                                                                                    int pageSize = 10,
+                                                                                                    Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
             var result = _repository.Find(query, include, null);
 
@@ -85,7 +85,7 @@ namespace ASMS.Services
             return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
         }
 
-        protected async Task<BaseApiResponse<TSimpleDto>> CreateBaseAsync<TCreateDto>(TCreateDto request, Action<TEntity>? actionBeforeSave = null)
+        protected async Task<BaseApiResponse<TSingleDto>> CreateBaseAsync<TCreateDto>(TCreateDto request, Action<TEntity>? actionBeforeSave = null)
         {
             var newEntity = _mapper.Map<TEntity>(request);
 
@@ -97,8 +97,8 @@ namespace ASMS.Services
 
             if (success)
             {
-                var response = _mapper.Map<TSimpleDto>(newEntity);
-                return new BaseApiResponse<TSimpleDto>(response);
+                var response = _mapper.Map<TSingleDto>(newEntity);
+                return new BaseApiResponse<TSingleDto>(response);
             }
 
             var message = $"Problem while saving {_entityName} changes";
@@ -106,7 +106,7 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
-        protected async Task<BaseApiResponse<TSimpleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, TKey key, Action<TUpdateDto, TEntity>? beforeAction = null)
+        protected async Task<BaseApiResponse<TSingleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, TKey key, Action<TUpdateDto, TEntity>? beforeAction = null)
         {
             var entity = await TryGetExistentEntity(key);
 
@@ -120,8 +120,8 @@ namespace ASMS.Services
 
             if (success)
             {
-                var response = _mapper.Map<TSimpleDto>(entity);
-                return new BaseApiResponse<TSimpleDto>(response);
+                var response = _mapper.Map<TSingleDto>(entity);
+                return new BaseApiResponse<TSingleDto>(response);
             }
 
             var message = $"Problem while saving {_entityName} changes";
@@ -129,7 +129,7 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
-        protected async Task<BaseApiResponse<TSimpleDto>> DeleteBaseAsync(TKey key)
+        protected async Task<BaseApiResponse<TSingleDto>> DeleteBaseAsync(TKey key)
         {
             var entity = await TryGetExistentEntity(key);
 
@@ -139,8 +139,8 @@ namespace ASMS.Services
 
             if (success)
             {
-                var response = _mapper.Map<TSimpleDto>(entity);
-                return new BaseApiResponse<TSimpleDto>(response);
+                var response = _mapper.Map<TSingleDto>(entity);
+                return new BaseApiResponse<TSingleDto>(response);
             }
 
             var message = $"Problem while deleting {_entityName} changes";

@@ -16,7 +16,6 @@ namespace ASMS.API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [Authorize(Roles = "Admion")]
         public async Task<BaseApiResponse<AuthResponseDto>> Login(AuthLoginCommand command)
         {
             return await _mediator.Send(command);

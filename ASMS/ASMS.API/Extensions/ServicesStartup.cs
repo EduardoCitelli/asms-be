@@ -16,6 +16,7 @@ namespace ASMS.API.Extensions
 
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPlanService, PlanService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IInstituteService, InstituteService>();
