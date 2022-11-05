@@ -10,6 +10,7 @@ namespace ASMS.Infrastructure.Automapper
             this.AddRoleCofig();
             this.AddUserCofig();
             this.AddAuthCofig();
+            this.AddPlanConfig();
         }
     }
 }

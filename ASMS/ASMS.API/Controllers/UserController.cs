@@ -16,7 +16,8 @@ namespace ASMS.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = RoleTypes.SuperAdmin)]
+        //[Authorize(Roles = RoleTypes.SuperAdmin)]
+        [AllowAnonymous]
         public async Task<BaseApiResponse<UserBasicDto>> Create([FromBody] UserCreateCommand createCommand)
         {
             return await _mediator.Send(createCommand);
