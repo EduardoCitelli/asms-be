@@ -25,5 +25,6 @@ namespace ASMS.Services
                                                                     int pageNumber = 1,
                                                                     int pageSize = 10,
                                                                     Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null);
+        Task<bool> ExistEntityAsync(Expression<Func<Plan, bool>> expression);
     }
 }

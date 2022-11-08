@@ -36,6 +36,11 @@ namespace ASMS.Services
             return await GetOneDtoBaseAsync(id);
         }
 
+        public async Task<bool> ExistEntityAsync(Expression<Func<Plan, bool>> expression)
+        {
+            return await ExistAsync(expression);
+        }
+
         public async Task<BaseApiResponse<PlanSingleDto>> CreateAsync(PlanCreateDto planCreateDto)
         {
             return await CreateBaseAsync(planCreateDto);

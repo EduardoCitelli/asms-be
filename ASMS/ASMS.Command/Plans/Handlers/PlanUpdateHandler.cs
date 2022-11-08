@@ -1,6 +1,7 @@
 ﻿using ASMS.Command.Plans.Request;
 using ASMS.DTOs.Plans;
 using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Services;
 using MediatR;
 
@@ -17,7 +18,9 @@ namespace ASMS.Command.Plans.Handlers
 
         public async Task<BaseApiResponse<PlanSingleDto>> Handle(PlanUpdateCommand request, CancellationToken cancellationToken)
         {
-            return await _planService.UpdateAsync(request);
+            var nameAlreadyExist = await _planService.ExistEntityAsync(x => x.Name.ToLower() == request.Name.ToLower() && x.Id != request.Id);
+
+            return nameAlreadyExist ? throw new BadRequestException("Plan name already exist") : await _planService.UpdateAsync(request);
         }
     }
 }

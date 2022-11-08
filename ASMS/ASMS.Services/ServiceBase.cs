@@ -173,5 +173,15 @@ namespace ASMS.Services
 
             return entity;
         }
+
+        protected async Task<bool> ExistAsync(TKey key)
+        {
+            return await _repository.ExistAsync(key);
+        }
+
+        protected async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return await _repository.FindExistAsync(expression);
+        }
     }
 }
