@@ -3,9 +3,9 @@ using ASMS.DTOs.Roles;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
-    public static class RoleConfig
+    internal static class RoleConfig
     {
-        public static ASMSProfile AddRoleCofig(this ASMSProfile profile)
+        internal static ASMSProfile AddRoleConfig(this ASMSProfile profile)
         {
             #region Map To Entity
             #endregion

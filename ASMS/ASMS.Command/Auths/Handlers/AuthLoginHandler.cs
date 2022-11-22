@@ -1,4 +1,4 @@
-﻿using ASMS.Command.Auths.Requests;
+﻿using ASMS.Command.Auths.Commands;
 using ASMS.DTOs.Auth;
 using ASMS.Infrastructure;
 using ASMS.Services.Abstractions;

@@ -2,7 +2,7 @@
 using ASMS.Infrastructure;
 using MediatR;
 
-namespace ASMS.Command.Users.Requests
+namespace ASMS.Command.Users.Commands
 {
     public class UserCreateCommand : UserCreateDto, IRequest<BaseApiResponse<UserBasicDto>>
     {

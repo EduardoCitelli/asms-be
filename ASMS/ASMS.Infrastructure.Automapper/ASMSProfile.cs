@@ -7,9 +7,10 @@ namespace ASMS.Infrastructure.Automapper
     {
         public ASMSProfile()
         {
-            this.AddRoleCofig();
-            this.AddUserCofig();
-            this.AddAuthCofig();
+            this.AddRoleConfig();
+            this.AddInstituteConfig();
+            this.AddUserConfig();
+            this.AddAuthConfig();
             this.AddPlanConfig();
         }
     }

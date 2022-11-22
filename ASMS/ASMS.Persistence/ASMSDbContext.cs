@@ -13,11 +13,11 @@ namespace ASMS.Persistence
         private const string DateBdTypeName = "date";
         private const string DefaultEditedByUser = "admin";
 
-        private readonly IInstituteService _instituteService;
+        private readonly IInstituteIdService _instituteService;
         private readonly IUserInfoService _userInfoService;
 
         public ASMSDbContext(DbContextOptions options,
-                             IInstituteService instituteService,
+                             IInstituteIdService instituteService,
                              IUserInfoService userInfoService)
             : base(options)
         {

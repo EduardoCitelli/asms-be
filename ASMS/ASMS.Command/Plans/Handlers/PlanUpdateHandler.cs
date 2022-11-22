@@ -1,4 +1,4 @@
-﻿using ASMS.Command.Plans.Request;
+﻿using ASMS.Command.Plans.Commands;
 using ASMS.DTOs.Plans;
 using ASMS.Infrastructure;
 using ASMS.Infrastructure.Exceptions;

@@ -31,32 +31,22 @@ namespace ASMS.Services
             _authSettings = options.Value;
         }
 
-        public async Task<BaseApiResponse<bool>> ExistUserName(string userName)
+        public async Task ValidateExistentInfo(string userName, string email)
         {
-            var result = await _repository.FindExistAsync(x => x.UserName == userName);
-            return new BaseApiResponse<bool>(result);
-        }
+            var isUserExistent = await ExistAsync(x => x.UserName == userName);
 
-        public async Task<BaseApiResponse<bool>> ExistEmail(string email)
-        {
-            var result = await _repository.FindExistAsync(x => x.Email == email.ToLower());
-            return new BaseApiResponse<bool>(result);
+            if (isUserExistent)
+                throw new BadRequestException($"Username {userName} already exist");
+
+            var isEmailExistent = await ExistAsync(x => x.Email == email);
+
+            if (isEmailExistent)
+                throw new BadRequestException($"Email {email} already exist");
         }
 
         public async Task<BaseApiResponse<UserBasicDto>> CreateUser(UserCreateDto dto)
         {
-            Action<User> action = x =>
-            {
-                foreach (var role in dto.Roles)
-                {
-                    x.UserRoles.Add(new UserRole
-                    {
-                        RoleId = role,
-                    });
-                }
-            };
-
-            return await CreateBaseAsync(dto, action);
+            return await CreateBaseAsync(dto);
         }
 
         public async Task<BaseApiResponse<AuthResponseDto>> LoginAsync(AuthLoginDto dto)

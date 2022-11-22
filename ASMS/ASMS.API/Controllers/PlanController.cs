@@ -1,4 +1,4 @@
-﻿using ASMS.Command.Plans.Request;
+﻿using ASMS.Command.Plans.Commands;
 using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Extensions;
 using ASMS.CrossCutting.Utils;
@@ -43,7 +43,7 @@ namespace ASMS.API.Controllers
         [Authorize(Roles = RoleTypes.SuperAdmin)]
         public async Task<BaseApiResponse<PlanSingleDto>> UpdatePlan([FromRoute] int planId, [FromBody] PlanCreateCommand command)
         {
-            var updateCommand = DtoMapperExtension.MapTo<PlanUpdateCommand>(command);
+            var updateCommand = command.MapTo<PlanUpdateCommand>();
             updateCommand.Id = planId;
 
             return await _mediator.Send(updateCommand);

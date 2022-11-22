@@ -1,4 +1,4 @@
-﻿using ASMS.Command.Users.Requests;
+﻿using ASMS.Command.Users.Commands;
 using ASMS.CrossCutting.Enums;
 using ASMS.DTOs.Users;
 using ASMS.Infrastructure;

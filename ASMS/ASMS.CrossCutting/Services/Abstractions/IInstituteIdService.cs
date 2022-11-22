@@ -1,6 +1,6 @@
 ﻿namespace ASMS.CrossCutting.Services.Abstractions
 {
-    public interface IInstituteService
+    public interface IInstituteIdService
     {
         long InstituteId { get; }
 

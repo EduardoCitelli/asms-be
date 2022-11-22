@@ -2,7 +2,7 @@
 
 namespace ASMS.CrossCutting.Services
 {
-    public class InstituteService : IInstituteService
+    public class InstituteIdService : IInstituteIdService
     {
         public long InstituteId { get; private set; } = 1;
 

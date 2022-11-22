@@ -2,7 +2,7 @@
 using ASMS.Infrastructure;
 using MediatR;
 
-namespace ASMS.Command.Plans.Request
+namespace ASMS.Command.Plans.Commands
 {
     public class PlanDeleteCommand : IRequest<BaseApiResponse<PlanSingleDto>>
     {

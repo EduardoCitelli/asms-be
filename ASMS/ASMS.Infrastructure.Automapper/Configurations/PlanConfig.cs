@@ -3,9 +3,9 @@
     using ASMS.Domain.Entities;
     using ASMS.DTOs.Plans;
 
-    public static class PlanConfig
+    internal static class PlanConfig
     {
-        public static ASMSProfile AddPlanConfig(this ASMSProfile profile)
+        internal static ASMSProfile AddPlanConfig(this ASMSProfile profile)
         {
             #region Map To Entity
             profile.CreateMap<PlanCreateDto, Plan>();

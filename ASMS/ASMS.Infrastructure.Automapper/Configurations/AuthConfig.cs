@@ -3,9 +3,9 @@ using ASMS.DTOs.Auth;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
-    public static class AuthConfig
+    internal static class AuthConfig
     {
-        public static ASMSProfile AddAuthCofig(this ASMSProfile profile)
+        internal static ASMSProfile AddAuthConfig(this ASMSProfile profile)
         {
             #region Map To Entity
             #endregion

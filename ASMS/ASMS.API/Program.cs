@@ -1,5 +1,6 @@
 using ASMS.API.Extensions;
 using ASMS.Command.Users.Handlers;
+using ASMS.CrossCutting.Utils;
 using ASMS.Infrastructure.Automapper;
 using ASMS.Queries.Handlers;
 using MediatR;
@@ -12,6 +13,10 @@ services.AddControllers()
         .ConfigureApiBehaviorOptions(options =>
         {
             options.SuppressModelStateInvalidFilter = true;
+        })
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
         });
 
 services.AddContext(builder.Configuration);

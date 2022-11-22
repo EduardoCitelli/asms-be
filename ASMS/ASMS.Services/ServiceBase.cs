@@ -179,9 +179,10 @@ namespace ASMS.Services
             return await _repository.ExistAsync(key);
         }
 
-        protected async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> expression)
+        protected async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> expression,
+                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
-            return await _repository.FindExistAsync(expression);
+            return await _repository.FindExistAsync(expression, include);
         }
     }
 }
