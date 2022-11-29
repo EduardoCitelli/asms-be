@@ -2,6 +2,7 @@
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Activities;
 using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
@@ -22,7 +23,13 @@ namespace ASMS.Services
 
         public async Task<BaseApiResponse<ActivitySingleDto>> CreateAsync(ActivityCreateDto dto)
         {
-            var action = (Activity entity) => { entity.InstituteId = _instituteIdService.InstituteId; };
+            var action = (Activity entity) => 
+            {
+                if (_instituteIdService.InstituteId <= 0)
+                    throw new BadRequestException("Not received Instititute Id");
+
+                entity.InstituteId = _instituteIdService.InstituteId; 
+            };
 
             return await CreateBaseAsync(dto, action);
         }
