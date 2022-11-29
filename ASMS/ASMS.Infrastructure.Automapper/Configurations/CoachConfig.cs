@@ -14,7 +14,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
             #region Map From Entity
             profile.CreateMap<Coach, CoachSingleDto>();
-            profile.CreateMap<Coach, CoachListDto>();
+            profile.CreateMap<Coach, CoachListDto>()
+                   .ForMember(dto => dto.FullName, conf => conf.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"));
             #endregion
 
             return profile;
