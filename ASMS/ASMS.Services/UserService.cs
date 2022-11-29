@@ -1,4 +1,5 @@
 ﻿using ASMS.CrossCutting.Constants;
+using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Settings;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Auth;
@@ -25,8 +26,9 @@ namespace ASMS.Services
 
         public UserService(IUnitOfWork uow,
                            IMapper mapper,
+                           IInstituteIdService instituteIdService,
                            IOptions<AuthSettings> options)
-            : base(uow, nameof(User), mapper)
+            : base(uow, nameof(User), mapper, instituteIdService)
         {
             _authSettings = options.Value;
         }

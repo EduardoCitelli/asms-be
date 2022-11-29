@@ -2,6 +2,6 @@
 {
     public interface IIsInstituteEntity : ISoftDeleteEntity
     {
-        public long InstituteId { get; }
+        public long InstituteId { get; set; }
     }
 }

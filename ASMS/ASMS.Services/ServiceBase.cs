@@ -1,6 +1,8 @@
 ﻿using ASMS.CrossCutting.Extensions;
+using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Utils;
 using ASMS.Domain;
+using ASMS.Domain.Abstractions;
 using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Infrastructure.Exceptions;
@@ -17,16 +19,18 @@ namespace ASMS.Services
         protected readonly IUnitOfWork _uow;
         protected readonly IRepository<TEntity, TKey> _repository;
         protected readonly IMapper _mapper;
+        protected readonly IInstituteIdService _instituteIdService;
         protected readonly string _entityName;
         protected readonly bool _isAuditEntity;
 
-        protected ServiceBase(IUnitOfWork uow, string entityName, IMapper mapper)
+        protected ServiceBase(IUnitOfWork uow, string entityName, IMapper mapper, IInstituteIdService instituteIdService)
         {
             _uow = uow;
             _repository = _uow.GetRepository<TEntity, TKey>()!;
             _mapper = mapper;
             _entityName = entityName;
             _isAuditEntity = typeof(TEntity) is AuditEntity<TKey>;
+            _instituteIdService = instituteIdService;
         }
 
         protected async Task<BaseApiResponse<IEnumerable<TListDto>>> GetAllDtosBaseAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
@@ -96,6 +100,14 @@ namespace ASMS.Services
             }
 
             var newEntity = _mapper.Map<TEntity>(request);
+
+            if (newEntity is IIsInstituteEntity instituteEntity)
+            {
+                if (_instituteIdService.InstituteId <= 0)
+                    throw new BadRequestException($"Not received Instititute Id");
+
+                instituteEntity.InstituteId = _instituteIdService.InstituteId;
+            }
 
             if (actionBeforeSave != null)
                 actionBeforeSave.Invoke(newEntity);

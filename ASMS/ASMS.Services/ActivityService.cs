@@ -2,7 +2,6 @@
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Activities;
 using ASMS.Infrastructure;
-using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
@@ -13,25 +12,14 @@ namespace ASMS.Services
 {
     public class ActivityService : ServiceBase<Activity, long, ActivitySingleDto, ActivityListDto>, IActivityService
     {
-        private readonly IInstituteIdService _instituteIdService;
-
         public ActivityService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
-            : base(uow, nameof(Activity), mapper)
+            : base(uow, nameof(Activity), mapper, instituteIdService)
         {
-            _instituteIdService = instituteIdService;
         }
 
         public async Task<BaseApiResponse<ActivitySingleDto>> CreateAsync(ActivityCreateDto dto)
         {
-            var action = (Activity entity) => 
-            {
-                if (_instituteIdService.InstituteId <= 0)
-                    throw new BadRequestException("Not received Instititute Id");
-
-                entity.InstituteId = _instituteIdService.InstituteId; 
-            };
-
-            return await CreateBaseAsync(dto, action);
+            return await CreateBaseAsync(dto);
         }
 
         public async Task<BaseApiResponse<ActivitySingleDto>> UpdateAsync(ActivityUpdateDto dto)

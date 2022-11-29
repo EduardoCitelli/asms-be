@@ -1,4 +1,5 @@
-﻿using ASMS.Domain.Entities;
+﻿using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.Domain.Entities;
 using ASMS.DTOs.Rooms;
 using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
@@ -11,8 +12,8 @@ namespace ASMS.Services
 {
     public class RoomService : ServiceBase<Room, long, RoomSingleDto, RoomListDto>, IRoomService
     {
-        public RoomService(IUnitOfWork uow, IMapper mapper)
-            : base(uow, nameof(Room), mapper)
+        public RoomService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
+            : base(uow, nameof(Room), mapper, instituteIdService)
         {
         }
 

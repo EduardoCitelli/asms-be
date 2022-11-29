@@ -1,6 +1,7 @@
 ﻿namespace ASMS.Services
 {
     using ASMS.CrossCutting.Enums;
+    using ASMS.CrossCutting.Services.Abstractions;
     using ASMS.Domain.Entities;
     using ASMS.DTOs.Roles;
     using ASMS.Infrastructure;
@@ -12,8 +13,8 @@
 
     public class RoleService : ServiceBase<Role, RoleTypeEnum, RoleDto, RoleListDto>, IRoleService
     {
-        public RoleService(IUnitOfWork uow, IMapper mapper)
-            : base(uow, nameof(Role), mapper)
+        public RoleService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
+            : base(uow, nameof(Role), mapper, instituteIdService)
         {
         }
 

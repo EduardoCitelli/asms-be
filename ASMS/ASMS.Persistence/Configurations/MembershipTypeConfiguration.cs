@@ -8,6 +8,10 @@ namespace ASMS.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<MembershipType> builder)
         {
+            builder.HasOne(x => x.Institute)
+                   .WithMany(x => x.MembershipTypes)
+                   .HasForeignKey(x => x.InstituteId)
+                   .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

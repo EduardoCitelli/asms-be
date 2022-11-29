@@ -1,4 +1,5 @@
-﻿using ASMS.CrossCutting.Utils;
+﻿using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Plans;
 using ASMS.Infrastructure;
@@ -11,8 +12,8 @@ namespace ASMS.Services
 {
     public class PlanService : ServiceBase<Plan, int, PlanSingleDto, PlanListDto>, IPlanService
     {
-        public PlanService(IUnitOfWork uow, IMapper mapper)
-            : base(uow, nameof(Plan), mapper)
+        public PlanService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
+            : base(uow, nameof(Plan), mapper, instituteIdService)
         {
         }
 

@@ -20,6 +20,8 @@
 
         public virtual ICollection<Membership> Memberships { get; set; } = new List<Membership>();
 
+        public virtual ICollection<MembershipType> MembershipTypes { get; set; } = new List<MembershipType>();
+
         public virtual ICollection<InstituteClass> InstituteClasses { get; set; } = new List<InstituteClass>();
 
         public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();

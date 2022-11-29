@@ -1,4 +1,4 @@
-﻿using ASMS.CrossCutting.Enums;
+﻿using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Institutes;
 using ASMS.Infrastructure;
@@ -12,8 +12,8 @@ namespace ASMS.Services
 {
     public class InstituteService : ServiceBase<Institute, long, InstituteSingleDto, InstituteListDto>, IInstituteService
     {
-        public InstituteService(IUnitOfWork uow, IMapper mapper)
-            : base(uow, nameof(Institute), mapper)
+        public InstituteService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
+            : base(uow, nameof(Institute), mapper, instituteIdService)
         {
         }
 
