@@ -16,6 +16,7 @@ namespace ASMS.Infrastructure.Automapper
             this.AddRoomConfig();
             this.AddCoachConfig();
             this.AddMembershipTypeConfig();
+            this.AddMembershipConfig();
         }
     }
 }
