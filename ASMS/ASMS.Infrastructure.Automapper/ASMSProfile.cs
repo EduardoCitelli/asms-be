@@ -12,6 +12,8 @@ namespace ASMS.Infrastructure.Automapper
             this.AddUserConfig();
             this.AddAuthConfig();
             this.AddPlanConfig();
+            this.AddActivityConfig();
+            this.AddRoomConfig();
         }
     }
 }

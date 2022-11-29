@@ -1,6 +1,6 @@
 ﻿namespace ASMS.DTOs.Activities
 {
-    public class ActivitySingleDto : ActivityListDto
+    public class ActivitySingleDto : ActivityUpdateDto
     {
     }
 }

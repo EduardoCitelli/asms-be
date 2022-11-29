@@ -19,6 +19,7 @@ namespace ASMS.API.Extensions
             services.AddTransient<IPlanService, PlanService>();
             services.AddTransient<IInstituteService, InstituteService>();
             services.AddTransient<IActivityService, ActivityService>();
+            services.AddTransient<IRoomService, RoomService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IInstituteIdService, InstituteIdService>();
