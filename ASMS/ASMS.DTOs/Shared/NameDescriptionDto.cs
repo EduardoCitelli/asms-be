@@ -2,7 +2,7 @@
 
 namespace ASMS.DTOs.Shared
 {
-    public class NameDescriptionDto
+    public abstract class NameDescriptionDto
     {
         [Required(ErrorMessage = "Field {0} is required")]
         [MinLength(3, ErrorMessage = "Field {0} must be longer than {1}")]

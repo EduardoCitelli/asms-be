@@ -2,7 +2,7 @@
 
 namespace ASMS.DTOs.Shared
 {
-    public class PersonalInfoDto
+    public abstract class PersonalInfoDto
     {
         [Required(ErrorMessage = "Field {0} is required")]
         public DateOnly BirthDate { get; set; }
