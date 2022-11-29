@@ -33,12 +33,12 @@ namespace ASMS.Services
 
         public async Task ValidateExistentInfo(string userName, string email)
         {
-            var isUserExistent = await ExistAsync(x => x.UserName == userName);
+            var isUserExistent = await ExistBaseAsync(x => x.UserName == userName);
 
             if (isUserExistent)
                 throw new BadRequestException($"Username {userName} already exist");
 
-            var isEmailExistent = await ExistAsync(x => x.Email == email);
+            var isEmailExistent = await ExistBaseAsync(x => x.Email == email);
 
             if (isEmailExistent)
                 throw new BadRequestException($"Email {email} already exist");
@@ -60,7 +60,7 @@ namespace ASMS.Services
             {
                 var response = _mapper.Map<AuthResponseDto>(entity);
 
-                GenerateToken(entity, response);
+                GenerateToken(entity!, response);
 
                 return new BaseApiResponse<AuthResponseDto>(response);
             }

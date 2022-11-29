@@ -1,6 +1,7 @@
 ﻿using ASMS.CrossCutting.Extensions;
 using ASMS.CrossCutting.Utils;
 using ASMS.Domain;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
@@ -53,7 +54,7 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key)
         {
-            var result = await TryGetExistentEntity(key);
+            var result = await TryGetExistentEntityBaseAsync(key);
 
             var dto = _mapper.Map<TSingleDto>(result);
 
@@ -87,6 +88,13 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSingleDto>> CreateBaseAsync<TCreateDto>(TCreateDto request, Action<TEntity>? actionBeforeSave = null)
         {
+            if (request is NameDescriptionDto nameDescription)
+            {
+                var nameAlreadyExist = await _repository.FindExistAsync(x => (x as NameDescriptionEntity<TKey>)!.Name.ToLower() == nameDescription.Name.ToLower());
+                if (nameAlreadyExist)
+                    throw new BadRequestException($"{_entityName} name already exist");
+            }
+
             var newEntity = _mapper.Map<TEntity>(request);
 
             if (actionBeforeSave != null)
@@ -108,7 +116,15 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSingleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, TKey key, Action<TUpdateDto, TEntity>? beforeAction = null)
         {
-            var entity = await TryGetExistentEntity(key);
+            var entity = await TryGetExistentEntityBaseAsync(key);
+
+            if (request is NameDescriptionDto nameDescription)
+            {
+                var nameAlreadyExist = await _repository.FindExistAsync(x => (x as NameDescriptionEntity<TKey>)!.Name.ToLower() == nameDescription.Name.ToLower() && 
+                                                                             !x.Id!.Equals(key));
+                if (nameAlreadyExist)
+                    throw new BadRequestException($"{_entityName} name already exist");
+            }
 
             beforeAction?.Invoke(request, entity);
 
@@ -131,7 +147,7 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<TSingleDto>> DeleteBaseAsync(TKey key)
         {
-            var entity = await TryGetExistentEntity(key);
+            var entity = await TryGetExistentEntityBaseAsync(key);
 
             await _repository.DeleteAsync(entity);
 
@@ -148,7 +164,7 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
-        protected async Task<TEntity> TryGetExistentEntity(TKey key)
+        protected async Task<TEntity> TryGetExistentEntityBaseAsync(TKey key)
         {
             var existentEntity = await _repository.GetByIdAsync(key);
 
@@ -161,7 +177,7 @@ namespace ASMS.Services
             return existentEntity;
         }
 
-        protected async Task<TEntity> TryGetExistentEntity(Expression<Func<TEntity, bool>> expression)
+        protected async Task<TEntity> TryGetExistentEntityBaseAsync(Expression<Func<TEntity, bool>> expression)
         {
             var entity = await _repository.FindSingleAsync(expression);
 
@@ -174,13 +190,13 @@ namespace ASMS.Services
             return entity;
         }
 
-        protected async Task<bool> ExistAsync(TKey key)
+        protected async Task<bool> ExistBaseAsync(TKey key)
         {
             return await _repository.ExistAsync(key);
         }
 
-        protected async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> expression,
-                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        protected async Task<bool> ExistBaseAsync(Expression<Func<TEntity, bool>> expression,
+                                                  Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
             return await _repository.FindExistAsync(expression, include);
         }

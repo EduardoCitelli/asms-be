@@ -17,14 +17,14 @@ namespace ASMS.Services
 
         Task<BaseApiResponse<PlanSingleDto>> GetOneAsync(int id);
 
-        Task<BaseApiResponse<PagedList<PlanDto>>> GetListAsync(int pageNumber = 1,
-                                                               int pageSize = 10,
-                                                               Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null);
+        Task<BaseApiResponse<PagedList<PlanListDto>>> GetListAsync(int pageNumber = 1,
+                                                                   int pageSize = 10,
+                                                                   Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null);
 
-        Task<BaseApiResponse<PagedList<PlanDto>>> GetListQueryAsync(Expression<Func<Plan, bool>> query,
-                                                                    int pageNumber = 1,
-                                                                    int pageSize = 10,
-                                                                    Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null);
+        Task<BaseApiResponse<PagedList<PlanListDto>>> GetListQueryAsync(Expression<Func<Plan, bool>> query,
+                                                                        int pageNumber = 1,
+                                                                        int pageSize = 10,
+                                                                        Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null);
         Task<bool> ExistEntityAsync(Expression<Func<Plan, bool>> expression);
     }
 }

@@ -20,7 +20,7 @@ namespace ASMS.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = RoleTypes.SuperAdmin)]
-        public async Task<BaseApiResponse<PagedList<PlanDto>>> GetAll([FromQuery] GetAllPlans query)
+        public async Task<BaseApiResponse<PagedList<PlanListDto>>> GetAll([FromQuery] GetAllPlans query)
         {
             return await _mediator.Send(query);
         }

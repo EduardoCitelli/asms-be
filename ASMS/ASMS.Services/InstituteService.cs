@@ -35,7 +35,7 @@ namespace ASMS.Services
         public async Task<bool> Any(Expression<Func<Institute, bool>> query,
                                     Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null)
         {
-            return await ExistAsync(query, include);
+            return await ExistBaseAsync(query, include);
         }
     }
 }

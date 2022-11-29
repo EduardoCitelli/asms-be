@@ -15,6 +15,7 @@
             #region Map From Entity
             profile.CreateMap<Plan, PlanSingleDto>();
             profile.CreateMap<Plan, PlanDto>();
+            profile.CreateMap<Plan, PlanListDto>();
             #endregion
 
             return profile;

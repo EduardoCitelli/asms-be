@@ -11,7 +11,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #endregion
 
             #region Map From Entity
-            profile.CreateMap<User, AuthResponseDto>();
+            profile.CreateMap<User, AuthResponseDto>()
+                   .ForMember(dto => dto.Roles, conf => conf.MapFrom(entity => entity.UserRoles.Select(x => x.RoleId)));
             #endregion
 
             return profile;

@@ -9,24 +9,24 @@ using System.Linq.Expressions;
 
 namespace ASMS.Services
 {
-    public class PlanService : ServiceBase<Plan, int, PlanSingleDto, PlanDto>, IPlanService
+    public class PlanService : ServiceBase<Plan, int, PlanSingleDto, PlanListDto>, IPlanService
     {
         public PlanService(IUnitOfWork uow, IMapper mapper)
             : base(uow, nameof(Plan), mapper)
         {
         }
 
-        public async Task<BaseApiResponse<PagedList<PlanDto>>> GetListAsync(int pageNumber = 1,
-                                                                            int pageSize = 10,
-                                                                            Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null)
+        public async Task<BaseApiResponse<PagedList<PlanListDto>>> GetListAsync(int pageNumber = 1,
+                                                                                int pageSize = 10,
+                                                                                Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null)
         {
             return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, include);
         }
 
-        public async Task<BaseApiResponse<PagedList<PlanDto>>> GetListQueryAsync(Expression<Func<Plan, bool>> query,
-                                                                                 int pageNumber = 1,
-                                                                                 int pageSize = 10,
-                                                                                 Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null)
+        public async Task<BaseApiResponse<PagedList<PlanListDto>>> GetListQueryAsync(Expression<Func<Plan, bool>> query,
+                                                                                     int pageNumber = 1,
+                                                                                     int pageSize = 10,
+                                                                                     Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null)
         {
             return await GetDtoPaginatedsByQueryBaseAsync(query, pageNumber, pageSize, include);
         }
@@ -38,7 +38,7 @@ namespace ASMS.Services
 
         public async Task<bool> ExistEntityAsync(Expression<Func<Plan, bool>> expression)
         {
-            return await ExistAsync(expression);
+            return await ExistBaseAsync(expression);
         }
 
         public async Task<BaseApiResponse<PlanSingleDto>> CreateAsync(PlanCreateDto planCreateDto)

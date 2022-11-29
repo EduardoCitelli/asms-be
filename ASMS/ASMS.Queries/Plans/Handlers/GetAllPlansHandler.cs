@@ -9,7 +9,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class GetAllPlansHandler : IRequestHandler<GetAllPlans, BaseApiResponse<PagedList<PlanDto>>>
+    public class GetAllPlansHandler : IRequestHandler<GetAllPlans, BaseApiResponse<PagedList<PlanListDto>>>
     {
         private readonly IPlanService _planService;
 
@@ -18,7 +18,7 @@
             _planService = planService;
         }
 
-        public async Task<BaseApiResponse<PagedList<PlanDto>>> Handle(GetAllPlans request, CancellationToken cancellationToken)
+        public async Task<BaseApiResponse<PagedList<PlanListDto>>> Handle(GetAllPlans request, CancellationToken cancellationToken)
         {
             return await _planService.GetListAsync(request.Page, request.Size);
         }

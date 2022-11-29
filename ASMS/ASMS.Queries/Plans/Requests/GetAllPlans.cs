@@ -5,7 +5,7 @@ using MediatR;
 
 namespace ASMS.Queries.Plans.Requests
 {
-    public class GetAllPlans : IRequest<BaseApiResponse<PagedList<PlanDto>>>
+    public class GetAllPlans : IRequest<BaseApiResponse<PagedList<PlanListDto>>>
     {
         public int Page { get; set; } = 1;
 
