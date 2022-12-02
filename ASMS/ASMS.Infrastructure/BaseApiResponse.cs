@@ -17,7 +17,7 @@ namespace ASMS.Infrastructure
         public BaseApiResponse(string error)
         {
             Success = false;
-            Errors = $"Error: {error}";
+            Errors = $"{error}";
         }
 
         public BaseApiResponse(IEnumerable<string> errors)

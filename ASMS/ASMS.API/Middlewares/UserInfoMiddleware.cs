@@ -3,7 +3,6 @@ using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Services.Models;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace ASMS.API.Middlewares
 {

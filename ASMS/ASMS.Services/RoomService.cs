@@ -1,4 +1,5 @@
 ﻿using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Rooms;
 using ASMS.Infrastructure;
@@ -15,6 +16,26 @@ namespace ASMS.Services
         public RoomService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
             : base(uow, nameof(Room), mapper, instituteIdService)
         {
+        }
+
+        public async Task<BaseApiResponse<PagedList<RoomListDto>>> GetListAsync(int pageNumber = 1,
+                                                                                int pageSize = 10,
+                                                                                Func<IQueryable<Room>, IIncludableQueryable<Room, object>>? include = null)
+        {
+            return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, include);
+        }
+
+        public async Task<BaseApiResponse<PagedList<RoomListDto>>> GetListAsync(Expression<Func<Room, bool>> query,
+                                                                                int pageNumber = 1,
+                                                                                int pageSize = 10,
+                                                                                Func<IQueryable<Room>, IIncludableQueryable<Room, object>>? include = null)
+        {
+            return await GetDtoPaginatedsByQueryBaseAsync(query, pageNumber, pageSize, include);
+        }
+
+        public async Task<BaseApiResponse<RoomSingleDto>> GetOneAsync(long id)
+        {
+            return await GetOneDtoBaseAsync(id);
         }
 
         public async Task<BaseApiResponse<RoomSingleDto>> CreateAsync(RoomCreateDto dto)

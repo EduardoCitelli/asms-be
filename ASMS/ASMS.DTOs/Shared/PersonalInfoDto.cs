@@ -2,7 +2,7 @@
 
 namespace ASMS.DTOs.Shared
 {
-    public abstract class PersonalInfoDto
+    public class PersonalInfoDto
     {
         [Required(ErrorMessage = "Field {0} is required")]
         public DateOnly BirthDate { get; set; }
@@ -22,7 +22,7 @@ namespace ASMS.DTOs.Shared
         public string? AddressExtraInfo { get; set; }
 
         [Required(ErrorMessage = "Field {0} is required")]
-        [Range(1, int.MaxValue, ErrorMessage = "Field {0} must be greater than {1} and less than {2}")]
+        [Range(1, long.MaxValue, ErrorMessage = "Field {0} must be greater than {1} and less than {2}")]
         public long IdentificationNumber { get; set; }
     }
 }

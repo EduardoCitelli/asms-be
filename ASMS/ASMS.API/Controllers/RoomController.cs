@@ -1,7 +1,9 @@
 ﻿using ASMS.Command.Rooms.Commands;
 using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Rooms;
 using ASMS.Infrastructure;
+using ASMS.Queries.Rooms.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,21 @@ namespace ASMS.API.Controllers
         public RoomController(IMediator mediator)
             : base(mediator)
         {
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
+        public async Task<BaseApiResponse<PagedList<RoomListDto>>> Get([FromQuery] GetAllRoomsRequest request)
+        {
+            return await _mediator.Send(request);
+        }
+
+        [HttpGet("{roomId}")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
+        public async Task<BaseApiResponse<RoomSingleDto>> GetById([FromRoute] long roomId, [FromQuery] GetRoomByIdRequest command)
+        {
+            command.Id = roomId;
+            return await _mediator.Send(command);
         }
 
         [HttpPost]
