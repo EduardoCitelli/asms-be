@@ -1,6 +1,7 @@
 ﻿using ASMS.Command.Rooms.Commands;
 using ASMS.DTOs.Rooms;
 using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Services.Abstractions;
 using MediatR;
 
@@ -17,9 +18,9 @@ namespace ASMS.Command.Rooms.Handlers
 
         public async Task<BaseApiResponse<RoomSingleDto>> Handle(RoomUpdateCommand request, CancellationToken cancellationToken)
         {
-            var roomNumberAlreadyExist = _roomService.AnyAsync(x => x.Number == request.Number && x.Id != request.Id);
+            var numberAlreadyExist = await _roomService.AnyAsync(x => x.Number == request.Number && x.Id != request.Id);
 
-            return await _roomService.UpdateAsync(request);
+            return numberAlreadyExist ? throw new BadRequestException("Room number already exist") : await _roomService.UpdateAsync(request);
         }
     }
 }

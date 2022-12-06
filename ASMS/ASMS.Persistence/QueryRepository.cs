@@ -14,15 +14,15 @@ namespace ASMS.Persistence
 
         public async Task<TEntity?> GetByIdAsync(TKey id)
         {
-            var ids = id!.GetType()
-                         .GetProperties()
-                         .Select(x => x.GetValue(id))
-                         .ToList();
+            //var ids = id!.GetType()
+            //             .GetProperties()
+            //             .Select(x => x.GetValue(id))
+            //             .ToList();
 
-            if (!ids.Any())
-                ids.Add(id);
+            //if (!ids.Any())
+            //    ids.Add(id);
 
-            var response = await _dbSet.FindAsync(ids.ToArray());
+            var response = await _dbSet.FindAsync(id);
 
             if (response != null)
                 _dbContext.Entry(response).State = EntityState.Detached;
@@ -34,6 +34,6 @@ namespace ASMS.Persistence
 
         public async Task<TEntity?> GetLastAsync() => await _dbSet.LastOrDefaultAsync();
 
-        public IQueryable<TEntity> GetQueryable() => _dbSet.AsQueryable();
+        public IQueryable<TEntity> GetQueryable() => _dbSet.AsNoTracking();
     }
 }

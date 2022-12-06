@@ -1,4 +1,5 @@
 ﻿using ASMS.CrossCutting.Constants;
+using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Settings;
 using ASMS.Domain.Entities;
@@ -23,6 +24,13 @@ namespace ASMS.Services
     public class UserService : ServiceBase<User, long, UserBasicDto, UserListDto>, IUserService
     {
         private readonly AuthSettings _authSettings;
+        private readonly Dictionary<RoleTypeEnum, Func<User, long>> _roleToInstituteId = new()
+        {
+            {RoleTypeEnum.Manager, (user) => user.Institute!.Id },
+            {RoleTypeEnum.StaffMember, (user) => user.StaffMember!.InstituteId},
+            {RoleTypeEnum.Coach, (user) => user.Coach!.InstituteId},
+            {RoleTypeEnum.Member, (user) => user.InstituteMember!.InstituteId},
+        };
 
         public UserService(IUnitOfWork uow,
                            IMapper mapper,
@@ -54,7 +62,11 @@ namespace ASMS.Services
         public async Task<BaseApiResponse<AuthResponseDto>> LoginAsync(AuthLoginDto dto)
         {
             IIncludableQueryable<User, object> includeQuery(IQueryable<User> x) => x.Include(x => x.UserRoles)
-                                                                                    .ThenInclude(x => x.Role);
+                                                                                    .ThenInclude(x => x.Role)
+                                                                                    .Include(x => x.Institute!)
+                                                                                    .Include(x => x.StaffMember!)
+                                                                                    .Include(x => x.Coach!)
+                                                                                    .Include(x => x.InstituteMember!);
 
             var entity = await _repository.FindSingleAsync(x => x.UserName == dto.UserName, includeQuery);
 
@@ -86,6 +98,11 @@ namespace ASMS.Services
             var rolesClaim = user.UserRoles.Select(x => new Claim(ClaimTypes.Role, x.Role.Name));
             claims.AddRange(rolesClaim);
 
+            var instituteId = TryGetInstituteId(user);
+
+            if (instituteId != null)
+                claims.Add(new Claim(ASMSConfiguration.InstituteIdClaim, instituteId.ToString()!));
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
@@ -97,6 +114,23 @@ namespace ASMS.Services
             var createdToken = tokenHandler.CreateToken(tokenDescriptor);
 
             dto.Token = tokenHandler.WriteToken(createdToken);
+        }
+
+        private long? TryGetInstituteId(User user)
+        {
+            var rolesToGetInstituteId = user.UserRoles.Where(x => x.RoleId != RoleTypeEnum.SuperAdmin)
+                                                      .OrderBy(x => x.RoleId)
+                                                      .Select(x => x.RoleId)
+                                                      .ToList();
+
+            if (rolesToGetInstituteId.Any())
+            {
+                var role = rolesToGetInstituteId.First();
+                var result = _roleToInstituteId.TryGetValue(role, out var response);
+                return response!(user);
+            }
+
+            return null;
         }
 
         private bool ValidatePassword(User? user, string requestPassword) => user != null && EncryptExtensions.VerifyPass(requestPassword, user.Password);

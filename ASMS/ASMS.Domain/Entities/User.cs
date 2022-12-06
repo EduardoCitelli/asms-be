@@ -16,8 +16,14 @@
 
         public bool IsBlocked { get; set; }
 
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
-        public ICollection<InstituteMemberNote> Notes { get; set; } = new List<InstituteMemberNote>();
+        public virtual Institute? Institute { get; set; }
+
+        public virtual StaffMember? StaffMember { get; set; }
+
+        public virtual Coach? Coach { get; set; }
+
+        public virtual InstituteMember? InstituteMember { get; set; }
     }
 }

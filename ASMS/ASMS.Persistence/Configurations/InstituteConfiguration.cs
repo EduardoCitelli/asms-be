@@ -9,7 +9,7 @@ namespace ASMS.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Institute> builder)
         {
             builder.HasOne(x => x.User)
-                   .WithOne()
+                   .WithOne(x => x.Institute)
                    .HasForeignKey<Institute>(x => x.UserId);
         }
     }

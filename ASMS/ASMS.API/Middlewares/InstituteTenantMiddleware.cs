@@ -14,9 +14,12 @@ namespace ASMS.API.Middlewares
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (context.Request.Headers.TryGetValue(ASMSConfiguration.HeaderInstituteIdProperty, out var values))
+            var claims = context.User.Claims;
+            var instituteIdClaim = claims.SingleOrDefault(x => x.Type == ASMSConfiguration.InstituteIdClaim);
+
+            if (instituteIdClaim != null)
             {
-                var id = Convert.ToInt64(values.FirstOrDefault());
+                var id = Convert.ToInt64(instituteIdClaim.Value);
                 _instituteIdService.SetId(id);
             }
 

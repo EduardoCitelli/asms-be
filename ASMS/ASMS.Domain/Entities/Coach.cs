@@ -10,8 +10,8 @@ namespace ASMS.Domain.Entities
 
         public virtual Institute Institute { get; set; }
 
-        public ICollection<InstituteClass> PrincipalClasses { get; set; } = new List<InstituteClass>();
+        public virtual ICollection<InstituteClass> PrincipalClasses { get; set; } = new List<InstituteClass>();
 
-        public ICollection<InstituteClass> AuxClasses { get; set; } = new List<InstituteClass>();
+        public virtual ICollection<InstituteClass> AuxClasses { get; set; } = new List<InstituteClass>();
     }
 }

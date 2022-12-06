@@ -4,6 +4,6 @@
 
     public class Role : NameDescriptionEntity<RoleTypeEnum>
     {
-        public IEnumerable<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public virtual IEnumerable<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }

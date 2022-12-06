@@ -13,7 +13,7 @@ namespace ASMS.Persistence.Configurations
                    .HasForeignKey(x => x.InstituteId);
 
             builder.HasOne(x => x.User)
-                   .WithOne()
+                   .WithOne(x => x.StaffMember)
                    .HasForeignKey<StaffMember>(x => x.UserId)
                    .OnDelete(DeleteBehavior.ClientCascade);
         }

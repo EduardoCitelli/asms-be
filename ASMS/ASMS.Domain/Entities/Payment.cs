@@ -15,6 +15,6 @@ namespace ASMS.Domain.Entities
 
         public virtual Institute Institute { get; set; }
 
-        public ICollection<InstituteMemberMembership> PaidMembership { get; set; } = new List<InstituteMemberMembership>();
+        public virtual ICollection<InstituteMemberMembership> PaidMembership { get; set; } = new List<InstituteMemberMembership>();
     }
 }

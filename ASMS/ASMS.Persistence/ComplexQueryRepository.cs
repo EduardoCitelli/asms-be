@@ -17,13 +17,13 @@ namespace ASMS.Persistence
         public IQueryable<TEntity> GetAll(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
                                           Expression<Func<TEntity, object>>? orderBy = null)
         {
-            var response = _dbSet.AsNoTracking();
+            var response = _dbSet.AsQueryable().AsNoTracking();
 
             if (include != null)
                 response = include(response);
 
             if (orderBy != null)
-                response.OrderBy(orderBy);
+                response.OrderBy(orderBy).AsNoTracking();
 
             return response;
         }
@@ -32,13 +32,13 @@ namespace ASMS.Persistence
                                         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
                                         Expression<Func<TEntity, object>>? orderBy = null)
         {
-            var response = _dbSet.AsNoTracking().Where(query);
+            var response = _dbSet.Where(query).AsNoTracking();
 
             if (include != null)
                 response = include(response);
 
             if (orderBy != null)
-                response = response.OrderBy(orderBy);
+                response = response.OrderBy(orderBy).AsNoTracking();
 
             return response;
         }
@@ -49,7 +49,7 @@ namespace ASMS.Persistence
             if (include == null)
                 return await _dbSet.AsNoTracking().AnyAsync(query);
 
-            var queryable = include(_dbSet.AsQueryable());
+            var queryable = include(_dbSet.AsNoTracking());
 
             return await queryable.AnyAsync(query);
         }
@@ -70,7 +70,7 @@ namespace ASMS.Persistence
             var response = _dbSet.AsNoTracking();
             
             if (query != null)                
-                response.Where(query);
+                response = response.Where(query).AsNoTracking();
 
             return response.Count();
         }

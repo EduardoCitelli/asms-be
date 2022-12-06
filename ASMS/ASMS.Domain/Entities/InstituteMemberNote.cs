@@ -6,6 +6,6 @@
 
         public virtual Coach Coach { get; set; }
 
-        public ICollection<NoteFile> NoteFiles { get; set; } = new List<NoteFile>();
+        public virtual ICollection<NoteFile> NoteFiles { get; set; } = new List<NoteFile>();
     }
 }

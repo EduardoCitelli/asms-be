@@ -4,6 +4,7 @@ using ASMS.Persistence.Conventions;
 using ASMS.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace ASMS.Persistence
@@ -13,7 +14,7 @@ namespace ASMS.Persistence
         private const string DateBdTypeName = "date";
         private const string DefaultEditedByUser = "admin";
 
-        private readonly IInstituteIdService _instituteService;
+        private readonly long _instituteId;
         private readonly IUserInfoService _userInfoService;
 
         public ASMSDbContext(DbContextOptions options,
@@ -21,7 +22,7 @@ namespace ASMS.Persistence
                              IUserInfoService userInfoService)
             : base(options)
         {
-            _instituteService = instituteService;
+            _instituteId = instituteService.InstituteId;
             _userInfoService = userInfoService;
         }
 
@@ -29,7 +30,28 @@ namespace ASMS.Persistence
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            modelBuilder.ApplyApplicationQueryFilter(_instituteService.InstituteId);
+            modelBuilder.ApplyApplicationQueryFilter(_instituteId);
+
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                var type = entity.ClrType;
+
+                if (typeof(IIsInstituteEntity).IsAssignableFrom(type))
+                {
+                    var method = typeof(ASMSDbContext).GetMethod(nameof(GetInsituteIdFilter), BindingFlags.NonPublic | BindingFlags.Static)?
+                                                      .MakeGenericMethod(type);
+
+                    var filtro = method?.Invoke(null, new object[] { this })!;
+                    entity.SetQueryFilter((LambdaExpression)filtro);
+                }
+            }
+
+        }
+
+        private static LambdaExpression GetInsituteIdFilter<TEntity>(ASMSDbContext context) where TEntity : class, IIsInstituteEntity
+        {
+            Expression<Func<TEntity, bool>> filter = x => x.InstituteId == context._instituteId && !x.IsDelete;
+            return filter;
         }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
