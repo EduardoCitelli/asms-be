@@ -1,5 +1,9 @@
-﻿using ASMS.DTOs.MembershipTypes;
+﻿using ASMS.CrossCutting.Utils;
+using ASMS.Domain.Entities;
+using ASMS.DTOs.MembershipTypes;
 using ASMS.Infrastructure;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace ASMS.Services.Abstractions
 {
@@ -7,6 +11,8 @@ namespace ASMS.Services.Abstractions
     {
         Task<BaseApiResponse<MembershipTypeSingleDto>> CreateAsync(MembershipTypeCreateDto dto);
         Task<BaseApiResponse<MembershipTypeSingleDto>> DeleteAsync(long id);
+        Task<BaseApiResponse<PagedList<MembershipTypeListDto>>> GetListAsync(int pageNumber = 1, int pageSize = 10, Expression<Func<MembershipType, bool>>? query = null, Func<IQueryable<MembershipType>, IIncludableQueryable<MembershipType, object>>? include = null);
+        Task<BaseApiResponse<MembershipTypeSingleDto>> GetOneAsync(long id);
         Task<BaseApiResponse<MembershipTypeSingleDto>> UpdateAsync(MembershipTypeUpdateDto dto);
     }
 }

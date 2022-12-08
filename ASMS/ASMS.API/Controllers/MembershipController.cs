@@ -1,7 +1,9 @@
 ﻿using ASMS.Command.Memberships.Commands;
 using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Memberships;
 using ASMS.Infrastructure;
+using ASMS.Queries.Memberships.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,21 @@ namespace ASMS.API.Controllers
         public MembershipController(IMediator mediator)
             : base(mediator)
         {
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
+        public async Task<BaseApiResponse<PagedList<MembershipListDto>>> Get([FromQuery] GetAllMemberships request)
+        {
+            return await _mediator.Send(request);
+        }
+
+        [HttpGet("{membershipId}")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
+        public async Task<BaseApiResponse<MembershipSingleDto>> GetById([FromRoute] long membershipId, [FromQuery] GetMembershipById request)
+        {
+            request.Id = membershipId;
+            return await _mediator.Send(request);
         }
 
         [HttpPost]
