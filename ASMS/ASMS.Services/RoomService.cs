@@ -22,7 +22,7 @@ namespace ASMS.Services
                                                                                 int pageSize = 10,
                                                                                 Func<IQueryable<Room>, IIncludableQueryable<Room, object>>? include = null)
         {
-            return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, include);
+            return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, null, include);
         }
 
         public async Task<BaseApiResponse<PagedList<RoomListDto>>> GetListAsync(Expression<Func<Room, bool>> query,

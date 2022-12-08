@@ -1,4 +1,5 @@
 ﻿using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Activities;
 using ASMS.Infrastructure;
@@ -15,6 +16,19 @@ namespace ASMS.Services
         public ActivityService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
             : base(uow, nameof(Activity), mapper, instituteIdService)
         {
+        }
+
+        public async Task<BaseApiResponse<PagedList<ActivityListDto>>> GetListAsync(int pageNumber = 1,
+                                                                                    int pageSize = 10,
+                                                                                    Expression<Func<Activity, bool>>? query = null,
+                                                                                    Func<IQueryable<Activity>, IIncludableQueryable<Activity, object>>? include = null)
+        {
+            return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, query, include);
+        }
+
+        public async Task<BaseApiResponse<ActivitySingleDto>> GetOneAsync(long id)
+        {
+            return await GetOneDtoBaseAsync(id);
         }
 
         public async Task<BaseApiResponse<ActivitySingleDto>> CreateAsync(ActivityCreateDto dto)

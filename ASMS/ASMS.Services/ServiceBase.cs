@@ -45,9 +45,10 @@ namespace ASMS.Services
 
         protected async Task<BaseApiResponse<PagedList<TListDto>>> GetAllDtosPaginatedBaseAsync(int pageNumber = 1,
                                                                                                 int pageSize = 10,
+                                                                                                Expression<Func<TEntity, bool>>? query = null,
                                                                                                 Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
-            var result = _repository.GetAll(include, null);
+            var result = query is null ? _repository.GetAll(include, null) : _repository.Find(query, include, null);
 
             var dtos = _mapper.ProjectTo<TListDto>(result);
 
@@ -63,17 +64,6 @@ namespace ASMS.Services
             var dto = _mapper.Map<TSingleDto>(result);
 
             return new BaseApiResponse<TSingleDto>(dto);
-        }
-
-        protected async Task<BaseApiResponse<IEnumerable<TListDto>>> GetDtosByQueryBaseAsync(Expression<Func<TEntity, bool>> query,
-                                                                                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
-        {
-            var result = _repository.Find(query, include, null);
-
-            var dtos = await _mapper.ProjectTo<TListDto>(result)
-                                    .ToListAsync();
-
-            return new BaseApiResponse<IEnumerable<TListDto>>(dtos);
         }
 
         protected async Task<BaseApiResponse<PagedList<TListDto>>> GetDtoPaginatedsByQueryBaseAsync(Expression<Func<TEntity, bool>> query,
@@ -132,7 +122,7 @@ namespace ASMS.Services
 
             if (request is NameDescriptionDto nameDescription)
             {
-                var nameAlreadyExist = await _repository.FindExistAsync(x => (x as NameDescriptionEntity<TKey>)!.Name.ToLower() == nameDescription.Name.ToLower() && 
+                var nameAlreadyExist = await _repository.FindExistAsync(x => (x as NameDescriptionEntity<TKey>)!.Name.ToLower() == nameDescription.Name.ToLower() &&
                                                                              !x.Id!.Equals(key));
                 if (nameAlreadyExist)
                     throw new BadRequestException($"{_entityName} name already exist");
