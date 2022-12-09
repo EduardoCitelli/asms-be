@@ -99,8 +99,7 @@ namespace ASMS.Services
                 instituteEntity.InstituteId = _instituteIdService.InstituteId;
             }
 
-            if (actionBeforeSave != null)
-                actionBeforeSave.Invoke(newEntity);
+            actionBeforeSave?.Invoke(newEntity);
 
             await _repository.AddAsync(newEntity);
             var success = await _uow.SaveChangesAsync() > 0;

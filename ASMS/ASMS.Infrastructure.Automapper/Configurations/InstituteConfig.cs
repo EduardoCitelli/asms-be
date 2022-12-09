@@ -1,6 +1,7 @@
 ﻿using ASMS.Command.Institutes.Commands;
 using ASMS.CrossCutting.Enums;
 using ASMS.Domain.Entities;
+using ASMS.DTOs.Institutes;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
@@ -21,7 +22,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #endregion
 
             #region MapFromEntity
-
+            profile.CreateMap<Institute, InstituteSingleDto>();
             #endregion
 
             return profile;
