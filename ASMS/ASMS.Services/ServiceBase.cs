@@ -80,6 +80,15 @@ namespace ASMS.Services
             return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
         }
 
+        protected async Task<BaseApiResponse<IEnumerable<ComboDto<TKey>>>> GetForComboBaseAsync()
+        {
+            var result = _repository.GetAll();
+            var dtos = _mapper.ProjectTo<ComboDto<TKey>>(result);
+            var response = await dtos.ToListAsync();
+
+            return new BaseApiResponse<IEnumerable<ComboDto<TKey>>>(response);
+        }
+
         protected async Task<BaseApiResponse<TSingleDto>> CreateBaseAsync<TCreateDto>(TCreateDto request, Action<TEntity>? actionBeforeSave = null)
         {
             if (request is NameDescriptionDto nameDescription)

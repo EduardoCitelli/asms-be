@@ -1,5 +1,6 @@
 ﻿using ASMS.Domain.Entities;
 using ASMS.DTOs.MembershipTypes;
+using ASMS.DTOs.Shared;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
@@ -15,6 +16,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #region Map From Entity
             profile.CreateMap<MembershipType, MembershipTypeSingleDto>();
             profile.CreateMap<MembershipType, MembershipTypeListDto>();
+            profile.CreateMap<MembershipType, ComboDto<long>>();
             #endregion
 
             return profile;

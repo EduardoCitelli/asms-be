@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.MembershipTypes;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Queries.MembershipTypes.Requests;
 using MediatR;
@@ -22,6 +23,13 @@ namespace ASMS.API.Controllers
         public async Task<BaseApiResponse<PagedList<MembershipTypeListDto>>> Get([FromQuery] GetAllMembershipTypes request)
         {
             return await _mediator.Send(request);
+        }
+
+        [HttpGet("combos")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> Combo()
+        {
+            return await _mediator.Send(new GetAllMembershipTypesForCombo());
         }
 
         [HttpGet("{membershipTypeId}")]

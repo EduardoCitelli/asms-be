@@ -2,10 +2,12 @@
 using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.MembershipTypes;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
@@ -29,6 +31,11 @@ namespace ASMS.Services
         public async Task<BaseApiResponse<MembershipTypeSingleDto>> GetOneAsync(long id)
         {
             return await GetOneDtoBaseAsync(id);
+        }
+
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetForComboAsync()
+        {
+            return await GetForComboBaseAsync();
         }
 
         public async Task<BaseApiResponse<MembershipTypeSingleDto>> CreateAsync(MembershipTypeCreateDto dto)
