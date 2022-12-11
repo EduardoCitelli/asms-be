@@ -1,10 +1,13 @@
 ﻿using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Coaches;
 using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace ASMS.Services
 {
@@ -13,6 +16,19 @@ namespace ASMS.Services
         public CoachService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
             : base(uow, nameof(Coach), mapper, instituteIdService)
         {
+        }
+
+        public async Task<BaseApiResponse<PagedList<CoachListDto>>> GetListAsync(int pageNumber = 1,
+                                                                                    int pageSize = 10,
+                                                                                    Expression<Func<Coach, bool>>? query = null,
+                                                                                    Func<IQueryable<Coach>, IIncludableQueryable<Coach, object>>? include = null)
+        {
+            return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, query, include);
+        }
+
+        public async Task<BaseApiResponse<CoachSingleDto>> GetOneAsync(long id)
+        {
+            return await GetOneDtoBaseAsync(id);
         }
 
         public async Task<BaseApiResponse<CoachSingleDto>> CreateAsync(CoachCreateDto dto)

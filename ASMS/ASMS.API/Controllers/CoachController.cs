@@ -1,7 +1,9 @@
 ﻿using ASMS.Command.Coaches.Commands;
 using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Coaches;
 using ASMS.Infrastructure;
+using ASMS.Queries.Coaches.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,21 @@ namespace ASMS.API.Controllers
         public CoachController(IMediator mediator)
             : base(mediator)
         {
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
+        public async Task<BaseApiResponse<PagedList<CoachListDto>>> Get([FromQuery] GetAllCoaches request)
+        {
+            return await _mediator.Send(request);
+        }
+
+        [HttpGet("{coachId}")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
+        public async Task<BaseApiResponse<CoachSingleDto>> GetById([FromRoute] long coachId, [FromQuery] GetCoachById request)
+        {
+            request.Id = coachId;
+            return await _mediator.Send(request);
         }
 
         [HttpPost]

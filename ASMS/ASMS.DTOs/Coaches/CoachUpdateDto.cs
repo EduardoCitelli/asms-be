@@ -1,7 +1,11 @@
 ﻿namespace ASMS.DTOs.Coaches
 {
-    public class CoachUpdateDto : CoachCreateDto
+    using ASMS.DTOs.Users;
+
+    public class CoachUpdateDto : CoachBasicDto
     {
         public long Id { get; set; }
+
+        public UserBasicDto User { get; set; }
     }
 }
