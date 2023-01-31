@@ -10,7 +10,7 @@ namespace ASMS.API.Extensions
 {
     public static class ServicesStartup
     {
-        public static IServiceCollection ConfigureServices(this IServiceCollection services)
+        public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<ValidateModelAttribute>();
 
@@ -28,6 +28,13 @@ namespace ASMS.API.Extensions
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IInstituteIdService, InstituteIdService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
+
+            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
             return services;
         }

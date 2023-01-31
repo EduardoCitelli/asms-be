@@ -31,8 +31,9 @@ services.AddAutoMapper(typeof(ASMSProfile));
 services.AddSwagger();
 services.AddJwt(builder.Configuration);
 
-services.ConfigureServices();
+services.ConfigureServices(builder.Configuration);
 services.ConfigureMiddlewares();
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 var app = builder.Build();
 
