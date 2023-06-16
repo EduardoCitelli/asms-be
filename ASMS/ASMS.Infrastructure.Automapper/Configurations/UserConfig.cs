@@ -10,6 +10,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #region Map To Entity
             profile.CreateMap<UserBasicWithPasswordDto, User>();
 
+            profile.CreateMap<UserBasicDto, User>();
+
             profile.CreateMap<UserCreateDto, User>()
                    .ForMember(entity => entity.UserRoles, config => config.MapFrom(dto => dto.Roles.Select(role => new UserRole { RoleId = role })));
                    

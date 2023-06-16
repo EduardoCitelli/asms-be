@@ -6,6 +6,7 @@ using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
@@ -19,16 +20,16 @@ namespace ASMS.Services
         }
 
         public async Task<BaseApiResponse<PagedList<CoachListDto>>> GetListAsync(int pageNumber = 1,
-                                                                                    int pageSize = 10,
-                                                                                    Expression<Func<Coach, bool>>? query = null,
-                                                                                    Func<IQueryable<Coach>, IIncludableQueryable<Coach, object>>? include = null)
+                                                                                 int pageSize = 10,
+                                                                                 Expression<Func<Coach, bool>>? query = null,
+                                                                                 Func<IQueryable<Coach>, IIncludableQueryable<Coach, object>>? include = null)
         {
             return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, query, include);
         }
 
         public async Task<BaseApiResponse<CoachSingleDto>> GetOneAsync(long id)
         {
-            return await GetOneDtoBaseAsync(id);
+            return await GetOneDtoBaseAsync(id, x => x.User);
         }
 
         public async Task<BaseApiResponse<CoachSingleDto>> CreateAsync(CoachCreateDto dto)

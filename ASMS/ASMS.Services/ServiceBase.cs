@@ -57,9 +57,9 @@ namespace ASMS.Services
             return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
         }
 
-        protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key)
+        protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key, Expression<Func<TEntity, object>>? include = null)
         {
-            var result = await TryGetExistentEntityBaseAsync(key);
+            var result = await TryGetExistentEntityBaseAsync(key, include);
 
             var dto = _mapper.Map<TSingleDto>(result);
 
@@ -174,9 +174,9 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
-        protected async Task<TEntity> TryGetExistentEntityBaseAsync(TKey key)
+        protected async Task<TEntity> TryGetExistentEntityBaseAsync(TKey key, Expression<Func<TEntity, object>>? include = null)
         {
-            var existentEntity = await _repository.GetByIdAsync(key);
+            var existentEntity = await _repository.GetByIdAsync(key, include);
 
             if (existentEntity == null)
             {
