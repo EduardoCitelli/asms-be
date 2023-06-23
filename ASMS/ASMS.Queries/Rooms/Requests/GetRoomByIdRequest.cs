@@ -7,5 +7,8 @@ namespace ASMS.Queries.Rooms.Requests
 {
     public class GetRoomByIdRequest : EntityByIdRequest<long>, IRequest<BaseApiResponse<RoomSingleDto>>
     {
+        public GetRoomByIdRequest(long id) : base(id)
+        {
+        }
     }
 }

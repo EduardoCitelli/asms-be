@@ -7,5 +7,8 @@ namespace ASMS.Queries.Activities.Requests
 {
     public class GetActivityById : EntityByIdRequest<long>, IRequest<BaseApiResponse<ActivitySingleDto>>
     {
+        public GetActivityById(long id) : base(id)
+        {
+        }
     }
 }

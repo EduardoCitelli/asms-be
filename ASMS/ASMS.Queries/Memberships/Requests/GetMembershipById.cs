@@ -7,5 +7,8 @@ namespace ASMS.Queries.Memberships.Requests
 {
     public class GetMembershipById : EntityByIdRequest<long>, IRequest<BaseApiResponse<MembershipSingleDto>>
     {
+        public GetMembershipById(long id) : base(id)
+        {
+        }
     }
 }
