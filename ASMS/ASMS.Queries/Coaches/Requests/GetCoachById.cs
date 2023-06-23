@@ -7,5 +7,8 @@
 
     public class GetCoachById : EntityByIdRequest<long>, IRequest<BaseApiResponse<CoachSingleDto>>
     {
+        public GetCoachById(long id) : base(id)
+        {
+        }
     }
 }
