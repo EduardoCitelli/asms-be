@@ -26,10 +26,9 @@ namespace ASMS.API.Controllers
 
         [HttpGet("{activityId}")]
         [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
-        public async Task<BaseApiResponse<ActivitySingleDto>> GetById([FromRoute] long activityId, [FromQuery] GetActivityById request)
+        public async Task<BaseApiResponse<ActivitySingleDto>> GetById([FromRoute] long activityId)
         {
-            request.Id = activityId;
-            return await _mediator.Send(request);
+            return await _mediator.Send(new GetActivityById(activityId));
         }
 
         [HttpPost]

@@ -26,10 +26,9 @@ namespace ASMS.API.Controllers
 
         [HttpGet("{roomId}")]
         [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
-        public async Task<BaseApiResponse<RoomSingleDto>> GetById([FromRoute] long roomId, [FromQuery] GetRoomByIdRequest request)
+        public async Task<BaseApiResponse<RoomSingleDto>> GetById([FromRoute] long roomId)
         {
-            request.Id = roomId;
-            return await _mediator.Send(request);
+            return await _mediator.Send(new GetRoomByIdRequest(roomId));
         }
 
         [HttpPost]
