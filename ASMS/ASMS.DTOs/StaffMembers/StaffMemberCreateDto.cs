@@ -1,8 +1,9 @@
-﻿using ASMS.DTOs.Shared;
+﻿using ASMS.DTOs.Users;
 
 namespace ASMS.DTOs.StaffMembers
 {
-    public class StaffMemberCreateDto : PersonalInfoDto
+    public class StaffMemberCreateDto : StaffMemberBasicDto
     {
+        public UserBasicWithPasswordDto User { get; set; }
     }
 }
