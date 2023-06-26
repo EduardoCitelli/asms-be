@@ -1,5 +1,6 @@
 ﻿using ASMS.CrossCutting.Enums;
 using ASMS.Domain.Entities;
+using ASMS.DTOs.Shared;
 using ASMS.DTOs.StaffMembers;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
@@ -30,6 +31,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #region Map From Entity
             profile.CreateMap<StaffMember, StaffMemberSingleDto>()
                    .ForMember(dto => dto.PersonalInfo, config => config.MapFrom(entity => entity));
+
+            profile.CreateMap<StaffMember, PersonalInfoDto>();
 
             profile.CreateMap<StaffMember, StaffMemberListDto>()
                    .ForMember(dto => dto.FullName, conf => conf.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"));

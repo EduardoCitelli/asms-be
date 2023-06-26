@@ -39,7 +39,7 @@ namespace ASMS.Services
 
         public async Task<BaseApiResponse<CoachSingleDto>> UpdateAsync(CoachUpdateDto dto)
         {
-            return await UpdateBaseAsync(dto, dto.Id);
+            return await UpdateBaseAsync(dto, dto.Id, null, x => x.User);
         }
 
         public async Task<BaseApiResponse<CoachSingleDto>> DeleteAsync(long id)

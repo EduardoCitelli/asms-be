@@ -124,9 +124,12 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
-        protected async Task<BaseApiResponse<TSingleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, TKey key, Action<TUpdateDto, TEntity>? beforeAction = null)
+        protected async Task<BaseApiResponse<TSingleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, 
+                                                                                      TKey key, 
+                                                                                      Action<TUpdateDto, TEntity>? beforeAction = null,
+                                                                                      Expression<Func<TEntity, object>>? include = null)
         {
-            var entity = await TryGetExistentEntityBaseAsync(key);
+            var entity = await TryGetExistentEntityBaseAsync(key, include);
 
             if (request is NameDescriptionDto nameDescription)
             {

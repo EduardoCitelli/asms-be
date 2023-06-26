@@ -38,7 +38,7 @@ namespace ASMS.Services
 
         public async Task<BaseApiResponse<StaffMemberSingleDto>> UpdateAsync(StaffMemberUpdateDto dto)
         {
-            return await UpdateBaseAsync(dto, dto.Id);
+            return await UpdateBaseAsync(dto, dto.Id, null, x => x.User);
         }
 
         public async Task<BaseApiResponse<StaffMemberSingleDto>> DeleteAsync(long id)

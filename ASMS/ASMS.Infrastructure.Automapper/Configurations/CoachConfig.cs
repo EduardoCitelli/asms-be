@@ -1,6 +1,7 @@
 ﻿using ASMS.CrossCutting.Enums;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Coaches;
+using ASMS.DTOs.Shared;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
@@ -30,6 +31,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #region Map From Entity
             profile.CreateMap<Coach, CoachSingleDto>()
                    .ForMember(dto => dto.PersonalInfo, config => config.MapFrom(entity => entity));
+
+            profile.CreateMap<Coach, PersonalInfoDto>();
 
             profile.CreateMap<Coach, CoachListDto>()
                    .ForMember(dto => dto.FullName, conf => conf.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"));
