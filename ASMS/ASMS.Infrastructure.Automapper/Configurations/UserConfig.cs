@@ -1,4 +1,5 @@
 ﻿using ASMS.Domain.Entities;
+using ASMS.DTOs.MyUser;
 using ASMS.DTOs.Users;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
@@ -11,6 +12,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             profile.CreateMap<UserBasicWithPasswordDto, User>();
 
             profile.CreateMap<UserBasicDto, User>();
+
+            profile.CreateMap<UpdateMyUserDto, User>();
 
             profile.CreateMap<UserCreateDto, User>()
                    .ForMember(entity => entity.UserRoles, config => config.MapFrom(dto => dto.Roles.Select(role => new UserRole { RoleId = role })));

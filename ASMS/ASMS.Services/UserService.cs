@@ -4,6 +4,7 @@ using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Settings;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Auth;
+using ASMS.DTOs.MyUser;
 using ASMS.DTOs.Users;
 using ASMS.Infrastructure;
 using ASMS.Infrastructure.Exceptions;
@@ -59,16 +60,38 @@ namespace ASMS.Services
             return await CreateBaseAsync(dto);
         }
 
+        public async Task<BaseApiResponse<UserBasicDto>> UpdateMyUser(UpdateMyUserDto dto, long id)
+        {
+            var isEmailExistent = await ExistBaseAsync(x => x.Email == dto.Email && x.Id != id);
+
+            return isEmailExistent ? throw new BadRequestException($"Email {dto.Email} already exist") : await UpdateBaseAsync(dto, id);
+        }
+
+        public async Task<BaseApiResponse<bool>> UpdateMyPassword(UpdateMyPasswordDto dto, string userName)
+        {
+            var entity = await GetFullUserByUserName(userName);
+
+            if (ValidatePassword(entity, dto.OldPassword))
+            {
+                entity!.Password = dto.Password.ToHash();
+
+                await _repository.UpdateAsync(entity);
+
+                var success = await _uow.SaveChangesAsync() > 0;
+
+                if (success)
+                    return new BaseApiResponse<bool>(true);
+
+                var message = $"Problem while saving {_entityName} changes";
+                throw new InternalErrorException(message);
+            }
+
+            throw new NotFoundException($"{userName} not found");
+        }
+
         public async Task<BaseApiResponse<AuthResponseDto>> LoginAsync(AuthLoginDto dto)
         {
-            IIncludableQueryable<User, object> includeQuery(IQueryable<User> x) => x.Include(x => x.UserRoles)
-                                                                                    .ThenInclude(x => x.Role)
-                                                                                    .Include(x => x.Institute!)
-                                                                                    .Include(x => x.StaffMember!)
-                                                                                    .Include(x => x.Coach!)
-                                                                                    .Include(x => x.InstituteMember!);
-
-            var entity = await _repository.FindSingleAsync(x => x.UserName == dto.UserName, includeQuery);
+            var entity = await GetFullUserByUserName(dto.UserName);
 
             if (ValidatePassword(entity, dto.Password))
             {
@@ -80,6 +103,20 @@ namespace ASMS.Services
             }
 
             throw new BadRequestException("User or Password incorrect");
+        }
+
+        private async Task<User?> GetFullUserByUserName(string userName)
+        {
+            IIncludableQueryable<User, object> includeQuery(IQueryable<User> x) => x.Include(x => x.UserRoles)
+                                                                                                .ThenInclude(x => x.Role)
+                                                                                                .Include(x => x.Institute!)
+                                                                                                .Include(x => x.StaffMember!)
+                                                                                                .Include(x => x.Coach!)
+                                                                                                .Include(x => x.InstituteMember!);
+
+            var entity = await _repository.FindSingleAsync(x => x.UserName == userName, includeQuery);
+
+            return entity;
         }
 
         private void GenerateToken(User user, AuthResponseDto dto)
