@@ -86,7 +86,7 @@ namespace ASMS.Services
                 throw new InternalErrorException(message);
             }
 
-            throw new NotFoundException($"{userName} not found");
+            throw new BadRequestException($"Wrong password");
         }
 
         public async Task<BaseApiResponse<AuthResponseDto>> LoginAsync(AuthLoginDto dto)
