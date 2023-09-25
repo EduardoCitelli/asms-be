@@ -8,6 +8,8 @@ namespace ASMS.Services.Abstractions
 {
     public interface IInstituteService
     {
+        Task<BaseApiResponse<InstituteSingleDto>> GetOneAsync(long id);
+
         Task<BaseApiResponse<InstituteSingleDto>> Create(InstituteCreateDto dto);
 
         Task<BaseApiResponse<InstituteSingleDto>> Update(InstituteUpdateDto dto);
@@ -15,6 +17,6 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<InstituteSingleDto>> Delete(long id);
 
         Task<bool> Any(Expression<Func<Institute, bool>> query,
-                                    Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null);
+                       Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null);
     }
 }

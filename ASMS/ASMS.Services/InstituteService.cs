@@ -17,6 +17,11 @@ namespace ASMS.Services
         {
         }
 
+        public async Task<BaseApiResponse<InstituteSingleDto>> GetOneAsync(long id)
+        {
+            return await GetOneDtoBaseAsync(id);
+        }
+
         public async Task<BaseApiResponse<InstituteSingleDto>> Create(InstituteCreateDto dto)
         {
             return await CreateBaseAsync(dto);

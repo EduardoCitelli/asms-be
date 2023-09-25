@@ -3,6 +3,7 @@ using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.DTOs.Institutes;
 using ASMS.Infrastructure;
+using ASMS.Queries.Institutes.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,15 @@ namespace ASMS.API.Controllers
             : base(mediator)
         {
             _userInfoService = userInfoService;
+        }
+
+        [HttpGet]
+        [Route("mine")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<InstituteSingleDto>> GetMyInstitute()
+        {
+            var request = new GetInstituteById(_userInfoService.Value!.Id);
+            return await _mediator.Send(request);
         }
 
         [HttpPost]
