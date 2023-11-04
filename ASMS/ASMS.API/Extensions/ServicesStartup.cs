@@ -24,16 +24,12 @@ namespace ASMS.API.Extensions
             services.AddTransient<IMembershipTypeService, MembershipTypeService>();
             services.AddTransient<IMembershipService, MembershipService>();
             services.AddTransient<IStaffMemberService, StaffMemberService>();
+            services.AddTransient<IInstituteMemberService, InstituteMemberService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IInstituteIdService, InstituteIdService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
 
-            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
-            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
-            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
-            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
-            services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
             services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
             return services;

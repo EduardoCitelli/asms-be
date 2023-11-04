@@ -18,6 +18,7 @@ namespace ASMS.Infrastructure.Automapper
             this.AddMembershipTypeConfig();
             this.AddMembershipConfig();
             this.AddStaffMemberConfig();
+            this.AddInstituteMemberConfig();
         }
     }
 }
