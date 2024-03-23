@@ -33,7 +33,6 @@ services.AddJwt(builder.Configuration);
 
 services.ConfigureServices(builder.Configuration);
 services.ConfigureMiddlewares();
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 var app = builder.Build();
 

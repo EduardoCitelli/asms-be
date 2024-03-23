@@ -5,9 +5,8 @@
       "connectionId": "ConnectionStrings:DefaultConnection",
       "dynamicId": null
     },
-    "appInsights1": {
-      "type": "appInsights",
-      "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+    "secrets1": {
+      "type": "secrets",
       "dynamicId": null
     }
   }
