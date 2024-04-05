@@ -5,8 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>2f384ea5-9af2-44f6-9798-270d28723f2e</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <ApplicationInsightsResourceId>/subscriptions/fd21d8ff-4bfa-48e1-89fc-f83036770edf/resourceGroups/ASMS/providers/microsoft.insights/components/asms-api</ApplicationInsightsResourceId>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>

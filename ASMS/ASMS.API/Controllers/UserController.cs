@@ -1,7 +1,9 @@
 ﻿using ASMS.Command.Users.Commands;
 using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Users;
 using ASMS.Infrastructure;
+using ASMS.Queries.Users.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +23,20 @@ namespace ASMS.API.Controllers
         public async Task<BaseApiResponse<UserBasicDto>> Create([FromBody] UserCreateCommand createCommand)
         {
             return await _mediator.Send(createCommand);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<PagedList<UserListDto>>> Get([FromQuery] GetAllUsers request)
+        {
+            return await _mediator.Send(request);
+        }
+
+        [HttpGet("{userId}")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<UserBasicDto>> GetById([FromRoute] long userId)
+        {
+            return await _mediator.Send(new GetUserById(userId));
         }
     }
 }

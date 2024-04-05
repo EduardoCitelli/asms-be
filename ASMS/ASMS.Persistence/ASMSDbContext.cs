@@ -41,8 +41,8 @@ namespace ASMS.Persistence
                     var method = typeof(ASMSDbContext).GetMethod(nameof(GetInsituteIdFilter), BindingFlags.NonPublic | BindingFlags.Static)?
                                                       .MakeGenericMethod(type);
 
-                    var filtro = method?.Invoke(null, new object[] { this })!;
-                    entity.SetQueryFilter((LambdaExpression)filtro);
+                    var filter = method?.Invoke(null, new object[] { this })!;
+                    entity.SetQueryFilter((LambdaExpression)filter);
                 }
             }
 

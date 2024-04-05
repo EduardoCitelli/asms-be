@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Settings;
+using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Auth;
 using ASMS.DTOs.MyUser;
@@ -17,6 +18,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 
@@ -53,6 +55,19 @@ namespace ASMS.Services
 
             if (isEmailExistent)
                 throw new BadRequestException($"Email {email} already exist");
+        }
+
+        public async Task<BaseApiResponse<PagedList<UserListDto>>> GetListAsync(int pageNumber = 1,
+                                                                                int pageSize = 10,
+                                                                                Expression<Func<User, bool>>? query = null,
+                                                                                Func<IQueryable<User>, IIncludableQueryable<User, object>>? include = null)
+        {
+            return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, query, include);
+        }
+
+        public async Task<BaseApiResponse<UserBasicDto>> GetOneAsync(long id)
+        {
+            return await GetOneDtoBaseAsync(id);
         }
 
         public async Task<BaseApiResponse<UserBasicDto>> CreateUser(UserCreateDto dto)
@@ -108,11 +123,11 @@ namespace ASMS.Services
         private async Task<User?> GetFullUserByUserName(string userName)
         {
             IIncludableQueryable<User, object> includeQuery(IQueryable<User> x) => x.Include(x => x.UserRoles)
-                                                                                                .ThenInclude(x => x.Role)
-                                                                                                .Include(x => x.Institute!)
-                                                                                                .Include(x => x.StaffMember!)
-                                                                                                .Include(x => x.Coach!)
-                                                                                                .Include(x => x.InstituteMember!);
+                                                                                    .ThenInclude(x => x.Role)
+                                                                                    .Include(x => x.Institute!)
+                                                                                    .Include(x => x.StaffMember!)
+                                                                                    .Include(x => x.Coach!)
+                                                                                    .Include(x => x.InstituteMember!);
 
             var entity = await _repository.FindSingleAsync(x => x.UserName == userName, includeQuery);
 
@@ -125,11 +140,11 @@ namespace ASMS.Services
 
             var claims = new List<Claim>
             {
-                new Claim(ASMSConfiguration.IdClaim, user.Id.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
+                new(ASMSConfiguration.IdClaim, user.Id.ToString()),
+                new(ClaimTypes.NameIdentifier, user.UserName),
+                new(ClaimTypes.Email, user.Email),
+                new(ClaimTypes.Name, user.FirstName),
+                new(ClaimTypes.Surname, user.LastName),
             };
 
             var rolesClaim = user.UserRoles.Select(x => new Claim(ClaimTypes.Role, x.Role.Name));

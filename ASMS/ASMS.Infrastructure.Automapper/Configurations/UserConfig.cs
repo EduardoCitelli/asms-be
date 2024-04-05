@@ -22,6 +22,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
             #region Map From Entity
             profile.CreateMap<User, UserBasicDto>();
+            profile.CreateMap<User, UserListDto>();
             #endregion
 
             return profile;
