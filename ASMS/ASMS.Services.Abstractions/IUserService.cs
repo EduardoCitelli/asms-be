@@ -27,5 +27,7 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<UserBasicDto>> UpdateMyUser(UpdateMyUserDto dto, long id);
 
         Task ValidateExistentInfo(string userName, string email);
+
+        Task<BaseApiResponse<bool>> BlockUnblockUser(long id, bool isBlockRequest);
     }
 }

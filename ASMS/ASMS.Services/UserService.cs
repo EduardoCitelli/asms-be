@@ -120,6 +120,25 @@ namespace ASMS.Services
             throw new BadRequestException("User or Password incorrect");
         }
 
+        public async Task<BaseApiResponse<bool>> BlockUnblockUser(long id, bool isBlockRequest)
+        {
+            var user = await _repository.GetByIdAsync(id);
+
+            if (user is null)
+                throw new NotFoundException("User not found");
+
+            user.IsBlocked = isBlockRequest;
+
+            await _repository.UpdateAsync(user);
+            var success = await _uow.SaveChangesAsync() > 0;
+
+            if (success)
+                return new BaseApiResponse<bool>(true);
+
+            var message = $"Problem while saving {_entityName} changes";
+            throw new InternalErrorException(message);
+        }
+
         private async Task<User?> GetFullUserByUserName(string userName)
         {
             IIncludableQueryable<User, object> includeQuery(IQueryable<User> x) => x.Include(x => x.UserRoles)

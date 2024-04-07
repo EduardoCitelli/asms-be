@@ -25,6 +25,20 @@ namespace ASMS.API.Controllers
             return await _mediator.Send(createCommand);
         }
 
+        [HttpPut("[action]/{userId}")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<bool>> Block([FromRoute] long userId)
+        {
+            return await _mediator.Send(new BlockUserCommand(userId));
+        }
+
+        [HttpPut("[action]/{userId}")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<bool>> Unblock([FromRoute] long userId)
+        {
+            return await _mediator.Send(new UnblockUserCommand(userId));
+        }
+
         [HttpGet]
         [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
         public async Task<BaseApiResponse<PagedList<UserListDto>>> Get([FromQuery] GetAllUsers request)
