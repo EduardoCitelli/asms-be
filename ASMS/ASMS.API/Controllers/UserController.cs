@@ -27,9 +27,9 @@ namespace ASMS.API.Controllers
 
         [HttpPut("{userId}")]
         [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
-        public async Task<BaseApiResponse<UserBasicDto>> Update([FromRoute] long userId)
+        public async Task<BaseApiResponse<UserBasicDto>> Update([FromRoute] long userId, [FromBody] UpdateUserCommand request)
         {
-            return await _mediator.Send(new UpdateUserCommand(userId));
+            return await _mediator.Send(new UpdateUserCommand(request, userId));
         }
 
         [HttpPut("[action]/{userId}")]

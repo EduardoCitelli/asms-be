@@ -6,9 +6,12 @@ namespace ASMS.Command.Users.Commands
 {
     public class UpdateUserCommand : UserUpdateDto, IRequest<BaseApiResponse<UserBasicDto>>
     {
-        public UpdateUserCommand(long id)
+        public UpdateUserCommand(UpdateUserCommand request, long id)
         {
             Id = id;
+            FirstName = request.FirstName;
+            LastName = request.LastName;
+            Email = request.Email;
         }
     }
 }
