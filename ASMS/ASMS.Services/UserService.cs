@@ -139,6 +139,18 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
+        public async Task<BaseApiResponse<IEnumerable<RoleTypeEnum>>> GetUserRoles(long userId)
+        {
+            var user = await _repository.FindSingleAsync(x => x.Id == userId, x => x.Include(x => x.UserRoles));
+
+            if (user is null)
+                throw new NotFoundException("User not found");
+
+            var roles = user.UserRoles.Select(x => x.RoleId).ToList();
+
+            return new BaseApiResponse<IEnumerable<RoleTypeEnum>>(roles);
+        }
+
         private async Task<User?> GetFullUserByUserName(string userName)
         {
             IIncludableQueryable<User, object> includeQuery(IQueryable<User> x) => x.Include(x => x.UserRoles)
