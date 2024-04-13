@@ -32,5 +32,7 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<bool>> BlockUnblockUser(long id, bool isBlockRequest);
 
         Task<BaseApiResponse<IEnumerable<RoleTypeEnum>>> GetUserRoles(long userId);
+
+        Task<BaseApiResponse<bool>> UpdateRolesAsync(long userId, IEnumerable<RoleTypeEnum> roles);
     }
 }

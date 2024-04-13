@@ -151,6 +151,25 @@ namespace ASMS.Services
             return new BaseApiResponse<IEnumerable<RoleTypeEnum>>(roles);
         }
 
+        public async Task<BaseApiResponse<bool>> UpdateRolesAsync(long userId, IEnumerable<RoleTypeEnum> roles)
+        {
+            var user = await _repository.FindSingleAsync(x => x.Id == userId, x => x.Include(x => x.UserRoles)) ?? throw new NotFoundException("User not found");
+
+            user.UserRoles = roles.Select(x => new UserRole()
+            {
+                RoleId = x,
+            }).ToList();
+
+            await _repository.UpdateAsync(user);
+            var success = await _uow.SaveChangesAsync() > 0;
+
+            if (success)
+                return new BaseApiResponse<bool>(true);
+
+            var message = $"Problem updating roles to {_entityName}";
+            throw new InternalErrorException(message);
+        }
+
         private async Task<User?> GetFullUserByUserName(string userName)
         {
             IIncludableQueryable<User, object> includeQuery(IQueryable<User> x) => x.Include(x => x.UserRoles)

@@ -66,5 +66,12 @@ namespace ASMS.API.Controllers
         {
             return await _mediator.Send(new GetUserRoles(userId));
         }
+
+        [HttpPut("{userId}/roles")]
+        [Authorize(Roles = RoleTypes.SuperAdmin)]
+        public async Task<BaseApiResponse<bool>> UpdateRoles([FromRoute] long userId, [FromBody] IEnumerable<RoleTypeEnum> roles)
+        {
+            return await _mediator.Send(new UpdateRolesCommand(userId, roles));
+        }
     }
 }
