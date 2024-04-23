@@ -20,9 +20,9 @@ namespace ASMS.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = RoleTypes.SuperAdmin)]
-        public async Task<BaseApiResponse<IEnumerable<RoleListDto>>> GetAll()
+        public async Task<BaseApiResponse<IEnumerable<RoleListDto>>> GetAll([FromQuery] GetAllRolesQueryRequest request)
         {
-            return await _mediator.Send(new GetAllRolesQueryRequest());
+            return await _mediator.Send(request);
         }
     }
 }
