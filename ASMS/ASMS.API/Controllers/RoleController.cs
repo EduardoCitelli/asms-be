@@ -1,4 +1,5 @@
 ﻿using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Roles;
 using ASMS.Infrastructure;
 using ASMS.Queries.Requests;
@@ -20,7 +21,7 @@ namespace ASMS.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = RoleTypes.SuperAdmin)]
-        public async Task<BaseApiResponse<IEnumerable<RoleListDto>>> GetAll([FromQuery] GetAllRolesQueryRequest request)
+        public async Task<BaseApiResponse<PagedList<RoleListDto>>> GetAll([FromQuery] GetAllRolesQueryRequest request)
         {
             return await _mediator.Send(request);
         }
