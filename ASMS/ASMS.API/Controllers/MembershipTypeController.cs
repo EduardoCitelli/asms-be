@@ -13,8 +13,8 @@ namespace ASMS.API.Controllers
 {
     public class MembershipTypeController : DefaultController
     {
-        public MembershipTypeController(IMediator mediator)
-            : base(mediator)
+        public MembershipTypeController(IMediator mediator, ILogger<MembershipTypeController> logger)
+            : base(mediator, logger)
         {
         }
 

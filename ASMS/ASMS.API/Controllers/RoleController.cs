@@ -11,12 +11,9 @@ namespace ASMS.API.Controllers
 {
     public class RoleController : DefaultController
     {
-        private readonly ILogger<RoleController> _logger;
-
         public RoleController(ILogger<RoleController> logger, IMediator mediator)
-            : base(mediator)
+            : base(mediator, logger)
         {
-            _logger = logger;
         }
 
         [HttpGet]

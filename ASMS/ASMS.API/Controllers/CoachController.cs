@@ -12,8 +12,8 @@ namespace ASMS.API.Controllers
 {
     public class CoachController : DefaultController
     {
-        public CoachController(IMediator mediator)
-            : base(mediator)
+        public CoachController(IMediator mediator, ILogger<CoachController> logger)
+            : base(mediator, logger)
         {
         }
 

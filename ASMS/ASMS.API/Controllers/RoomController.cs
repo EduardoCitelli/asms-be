@@ -12,8 +12,8 @@ namespace ASMS.API.Controllers
 {
     public class RoomController : DefaultController
     {
-        public RoomController(IMediator mediator)
-            : base(mediator)
+        public RoomController(IMediator mediator, ILogger<RoomController> logger)
+            : base(mediator, logger)
         {
         }
 

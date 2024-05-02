@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ASMS.API.Controllers
 {
     [Authorize]
-    public class MyUser : DefaultController
+    public class MyUserController : DefaultController
     {
-        public MyUser(IMediator mediator)
-            : base(mediator)
+        public MyUserController(IMediator mediator, ILogger<MyUserController> logger)
+            : base(mediator, logger)
         {
         }
 

@@ -14,8 +14,8 @@ namespace ASMS.API.Controllers
     {
         private readonly IUserInfoService _userInfoService;
 
-        public InstituteController(IMediator mediator, IUserInfoService userInfoService)
-            : base(mediator)
+        public InstituteController(IMediator mediator, IUserInfoService userInfoService, ILogger<InstituteController> logger)
+            : base(mediator, logger)
         {
             _userInfoService = userInfoService;
         }

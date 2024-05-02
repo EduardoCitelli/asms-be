@@ -13,8 +13,8 @@ namespace ASMS.API.Controllers
 {
     public class PlanController : DefaultController
     {
-        public PlanController(IMediator mediator)
-            : base(mediator)
+        public PlanController(IMediator mediator, ILogger<PlanController> logger)
+            : base(mediator, logger)
         {
         }
 

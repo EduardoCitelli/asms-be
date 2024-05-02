@@ -12,8 +12,8 @@ namespace ASMS.API.Controllers
 {
     public class UserController : DefaultController
     {
-        public UserController(IMediator mediator)
-            : base(mediator)
+        public UserController(IMediator mediator, ILogger<UserController> logger)
+            : base(mediator, logger)
         {
         }
 

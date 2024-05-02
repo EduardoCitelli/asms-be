@@ -12,8 +12,8 @@ namespace ASMS.API.Controllers
 {
     public class InstituteMemberController : DefaultController
     {
-        public InstituteMemberController(IMediator mediator)
-            : base(mediator)
+        public InstituteMemberController(IMediator mediator, ILogger<InstituteMemberController> logger)
+            : base(mediator, logger)
         {
         }
 

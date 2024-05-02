@@ -13,10 +13,12 @@ namespace ASMS.API.Controllers
     public abstract class DefaultController : ControllerBase
     {
         protected readonly IMediator _mediator;
+        protected readonly ILogger<DefaultController> _logger;
 
-        public DefaultController(IMediator mediator)
+        public DefaultController(IMediator mediator, ILogger<DefaultController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
     }
 }
