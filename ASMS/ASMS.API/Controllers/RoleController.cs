@@ -1,4 +1,5 @@
 ﻿using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Roles;
 using ASMS.Infrastructure;
 using ASMS.Queries.Requests;
@@ -10,19 +11,16 @@ namespace ASMS.API.Controllers
 {
     public class RoleController : DefaultController
     {
-        private readonly ILogger<RoleController> _logger;
-
         public RoleController(ILogger<RoleController> logger, IMediator mediator)
-            : base(mediator)
+            : base(mediator, logger)
         {
-            _logger = logger;
         }
 
         [HttpGet]
         [Authorize(Roles = RoleTypes.SuperAdmin)]
-        public async Task<BaseApiResponse<IEnumerable<RoleListDto>>> GetAll()
+        public async Task<BaseApiResponse<PagedList<RoleListDto>>> GetAll([FromQuery] GetAllRolesQueryRequest request)
         {
-            return await _mediator.Send(new GetAllRolesQueryRequest());
+            return await _mediator.Send(request);
         }
     }
 }

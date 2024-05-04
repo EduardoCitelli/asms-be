@@ -27,7 +27,14 @@ namespace ASMS.Command.Institutes.Handlers
             request.User.Password = request.User.Password.ToHash();
             request.User.Email = request.User.Email.ToLower();
 
-            return errors.Any() ? throw new BadRequestException(errors) : await _instituteService.Create(request);
+            if (errors.Any())
+                throw new BadRequestException(errors);
+
+            var response = await _instituteService.Create(request);
+
+            await _userService.CreateAdminUserAsync(response.Content!.Id, response.Content!.InstitutionName);
+
+            return response;
         }
 
         private async Task<List<string>> ValidateInstitute(InstituteCreateCommand request)

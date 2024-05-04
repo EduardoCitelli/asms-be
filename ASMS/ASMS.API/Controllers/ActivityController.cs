@@ -12,8 +12,8 @@ namespace ASMS.API.Controllers
 {
     public class ActivityController : DefaultController
     {
-        public ActivityController(IMediator mediator)
-            : base(mediator)
+        public ActivityController(IMediator mediator, ILogger<ActivityController> logger)
+            : base(mediator, logger)
         {
         }
 

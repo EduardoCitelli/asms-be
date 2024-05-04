@@ -1,6 +1,6 @@
 ﻿namespace ASMS.CrossCutting.Enums
 {
-    public enum RoleTypeEnum
+    public enum RoleTypeEnum : int
     {
         SuperAdmin = 1,
         Manager,

@@ -1,11 +1,15 @@
 ﻿using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Utils;
+using ASMS.Domain.Entities;
 using ASMS.DTOs.Users;
 using ASMS.Infrastructure;
 using ASMS.Queries.Users.Requests;
 using ASMS.Services.Abstractions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace ASMS.Queries.Users.Handlers
 {
@@ -29,7 +33,17 @@ namespace ASMS.Queries.Users.Handlers
             if (!user.Roles.Intersect(_administrationRoles).Any())
                 return new BaseApiResponse<PagedList<UserListDto>>();
 
-            return await _userService.GetListAsync(request.Page, request.Size);
+            return await _userService.GetListAsync(request.Page, request.Size, NotAdminUsers(), IncludeUserRoles());
+        }
+
+        private static Expression<Func<User, bool>> NotAdminUsers()
+        {
+            return x => !x.UserRoles.Any(x => x.RoleId == RoleTypeEnum.SuperAdmin);
+        }
+
+        private static Func<IQueryable<User>, IIncludableQueryable<User, object>> IncludeUserRoles()
+        {
+            return x => x.Include(x => x.UserRoles);
         }
     }
 }

@@ -9,8 +9,8 @@ namespace ASMS.API.Controllers
 {
     public class AuthController : DefaultController
     {
-        public AuthController(IMediator mediator)
-            : base(mediator)
+        public AuthController(IMediator mediator, ILogger<AuthController> logger)
+            : base(mediator, logger)
         {
         }
 

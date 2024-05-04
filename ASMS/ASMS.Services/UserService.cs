@@ -26,6 +26,7 @@ namespace ASMS.Services
 {
     public class UserService : ServiceBase<User, long, UserBasicDto, UserListDto>, IUserService
     {
+        private const string AdminValue = "admin";
         private readonly AuthSettings _authSettings;
         private readonly Dictionary<RoleTypeEnum, Func<User, long>> _roleToInstituteId = new()
         {
@@ -75,6 +76,21 @@ namespace ASMS.Services
             return await CreateBaseAsync(dto);
         }
 
+        public async Task CreateAdminUserAsync(long instituteId, string instituteName)
+        {
+            var dto = new UserCreateDto
+            {
+                UserName = $"{AdminValue}-{instituteName}",
+                Password = _authSettings.AdminPassword,
+                Email = _authSettings.AdminEmail,
+                FirstName = AdminValue,
+                LastName = AdminValue,
+                Roles = new List<RoleTypeEnum>() { RoleTypeEnum.SuperAdmin, RoleTypeEnum.Manager },
+            };
+
+            _ = await CreateBaseAsync(dto, GenerateInstituteMemberForAdmin(instituteId));
+        }
+
         public async Task<BaseApiResponse<UserBasicDto>> UpdateMyUser(UpdateMyUserDto dto, long id)
         {
             var isEmailExistent = await ExistBaseAsync(x => x.Email == dto.Email && x.Id != id);
@@ -118,6 +134,56 @@ namespace ASMS.Services
             }
 
             throw new BadRequestException("User or Password incorrect");
+        }
+
+        public async Task<BaseApiResponse<bool>> BlockUnblockUser(long id, bool isBlockRequest)
+        {
+            var user = await _repository.GetByIdAsync(id);
+
+            if (user is null)
+                throw new NotFoundException("User not found");
+
+            user.IsBlocked = isBlockRequest;
+
+            await _repository.UpdateAsync(user);
+            var success = await _uow.SaveChangesAsync() > 0;
+
+            if (success)
+                return new BaseApiResponse<bool>(true);
+
+            var message = $"Problem while saving {_entityName} changes";
+            throw new InternalErrorException(message);
+        }
+
+        public async Task<BaseApiResponse<IEnumerable<RoleTypeEnum>>> GetUserRoles(long userId)
+        {
+            var user = await _repository.FindSingleAsync(x => x.Id == userId, x => x.Include(x => x.UserRoles));
+
+            if (user is null)
+                throw new NotFoundException("User not found");
+
+            var roles = user.UserRoles.Select(x => x.RoleId).ToList();
+
+            return new BaseApiResponse<IEnumerable<RoleTypeEnum>>(roles);
+        }
+
+        public async Task<BaseApiResponse<bool>> UpdateRolesAsync(long userId, IEnumerable<RoleTypeEnum> roles)
+        {
+            var user = await _repository.FindSingleAsync(x => x.Id == userId, x => x.Include(x => x.UserRoles)) ?? throw new NotFoundException("User not found");
+
+            user.UserRoles = roles.Select(x => new UserRole()
+            {
+                RoleId = x,
+            }).ToList();
+
+            await _repository.UpdateAsync(user);
+            var success = await _uow.SaveChangesAsync() > 0;
+
+            if (success)
+                return new BaseApiResponse<bool>(true);
+
+            var message = $"Problem updating roles to {_entityName}";
+            throw new InternalErrorException(message);
         }
 
         private async Task<User?> GetFullUserByUserName(string userName)
@@ -185,6 +251,16 @@ namespace ASMS.Services
             return null;
         }
 
-        private bool ValidatePassword(User? user, string requestPassword) => user != null && EncryptExtensions.VerifyPass(requestPassword, user.Password);
+        private static Action<User> GenerateInstituteMemberForAdmin(long instituteId)
+        {
+            return x => x.InstituteMember = new InstituteMember
+            {
+                InstituteId = instituteId,
+                IsEnabled = true,
+                BirthDate = new DateOnly(1992, 1, 1),
+            };
+        }
+
+        private static bool ValidatePassword(User? user, string requestPassword) => user != null && EncryptExtensions.VerifyPass(requestPassword, user.Password);
     }
 }

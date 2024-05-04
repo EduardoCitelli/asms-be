@@ -1,4 +1,5 @@
-﻿using ASMS.CrossCutting.Utils;
+﻿using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.InstituteMembers;
 using ASMS.Infrastructure;
@@ -7,6 +8,7 @@ using ASMS.Services.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace ASMS.Queries.InstituteMembers.Handlers
 {
@@ -23,10 +25,13 @@ namespace ASMS.Queries.InstituteMembers.Handlers
         {
             return await _instituteMemberService.GetListAsync(request.Page,
                                                               request.Size,
-                                                              null,
+                                                              ExcludeAdminUsers(),
                                                               IncludeUser());
         }
 
-        private static Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>> IncludeUser() => x => x.Include(x => x.User);
+        private static Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>> IncludeUser() => x => x.Include(x => x.User)
+                                                                                                                               .ThenInclude(x => x.UserRoles);
+
+        private static Expression<Func<InstituteMember, bool>> ExcludeAdminUsers() => x => !x.User.UserRoles.Any(x => x.RoleId == RoleTypeEnum.SuperAdmin);
     }
 }

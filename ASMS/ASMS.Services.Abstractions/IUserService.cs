@@ -1,4 +1,5 @@
-﻿using ASMS.CrossCutting.Utils;
+﻿using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Auth;
 using ASMS.DTOs.MyUser;
@@ -27,5 +28,13 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<UserBasicDto>> UpdateMyUser(UpdateMyUserDto dto, long id);
 
         Task ValidateExistentInfo(string userName, string email);
+
+        Task<BaseApiResponse<bool>> BlockUnblockUser(long id, bool isBlockRequest);
+
+        Task<BaseApiResponse<IEnumerable<RoleTypeEnum>>> GetUserRoles(long userId);
+
+        Task<BaseApiResponse<bool>> UpdateRolesAsync(long userId, IEnumerable<RoleTypeEnum> roles);
+
+        Task CreateAdminUserAsync(long instituteId, string instituteName);
     }
 }

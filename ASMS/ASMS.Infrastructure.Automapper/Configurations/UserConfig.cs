@@ -13,6 +13,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
             profile.CreateMap<UserBasicDto, User>();
 
+            profile.CreateMap<UserUpdateDto, User>();
+
             profile.CreateMap<UpdateMyUserDto, User>();
 
             profile.CreateMap<UserCreateDto, User>()

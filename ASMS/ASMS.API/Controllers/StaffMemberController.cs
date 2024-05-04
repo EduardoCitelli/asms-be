@@ -12,8 +12,8 @@ namespace ASMS.API.Controllers
 {
     public class StaffMemberController : DefaultController
     {
-        public StaffMemberController(IMediator mediator)
-            : base(mediator)
+        public StaffMemberController(IMediator mediator, ILogger<StaffMemberController> logger)
+            : base(mediator, logger)
         {
         }
 
