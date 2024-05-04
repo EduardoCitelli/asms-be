@@ -34,5 +34,7 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<IEnumerable<RoleTypeEnum>>> GetUserRoles(long userId);
 
         Task<BaseApiResponse<bool>> UpdateRolesAsync(long userId, IEnumerable<RoleTypeEnum> roles);
+
+        Task CreateAdminUserAsync(long instituteId, string instituteName);
     }
 }

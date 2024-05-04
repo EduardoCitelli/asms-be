@@ -26,6 +26,7 @@ namespace ASMS.Services
 {
     public class UserService : ServiceBase<User, long, UserBasicDto, UserListDto>, IUserService
     {
+        private const string AdminValue = "admin";
         private readonly AuthSettings _authSettings;
         private readonly Dictionary<RoleTypeEnum, Func<User, long>> _roleToInstituteId = new()
         {
@@ -73,6 +74,21 @@ namespace ASMS.Services
         public async Task<BaseApiResponse<UserBasicDto>> CreateUser(UserCreateDto dto)
         {
             return await CreateBaseAsync(dto);
+        }
+
+        public async Task CreateAdminUserAsync(long instituteId, string instituteName)
+        {
+            var dto = new UserCreateDto
+            {
+                UserName = $"{AdminValue}-{instituteName}",
+                Password = _authSettings.AdminPassword,
+                Email = _authSettings.AdminEmail,
+                FirstName = AdminValue,
+                LastName = AdminValue,
+                Roles = new List<RoleTypeEnum>() { RoleTypeEnum.SuperAdmin, RoleTypeEnum.Manager },
+            };
+
+            _ = await CreateBaseAsync(dto, GenerateInstituteMemberForAdmin(instituteId));
         }
 
         public async Task<BaseApiResponse<UserBasicDto>> UpdateMyUser(UpdateMyUserDto dto, long id)
@@ -235,6 +251,16 @@ namespace ASMS.Services
             return null;
         }
 
-        private bool ValidatePassword(User? user, string requestPassword) => user != null && EncryptExtensions.VerifyPass(requestPassword, user.Password);
+        private static Action<User> GenerateInstituteMemberForAdmin(long instituteId)
+        {
+            return x => x.InstituteMember = new InstituteMember
+            {
+                InstituteId = instituteId,
+                IsEnabled = true,
+                BirthDate = new DateOnly(1992, 1, 1),
+            };
+        }
+
+        private static bool ValidatePassword(User? user, string requestPassword) => user != null && EncryptExtensions.VerifyPass(requestPassword, user.Password);
     }
 }
