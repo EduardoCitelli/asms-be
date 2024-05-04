@@ -1,4 +1,5 @@
-﻿using ASMS.Domain.Entities;
+﻿using ASMS.CrossCutting.Utils;
+using ASMS.Domain.Entities;
 using ASMS.DTOs.Institutes;
 using ASMS.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
@@ -18,5 +19,10 @@ namespace ASMS.Services.Abstractions
 
         Task<bool> Any(Expression<Func<Institute, bool>> query,
                        Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null);
+
+        Task<BaseApiResponse<PagedList<InstituteListDto>>> GetListAsync(int pageNumber = 1, 
+                                                                        int pageSize = 10, 
+                                                                        Expression<Func<Institute, bool>>? query = null, 
+                                                                        Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null);
     }
 }

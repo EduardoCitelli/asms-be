@@ -1,6 +1,7 @@
 ﻿using ASMS.Command.Institutes.Commands;
 using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Institutes;
 using ASMS.Infrastructure;
 using ASMS.Queries.Institutes.Requests;
@@ -21,12 +22,26 @@ namespace ASMS.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleTypes.SuperAdmin)]
+        public async Task<BaseApiResponse<PagedList<InstituteListDto>>> GetList([FromQuery] GetAllInstitutes request)
+        {
+            return await _mediator.Send(request);
+        }
+
+        [HttpGet]
         [Route("mine")]
         [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
         public async Task<BaseApiResponse<InstituteSingleDto>> GetMyInstitute()
         {
             var request = new GetInstituteById(_userInfoService.Value!.Id);
             return await _mediator.Send(request);
+        }
+
+        [HttpGet("{instituteId}")]
+        [Authorize(Roles = RoleTypes.SuperAdmin)]
+        public async Task<BaseApiResponse<InstituteSingleDto>> GetById([FromRoute] long instituteId)
+        {
+            return await _mediator.Send(new GetInstituteById(instituteId));
         }
 
         [HttpPost]
