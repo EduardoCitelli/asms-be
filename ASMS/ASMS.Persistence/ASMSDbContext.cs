@@ -1,5 +1,6 @@
 ﻿using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.Domain.Abstractions;
+using ASMS.Domain.Entities;
 using ASMS.Persistence.Conventions;
 using ASMS.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,7 @@ namespace ASMS.Persistence
             {
                 var type = entity.ClrType;
 
-                if (typeof(IIsInstituteEntity).IsAssignableFrom(type))
+                if (typeof(IIsInstituteEntity).IsAssignableFrom(type) || typeof(User).IsAssignableFrom(type))
                 {
                     var method = typeof(ASMSDbContext).GetMethod(nameof(GetInsituteIdFilter), BindingFlags.NonPublic | BindingFlags.Static)?
                                                       .MakeGenericMethod(type);
