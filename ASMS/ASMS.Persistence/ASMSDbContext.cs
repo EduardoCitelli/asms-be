@@ -37,7 +37,7 @@ namespace ASMS.Persistence
             {
                 var type = entity.ClrType;
 
-                if (typeof(IIsInstituteEntity).IsAssignableFrom(type) || typeof(User).IsAssignableFrom(type))
+                if (typeof(IIsInstituteEntity).IsAssignableFrom(type))
                 {
                     var method = typeof(ASMSDbContext).GetMethod(nameof(GetInsituteIdFilter), BindingFlags.NonPublic | BindingFlags.Static)?
                                                       .MakeGenericMethod(type);

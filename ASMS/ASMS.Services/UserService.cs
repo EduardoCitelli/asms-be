@@ -1,5 +1,6 @@
 ﻿using ASMS.CrossCutting.Constants;
 using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Extensions;
 using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Settings;
 using ASMS.CrossCutting.Utils;
@@ -17,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -63,6 +65,17 @@ namespace ASMS.Services
                                                                                 Expression<Func<User, bool>>? query = null,
                                                                                 Func<IQueryable<User>, IIncludableQueryable<User, object>>? include = null)
         {
+            if (query is not null)
+            {
+                var instituteId = _instituteIdService.InstituteId;
+                query = query.And(x => x.Coach.InstituteId.Equals(instituteId) ||
+                                       x.InstituteMember.InstituteId.Equals(instituteId) ||
+                                       x.Institute.Id.Equals(instituteId) ||
+                                       x.StaffMember.InstituteId.Equals(instituteId));
+            }
+
+            include ??= IncludeFullUserQuery();
+
             return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, query, include);
         }
 
@@ -85,7 +98,7 @@ namespace ASMS.Services
                 Email = _authSettings.AdminEmail,
                 FirstName = AdminValue,
                 LastName = AdminValue,
-                Roles = new List<RoleTypeEnum>() { RoleTypeEnum.SuperAdmin, RoleTypeEnum.Manager },
+                Roles = new List<RoleTypeEnum>() { RoleTypeEnum.SuperAdmin, RoleTypeEnum.Member },
             };
 
             _ = await CreateBaseAsync(dto, GenerateInstituteMemberForAdmin(instituteId));
@@ -188,16 +201,19 @@ namespace ASMS.Services
 
         private async Task<User?> GetFullUserByUserName(string userName)
         {
-            IIncludableQueryable<User, object> includeQuery(IQueryable<User> x) => x.Include(x => x.UserRoles)
-                                                                                    .ThenInclude(x => x.Role)
-                                                                                    .Include(x => x.Institute!)
-                                                                                    .Include(x => x.StaffMember!)
-                                                                                    .Include(x => x.Coach!)
-                                                                                    .Include(x => x.InstituteMember!);
-
-            var entity = await _repository.FindSingleAsync(x => x.UserName == userName, includeQuery);
+            var entity = await _repository.FindSingleAsync(x => x.UserName == userName, IncludeFullUserQuery());
 
             return entity;
+        }
+
+        private static Func<IQueryable<User>, IIncludableQueryable<User, object>> IncludeFullUserQuery()
+        {
+            return x => x.Include(x => x.UserRoles)
+                         .ThenInclude(x => x.Role)
+                         .Include(x => x.Institute!)
+                         .Include(x => x.StaffMember!)
+                         .Include(x => x.Coach!)
+                         .Include(x => x.InstituteMember!);
         }
 
         private void GenerateToken(User user, AuthResponseDto dto)
