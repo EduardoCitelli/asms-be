@@ -35,7 +35,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
             profile.CreateMap<Institute, PersonalInfoDto>();
 
-            profile.CreateMap<Institute, InstituteListDto>();
+            profile.CreateMap<Institute, InstituteListDto>()
+                    .ForMember(dto => dto.PlanId, config => config.MapFrom(entity => entity.InstitutePlans.Where(x => x.IsCurrentPlan).FirstOrDefault().PlanId));
             #endregion
 
             return profile;

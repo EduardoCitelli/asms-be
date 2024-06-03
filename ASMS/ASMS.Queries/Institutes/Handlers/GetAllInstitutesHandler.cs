@@ -4,6 +4,7 @@ using ASMS.Infrastructure;
 using ASMS.Queries.Institutes.Requests;
 using ASMS.Services.Abstractions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASMS.Queries.Institutes.Handlers
 {
@@ -18,7 +19,7 @@ namespace ASMS.Queries.Institutes.Handlers
 
         public async Task<BaseApiResponse<PagedList<InstituteListDto>>> Handle(GetAllInstitutes request, CancellationToken cancellationToken)
         {
-            return await _instituteService.GetListAsync(request.Page, request.Size);
+            return await _instituteService.GetListAsync(request.Page, request.Size, include: x => x.Include(x => x.InstitutePlans));
         }
     }
 }

@@ -5,5 +5,7 @@
         public long Id { get; set; }
 
         public bool IsEnabled { get; set; }
+
+        public int? PlanId { get; set; }
     }
 }
