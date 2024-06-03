@@ -29,7 +29,7 @@ namespace ASMS.Services
                                                                                      int pageSize = 10,
                                                                                      Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null)
         {
-            return await GetDtoPaginatedsByQueryBaseAsync(query, pageNumber, pageSize, include);
+            return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, query, include);
         }
 
         public async Task<BaseApiResponse<PlanSingleDto>> GetOneAsync(int id)

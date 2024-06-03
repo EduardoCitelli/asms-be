@@ -30,7 +30,7 @@ namespace ASMS.Services
                                                                                 int pageSize = 10,
                                                                                 Func<IQueryable<Room>, IIncludableQueryable<Room, object>>? include = null)
         {
-            return await GetDtoPaginatedsByQueryBaseAsync(query, pageNumber, pageSize, include);
+            return await GetAllDtosPaginatedBaseAsync(pageNumber, pageSize, query, include);
         }
 
         public async Task<BaseApiResponse<RoomSingleDto>> GetOneAsync(long id)

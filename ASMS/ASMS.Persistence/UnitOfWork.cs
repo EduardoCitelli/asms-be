@@ -18,7 +18,7 @@ namespace ASMS.Persistence
             _repositories = new Dictionary<string, object>();
         }
 
-        public IRepository<TEntity, TKey>? GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
+        public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
         {
             var name = StringExtensions.GetRepositoryName<TEntity>();
 
@@ -28,7 +28,9 @@ namespace ASMS.Persistence
                 _repositories.Add(name, repository);
             }
 
-            return (IRepository<TEntity, TKey>)_repositories[name];
+            var repositoryValue = (IRepository<TEntity, TKey>)_repositories[name];
+
+            return repositoryValue ?? throw new InternalErrorException($"Repository {name} not found");
         }
 
         public async ValueTask DisposeAsync()
@@ -71,6 +73,6 @@ namespace ASMS.Persistence
             }
         }
 
-        protected virtual IRepository<TEntity, TKey> CreateRepository<TEntity, TKey>(string nombre) where TEntity : BaseEntity<TKey> => new Repository<TEntity, TKey>(_dbContext);
+        protected virtual IRepository<TEntity, TKey> CreateRepository<TEntity, TKey>(string name) where TEntity : BaseEntity<TKey> => new Repository<TEntity, TKey>(_dbContext);
     }
 }

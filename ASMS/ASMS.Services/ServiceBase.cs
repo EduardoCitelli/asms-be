@@ -26,13 +26,18 @@ namespace ASMS.Services
         protected ServiceBase(IUnitOfWork uow, string entityName, IMapper mapper, IInstituteIdService instituteIdService)
         {
             _uow = uow;
-            _repository = _uow.GetRepository<TEntity, TKey>()!;
+            _repository = _uow.GetRepository<TEntity, TKey>();
             _mapper = mapper;
             _entityName = entityName;
             _isAuditEntity = typeof(TEntity) is AuditEntity<TKey>;
             _instituteIdService = instituteIdService;
         }
 
+        /// <summary>
+        /// Base method to get all entities as dtos
+        /// </summary>
+        /// <param name="include"></param>
+        /// <returns></returns>
         protected async Task<BaseApiResponse<IEnumerable<TListDto>>> GetAllDtosBaseAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
             var result = _repository.GetAll(include, null);
@@ -43,6 +48,14 @@ namespace ASMS.Services
             return new BaseApiResponse<IEnumerable<TListDto>>(dtos);
         }
 
+        /// <summary>
+        /// Base method to get all entities paginated as dtos
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="query"></param>
+        /// <param name="include"></param>
+        /// <returns></returns>
         protected async Task<BaseApiResponse<PagedList<TListDto>>> GetAllDtosPaginatedBaseAsync(int pageNumber = 1,
                                                                                                 int pageSize = 10,
                                                                                                 Expression<Func<TEntity, bool>>? query = null,
@@ -57,6 +70,12 @@ namespace ASMS.Services
             return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
         }
 
+        /// <summary>
+        /// Base method to get one entity as dto
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="include"></param>
+        /// <returns></returns>
         protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key, Expression<Func<TEntity, object>>? include = null)
         {
             var result = await TryGetExistentEntityBaseAsync(key, include);
@@ -66,20 +85,10 @@ namespace ASMS.Services
             return new BaseApiResponse<TSingleDto>(dto);
         }
 
-        protected async Task<BaseApiResponse<PagedList<TListDto>>> GetDtoPaginatedsByQueryBaseAsync(Expression<Func<TEntity, bool>> query,
-                                                                                                    int pageNumber = 1,
-                                                                                                    int pageSize = 10,
-                                                                                                    Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
-        {
-            var result = _repository.Find(query, include, null);
-
-            var dtos = _mapper.ProjectTo<TListDto>(result);
-
-            var pagedResponse = await ListExtensions.ToPagedList(dtos, pageNumber, pageSize);
-
-            return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
-        }
-
+        /// <summary>
+        /// Base method to get all entities as combo values
+        /// </summary>
+        /// <returns></returns>
         protected async Task<BaseApiResponse<IEnumerable<ComboDto<TKey>>>> GetForComboBaseAsync()
         {
             var result = _repository.GetAll();
@@ -89,6 +98,15 @@ namespace ASMS.Services
             return new BaseApiResponse<IEnumerable<ComboDto<TKey>>>(response);
         }
 
+        /// <summary>
+        /// Base method to create and save a new entity
+        /// </summary>
+        /// <typeparam name="TCreateDto">type of dto to create the new entity</typeparam>
+        /// <param name="request"></param>
+        /// <param name="actionBeforeSave"></param>
+        /// <returns></returns>
+        /// <exception cref="BadRequestException"></exception>
+        /// <exception cref="InternalErrorException"></exception>
         protected async Task<BaseApiResponse<TSingleDto>> CreateBaseAsync<TCreateDto>(TCreateDto request, Action<TEntity>? actionBeforeSave = null)
         {
             if (request is NameDescriptionDto nameDescription)
@@ -124,6 +142,17 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
+        /// <summary>
+        /// Base method to update an entity from a DTO
+        /// </summary>
+        /// <typeparam name="TUpdateDto">type of dto to update the entity</typeparam>
+        /// <param name="request"></param>
+        /// <param name="key"></param>
+        /// <param name="beforeAction"></param>
+        /// <param name="include"></param>
+        /// <returns></returns>
+        /// <exception cref="BadRequestException"></exception>
+        /// <exception cref="InternalErrorException"></exception>
         protected async Task<BaseApiResponse<TSingleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, 
                                                                                       TKey key, 
                                                                                       Action<TUpdateDto, TEntity>? beforeAction = null,
@@ -158,6 +187,12 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
+        /// <summary>
+        /// Base method to delete an entity
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        /// <exception cref="InternalErrorException"></exception>
         protected async Task<BaseApiResponse<TSingleDto>> DeleteBaseAsync(TKey key)
         {
             var entity = await TryGetExistentEntityBaseAsync(key);
@@ -177,6 +212,13 @@ namespace ASMS.Services
             throw new InternalErrorException(message);
         }
 
+        /// <summary>
+        /// Base method to try to get an existent entity with key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="include"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         protected async Task<TEntity> TryGetExistentEntityBaseAsync(TKey key, Expression<Func<TEntity, object>>? include = null)
         {
             var existentEntity = await _repository.GetByIdAsync(key, include);
@@ -190,6 +232,12 @@ namespace ASMS.Services
             return existentEntity;
         }
 
+        /// <summary>
+        /// Base method to try to get an existent entity with a query
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         protected async Task<TEntity> TryGetExistentEntityBaseAsync(Expression<Func<TEntity, bool>> expression)
         {
             var entity = await _repository.FindSingleAsync(expression);
@@ -203,11 +251,22 @@ namespace ASMS.Services
             return entity;
         }
 
+        /// <summary>
+        /// Base method to check if entity exist by key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected async Task<bool> ExistBaseAsync(TKey key)
         {
             return await _repository.ExistAsync(key);
         }
 
+        /// <summary>
+        /// Base method to check if entity exist by query
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="include"></param>
+        /// <returns></returns>
         protected async Task<bool> ExistBaseAsync(Expression<Func<TEntity, bool>> expression,
                                                   Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
