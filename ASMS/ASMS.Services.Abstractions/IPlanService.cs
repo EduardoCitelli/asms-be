@@ -1,6 +1,7 @@
 ﻿using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Plans;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -26,5 +27,7 @@ namespace ASMS.Services
                                                                         int pageSize = 10,
                                                                         Func<IQueryable<Plan>, IIncludableQueryable<Plan, object>>? include = null);
         Task<bool> ExistEntityAsync(Expression<Func<Plan, bool>> expression);
+
+        Task<BaseApiResponse<IEnumerable<ComboDto<int>>>> GetForComboAsync();
     }
 }

@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Plans;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using AutoMapper;
@@ -35,6 +36,11 @@ namespace ASMS.Services
         public async Task<BaseApiResponse<PlanSingleDto>> GetOneAsync(int id)
         {
             return await GetOneDtoBaseAsync(id);
+        }
+
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<int>>>> GetForComboAsync()
+        {
+            return await GetForComboBaseAsync();
         }
 
         public async Task<bool> ExistEntityAsync(Expression<Func<Plan, bool>> expression)

@@ -3,6 +3,7 @@ using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Extensions;
 using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Plans;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Queries.Plans.Requests;
 using MediatR;
@@ -54,6 +55,13 @@ namespace ASMS.API.Controllers
         public async Task<BaseApiResponse<PlanSingleDto>> DeletePlan([FromRoute] int planId)
         {
             return await _mediator.Send(new PlanDeleteCommand(planId));
+        }
+
+        [HttpGet("combos")]
+        [Authorize(Roles = RoleTypes.SuperAdmin)]
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<int>>>> GetCombo()
+        {
+            return await _mediator.Send(new GetPlansForCombo());
         }
     }
 }

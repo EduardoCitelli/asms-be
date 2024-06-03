@@ -2,6 +2,7 @@
 {
     using ASMS.Domain.Entities;
     using ASMS.DTOs.Plans;
+    using ASMS.DTOs.Shared;
 
     internal static class PlanConfig
     {
@@ -16,6 +17,7 @@
             profile.CreateMap<Plan, PlanSingleDto>();
             profile.CreateMap<Plan, PlanDto>();
             profile.CreateMap<Plan, PlanListDto>();
+            profile.CreateMap<Plan, ComboDto<int>>();
             #endregion
 
             return profile;
