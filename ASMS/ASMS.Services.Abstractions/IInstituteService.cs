@@ -24,5 +24,7 @@ namespace ASMS.Services.Abstractions
                                                                         int pageSize = 10, 
                                                                         Expression<Func<Institute, bool>>? query = null, 
                                                                         Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null);
+
+        Task<BaseApiResponse<bool>> SetDisableInstitute(long instituteId, Action<Institute> businessLogic);
     }
 }

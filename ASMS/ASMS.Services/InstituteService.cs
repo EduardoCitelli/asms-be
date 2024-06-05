@@ -3,6 +3,7 @@ using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Institutes;
 using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
@@ -50,6 +51,23 @@ namespace ASMS.Services
                                     Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null)
         {
             return await ExistBaseAsync(query, include);
+        }
+
+        public async Task<BaseApiResponse<bool>> SetDisableInstitute(long instituteId, Action<Institute> businessLogic)
+        {
+            var entity = await TryGetExistentEntityBaseAsync(instituteId, x => x.InstitutePlans);
+
+            businessLogic.Invoke(entity);
+
+            await _repository.UpdateAsync(entity);
+
+            var success = await _uow.SaveChangesAsync() > 0;
+
+            if (success)
+                return new BaseApiResponse<bool>(true);
+
+            var message = $"Problem while saving {_entityName} changes";
+            throw new InternalErrorException(message);
         }
     }
 }

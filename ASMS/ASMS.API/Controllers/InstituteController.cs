@@ -67,6 +67,13 @@ namespace ASMS.API.Controllers
             return await _mediator.Send(command);
         }
 
+        [HttpPut("{instituteId}/disable")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin}")]
+        public async Task<BaseApiResponse<bool>> UpdateInstituteStatus([FromRoute] long instituteId)
+        {            
+            return await _mediator.Send(new InstituteDisableCommand(instituteId));
+        }
+
         [HttpDelete("{instituteId}")]
         [Authorize(Roles = RoleTypes.SuperAdmin)]
         public async Task<BaseApiResponse<InstituteSingleDto>> Delete([FromRoute] long instituteId)
