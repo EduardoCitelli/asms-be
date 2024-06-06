@@ -6,6 +6,7 @@ using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
@@ -28,7 +29,7 @@ namespace ASMS.Services
 
         public async Task<BaseApiResponse<StaffMemberSingleDto>> GetOneAsync(long id)
         {
-            return await GetOneDtoBaseAsync(id, x => x.User);
+            return await GetOneDtoBaseAsync(id, x => x.Include(x => x.User));
         }
 
         public async Task<BaseApiResponse<StaffMemberSingleDto>> CreateAsync(StaffMemberCreateDto dto)
@@ -38,7 +39,7 @@ namespace ASMS.Services
 
         public async Task<BaseApiResponse<StaffMemberSingleDto>> UpdateAsync(StaffMemberUpdateDto dto)
         {
-            return await UpdateBaseAsync(dto, dto.Id, null, x => x.User);
+            return await UpdateBaseAsync(dto, dto.Id, null, x => x.Include(x => x.User));
         }
 
         public async Task<BaseApiResponse<StaffMemberSingleDto>> DeleteAsync(long id)

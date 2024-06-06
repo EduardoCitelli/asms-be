@@ -76,7 +76,7 @@ namespace ASMS.Services
         /// <param name="key"></param>
         /// <param name="include"></param>
         /// <returns></returns>
-        protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key, Expression<Func<TEntity, object>>? include = null)
+        protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
             var result = await TryGetExistentEntityBaseAsync(key, include);
 
@@ -156,7 +156,7 @@ namespace ASMS.Services
         protected async Task<BaseApiResponse<TSingleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, 
                                                                                       TKey key, 
                                                                                       Action<TUpdateDto, TEntity>? beforeAction = null,
-                                                                                      Expression<Func<TEntity, object>>? include = null)
+                                                                                      Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
             var entity = await TryGetExistentEntityBaseAsync(key, include);
 
@@ -219,7 +219,7 @@ namespace ASMS.Services
         /// <param name="include"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
-        protected async Task<TEntity> TryGetExistentEntityBaseAsync(TKey key, Expression<Func<TEntity, object>>? include = null)
+        protected async Task<TEntity> TryGetExistentEntityBaseAsync(TKey key, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
             var existentEntity = await _repository.GetByIdAsync(key, include);
 

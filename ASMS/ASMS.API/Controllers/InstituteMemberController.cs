@@ -53,5 +53,16 @@ namespace ASMS.API.Controllers
             var command = new InstituteMemberDeleteCommand(InstituteMemberId);
             return await _mediator.Send(command);
         }
+
+        [HttpPut("{instituteMemberId}/status")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<bool>> UpdateStatus([FromRoute] long instituteMemberId, [FromBody] UpdateInstituteMemberStatusCommand command)
+        {
+            command.Id = instituteMemberId;
+            return await _mediator.Send(command);
+        }
+
+        //Asignar membresia junto con el pago para dejarla activa
+        //Realizar pago
     }
 }

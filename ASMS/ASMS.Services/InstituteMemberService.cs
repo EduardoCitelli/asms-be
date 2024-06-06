@@ -6,6 +6,7 @@ using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
@@ -28,7 +29,7 @@ namespace ASMS.Services
 
         public async Task<BaseApiResponse<InstituteMemberSingleDto>> GetOneAsync(long id)
         {
-            return await GetOneDtoBaseAsync(id, x => x.User);
+            return await GetOneDtoBaseAsync(id, x => x.Include(x => x.User));
         }
 
         public async Task<BaseApiResponse<InstituteMemberSingleDto>> CreateAsync(InstituteMemberCreateDto dto)
@@ -36,9 +37,17 @@ namespace ASMS.Services
             return await CreateBaseAsync(dto);
         }
 
-        public async Task<BaseApiResponse<InstituteMemberSingleDto>> UpdateAsync(InstituteMemberUpdateDto dto)
+        public async Task<BaseApiResponse<InstituteMemberSingleDto>> UpdateAsync(InstituteMemberUpdateDto dto, 
+                                                                                 Action<InstituteMemberUpdateDto, InstituteMember>? beforeToSaveAction = null)
         {
-            return await UpdateBaseAsync(dto, dto.Id, null, x => x.User);
+            return await UpdateBaseAsync(dto, dto.Id, beforeToSaveAction, x => x.Include(x => x.User));
+        }
+
+        public async Task<BaseApiResponse<InstituteMemberSingleDto>> UpdateAsync(UpdateStatusInstituteMemberDto dto,
+                                                                                 Action<UpdateStatusInstituteMemberDto, InstituteMember>? beforeToSaveAction = null,
+                                                                                 Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null)
+        {
+            return await UpdateBaseAsync(dto, dto.Id, beforeToSaveAction, include);
         }
 
         public async Task<BaseApiResponse<InstituteMemberSingleDto>> DeleteAsync(long id)

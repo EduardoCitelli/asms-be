@@ -19,6 +19,7 @@ namespace ASMS.Services.Abstractions
 
         Task<BaseApiResponse<InstituteMemberSingleDto>> DeleteAsync(long id);
 
-        Task<BaseApiResponse<InstituteMemberSingleDto>> UpdateAsync(InstituteMemberUpdateDto dto);
+        Task<BaseApiResponse<InstituteMemberSingleDto>> UpdateAsync(InstituteMemberUpdateDto dto, Action<InstituteMemberUpdateDto, InstituteMember>? beforeToSaveAction = null);
+        Task<BaseApiResponse<InstituteMemberSingleDto>> UpdateAsync(UpdateStatusInstituteMemberDto dto, Action<UpdateStatusInstituteMemberDto, InstituteMember>? beforeToSaveAction = null, Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null);
     }
 }

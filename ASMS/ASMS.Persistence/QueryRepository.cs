@@ -1,4 +1,5 @@
 ﻿using ASMS.Domain;
+using ASMS.Domain.Entities;
 using ASMS.Persistence.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -14,7 +15,7 @@ namespace ASMS.Persistence
         {
         }
 
-        public async Task<TEntity?> GetByIdAsync(TKey id, Expression<Func<TEntity, object>>? include = null)
+        public async Task<TEntity?> GetByIdAsync(TKey id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
         {
             //var ids = id!.GetType()
             //             .GetProperties()
@@ -26,7 +27,7 @@ namespace ASMS.Persistence
 
             var response = include is null ?
                 await _dbSet.FindAsync(id) :
-                await _dbSet.Include(include).SingleAsync(x => x.Id!.Equals(id));
+                await  include(_dbSet.AsNoTracking()).SingleAsync(x => x.Id!.Equals(id));
 
             if (response != null)
                 _dbContext.Entry(response).State = EntityState.Detached;

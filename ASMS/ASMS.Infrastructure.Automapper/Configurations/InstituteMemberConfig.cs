@@ -26,6 +26,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
                    .ForMember(entity => entity.AddressNumber, config => config.MapFrom(dto => dto.PersonalInfo.AddressNumber))
                    .ForMember(entity => entity.AddressExtraInfo, config => config.MapFrom(dto => dto.PersonalInfo.AddressExtraInfo))
                    .ForMember(entity => entity.IdentificationNumber, config => config.MapFrom(dto => dto.PersonalInfo.IdentificationNumber));
+
+            profile.CreateMap<UpdateStatusInstituteMemberDto, InstituteMember>();
             #endregion
 
             #region MapFromEntity

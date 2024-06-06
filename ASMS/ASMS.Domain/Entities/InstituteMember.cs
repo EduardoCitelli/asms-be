@@ -6,7 +6,7 @@ namespace ASMS.Domain.Entities
     {
         public long InstituteId { get; set; }
 
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get; set; } = true;
 
         public virtual Institute Institute { get; set; }
 

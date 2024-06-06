@@ -7,6 +7,7 @@ using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
@@ -55,7 +56,7 @@ namespace ASMS.Services
 
         public async Task<BaseApiResponse<bool>> SetDisableInstitute(long instituteId, Action<Institute> businessLogic)
         {
-            var entity = await TryGetExistentEntityBaseAsync(instituteId, x => x.InstitutePlans);
+            var entity = await TryGetExistentEntityBaseAsync(instituteId, x => x.Include(x => x.InstitutePlans));
 
             businessLogic.Invoke(entity);
 
