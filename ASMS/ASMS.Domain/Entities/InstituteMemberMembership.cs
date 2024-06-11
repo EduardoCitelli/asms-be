@@ -12,10 +12,12 @@
 
         public DateTime ExpirationDate { get; set; }
 
+        public DateTime? LastPaymentDate { get; set; }
+
         public virtual InstituteMember InstituteMember { get; set; }
 
         public virtual Membership Membership { get; set; }
 
-        public virtual Payment? Payment { get; set; }
+        public virtual ICollection<Payment>? Payments { get; set; }
     }
 }

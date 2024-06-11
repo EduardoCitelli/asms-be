@@ -1,6 +1,8 @@
-﻿using ASMS.CrossCutting.Services.Abstractions;
+﻿using ASMS.CrossCutting.Services;
+using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.Domain.Abstractions;
 using ASMS.Domain.Entities;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Conventions;
 using ASMS.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +79,17 @@ namespace ASMS.Persistence
             foreach (var entry in notDeletedEntries)
             {
                 if (entry.State == EntityState.Added)
+                {
                     ((IAuditEntity)entry.Entity).CreatedAt = DateTime.UtcNow;
+
+                    if (entry.Entity is IIsInstituteEntity instituteEntity)
+                    {
+                        if (_instituteId <= 0)
+                            throw new BadRequestException($"Not received Instititute Id");
+
+                        instituteEntity.InstituteId = _instituteId;
+                    }
+                }
 
                 ((IAuditEntity)entry.Entity).UpdatedAt = DateTime.UtcNow;
                 ((IAuditEntity)entry.Entity).LastEditedBy = _userInfoService.Value?.UserName ?? DefaultEditedByUser;

@@ -17,7 +17,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
                    .ForMember(entity => entity.AddressNumber, config => config.MapFrom(dto => dto.PersonalInfo.AddressNumber))
                    .ForMember(entity => entity.AddressExtraInfo, config => config.MapFrom(dto => dto.PersonalInfo.AddressExtraInfo))
                    .ForMember(entity => entity.IdentificationNumber, config => config.MapFrom(dto => dto.PersonalInfo.IdentificationNumber))
-                   .AfterMap((dto, entity) => entity.User.UserRoles = new List<UserRole> { new UserRole { RoleId = RoleTypeEnum.StaffMember } });
+                   .AfterMap((dto, entity) => entity.User.UserRoles = new List<UserRole> { new() { RoleId = RoleTypeEnum.StaffMember } });
 
             profile.CreateMap<StaffMemberUpdateDto, StaffMember>()
                    .ForMember(entity => entity.BirthDate, config => config.MapFrom(dto => dto.PersonalInfo.BirthDate))

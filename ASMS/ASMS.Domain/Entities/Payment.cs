@@ -7,14 +7,16 @@ namespace ASMS.Domain.Entities
     {
         public long InstituteId { get; set; }
 
-        public DateTime EmittedDate { get; set; }
+        public DateTime EmittedDate { get; set; } = DateTime.UtcNow;
 
         public decimal Amount { get; set; }
 
         public PaymentType PaymentType { get; set; }
 
+        public long InstituteMemberMembershipId { get; set; }
+
         public virtual Institute Institute { get; set; }
 
-        public virtual ICollection<InstituteMemberMembership> PaidMembership { get; set; } = new List<InstituteMemberMembership>();
+        public virtual InstituteMemberMembership PaidMembership { get; set; }
     }
 }

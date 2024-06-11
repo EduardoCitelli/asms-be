@@ -61,8 +61,5 @@ namespace ASMS.API.Controllers
             command.Id = instituteMemberId;
             return await _mediator.Send(command);
         }
-
-        //Asignar membresia junto con el pago para dejarla activa
-        //Realizar pago
     }
 }

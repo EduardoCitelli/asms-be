@@ -4,6 +4,7 @@ using ASMS.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASMS.Persistence.Migrations
 {
     [DbContext(typeof(ASMSDbContext))]
-    partial class ASMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240608181755_UpdateInstitueMemberMembershipUniqueId")]
+    partial class UpdateInstitueMemberMembershipUniqueId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -403,10 +405,10 @@ namespace ASMS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("LastPaymentDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<long>("MembershipId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("PaymentId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("StartDate")
@@ -420,6 +422,8 @@ namespace ASMS.Persistence.Migrations
                     b.HasAlternateKey("InstituteMemberId", "MembershipId", "StartDate");
 
                     b.HasIndex("MembershipId");
+
+                    b.HasIndex("PaymentId");
 
                     b.ToTable("InstituteMemberMemberships");
                 });
@@ -668,9 +672,6 @@ namespace ASMS.Persistence.Migrations
                     b.Property<long>("InstituteId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("InstituteMemberMembershipId")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
@@ -687,8 +688,6 @@ namespace ASMS.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("InstituteId");
-
-                    b.HasIndex("InstituteMemberMembershipId");
 
                     b.ToTable("Payments");
                 });
@@ -771,52 +770,52 @@ namespace ASMS.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(5923),
+                            CreatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(205),
                             Description = "Super usuario con acceso a todos los modulos del sistema",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "SuperAdmin",
-                            UpdatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(5926)
+                            UpdatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(207)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(6026),
+                            CreatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(309),
                             Description = "Manager de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Manager",
-                            UpdatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(6026)
+                            UpdatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(310)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(6030),
+                            CreatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(312),
                             Description = "Miembro administrativo de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "StaffMember",
-                            UpdatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(6031)
+                            UpdatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(313)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(6034),
+                            CreatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(314),
                             Description = "Profesor de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Coach",
-                            UpdatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(6034)
+                            UpdatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(315)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(6037),
+                            CreatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(317),
                             Description = "Miembro/Cliente de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Member",
-                            UpdatedAt = new DateTime(2024, 6, 8, 19, 33, 20, 662, DateTimeKind.Utc).AddTicks(6038)
+                            UpdatedAt = new DateTime(2024, 6, 8, 18, 17, 54, 882, DateTimeKind.Utc).AddTicks(317)
                         });
                 });
 
@@ -1166,9 +1165,15 @@ namespace ASMS.Persistence.Migrations
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
+                    b.HasOne("ASMS.Domain.Entities.Payment", "Payment")
+                        .WithMany("PaidMembership")
+                        .HasForeignKey("PaymentId");
+
                     b.Navigation("InstituteMember");
 
                     b.Navigation("Membership");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("ASMS.Domain.Entities.InstituteMemberNote", b =>
@@ -1258,15 +1263,7 @@ namespace ASMS.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ASMS.Domain.Entities.InstituteMemberMembership", "PaidMembership")
-                        .WithMany("Payments")
-                        .HasForeignKey("InstituteMemberMembershipId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
                     b.Navigation("Institute");
-
-                    b.Navigation("PaidMembership");
                 });
 
             modelBuilder.Entity("ASMS.Domain.Entities.Room", b =>
@@ -1364,11 +1361,6 @@ namespace ASMS.Persistence.Migrations
                     b.Navigation("Notes");
                 });
 
-            modelBuilder.Entity("ASMS.Domain.Entities.InstituteMemberMembership", b =>
-                {
-                    b.Navigation("Payments");
-                });
-
             modelBuilder.Entity("ASMS.Domain.Entities.InstituteMemberNote", b =>
                 {
                     b.Navigation("NoteFiles");
@@ -1377,6 +1369,11 @@ namespace ASMS.Persistence.Migrations
             modelBuilder.Entity("ASMS.Domain.Entities.MembershipType", b =>
                 {
                     b.Navigation("Memberships");
+                });
+
+            modelBuilder.Entity("ASMS.Domain.Entities.Payment", b =>
+                {
+                    b.Navigation("PaidMembership");
                 });
 
             modelBuilder.Entity("ASMS.Domain.Entities.Role", b =>

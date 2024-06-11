@@ -5,5 +5,6 @@
         Cash = 1,
         WireTransfer,
         MercadoPago,
+        CreditCard,
     }
 }

@@ -14,7 +14,7 @@ using System.Linq.Expressions;
 
 namespace ASMS.Services
 {
-    public abstract class ServiceBase<TEntity, TKey, TSingleDto, TListDto> where TEntity : BaseEntity<TKey>
+    public abstract partial class ServiceBase<TEntity, TKey, TSingleDto, TListDto> where TEntity : BaseEntity<TKey>
     {
         protected readonly IUnitOfWork _uow;
         protected readonly IRepository<TEntity, TKey> _repository;
@@ -117,14 +117,6 @@ namespace ASMS.Services
             }
 
             var newEntity = _mapper.Map<TEntity>(request);
-
-            if (newEntity is IIsInstituteEntity instituteEntity)
-            {
-                if (_instituteIdService.InstituteId <= 0)
-                    throw new BadRequestException($"Not received Instititute Id");
-
-                instituteEntity.InstituteId = _instituteIdService.InstituteId;
-            }
 
             actionBeforeSave?.Invoke(newEntity);
 

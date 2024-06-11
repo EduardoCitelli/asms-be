@@ -14,5 +14,6 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<PagedList<MembershipListDto>>> GetListAsync(int pageNumber = 1, int pageSize = 10, Expression<Func<Membership, bool>>? query = null, Func<IQueryable<Membership>, IIncludableQueryable<Membership, object>>? include = null);
         Task<BaseApiResponse<MembershipSingleDto>> GetOneAsync(long id);
         Task<BaseApiResponse<MembershipSingleDto>> UpdateAsync(MembershipUpdateDto dto);
+        Task<Membership> GetEntityByIdAsync(long key, Func<IQueryable<Membership>, IIncludableQueryable<Membership, object>>? include = null);
     }
 }
