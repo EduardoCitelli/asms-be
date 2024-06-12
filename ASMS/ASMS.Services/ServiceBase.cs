@@ -121,6 +121,7 @@ namespace ASMS.Services
             actionBeforeSave?.Invoke(newEntity);
 
             await _repository.AddAsync(newEntity);
+
             var success = await _uow.SaveChangesAsync() > 0;
 
             if (success)

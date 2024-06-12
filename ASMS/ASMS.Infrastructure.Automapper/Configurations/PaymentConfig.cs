@@ -14,7 +14,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
             #region Map from entity
             profile.CreateMap<Payment, PaymentSingleDto>();
-            profile.CreateMap<Payment, PaymentDto>();
+            profile.CreateMap<Payment, PaymentDto>()
+                   .ReverseMap();
             profile.CreateMap<Payment, PaymentListDto>();
             #endregion
 

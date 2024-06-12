@@ -5,6 +5,7 @@ using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASMS.Services
 {
@@ -32,13 +33,29 @@ namespace ASMS.Services
             var success = await _uow.SaveChangesAsync() > 0;
 
             if (success)
-            {
                 return new BaseApiResponse<long>(entity.Id);
-            }
 
             var message = $"Problem while saving Institute member membership changes";
 
             throw new InternalErrorException(message);
+        }
+
+        public async Task ValidateTryToAssignSameMembership(long instituteMemberId, long membershipId)
+        {
+            var exist = await _repository.FindExistAsync(x => x.InstituteMemberId == instituteMemberId && x.MembershipId == membershipId && x.IsActiveMembership);
+
+            if (exist)
+                throw new BadRequestException("The membership you are trying to assign is already an active membership");
+        }
+
+        public async Task SetInactiveMembershipsWithoutSave(long instituteMemberId)
+        {
+            var entities = await _repository.Find(x => x.InstituteMemberId == instituteMemberId && x.IsActiveMembership)
+                                            .ToListAsync();
+
+            entities.ForEach(x => x.IsActiveMembership = false);
+
+            await _repository.UpdateCollectionAsync(entities);
         }
     }
 }

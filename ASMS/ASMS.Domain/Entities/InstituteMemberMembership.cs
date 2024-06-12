@@ -18,6 +18,6 @@
 
         public virtual Membership Membership { get; set; }
 
-        public virtual ICollection<Payment>? Payments { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
     }
 }

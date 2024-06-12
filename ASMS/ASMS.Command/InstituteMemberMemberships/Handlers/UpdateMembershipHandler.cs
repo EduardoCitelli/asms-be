@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASMS.Command.InstituteMemberMemberships.Handlers
 {
-    public class AssignMembershipHandler : IRequestHandler<AssignMembershipCommand, BaseApiResponse<long>>
+    public class UpdateMembershipHandler : IRequestHandler<UpdateMembershipCommand, BaseApiResponse<long>>
     {
         private readonly IInstituteMemberMembershipService _service;
         private readonly IMembershipService _membershipService;
         private readonly IInstituteMemberService _instituteMemberService;
 
-        public AssignMembershipHandler(IInstituteMemberMembershipService service,
+        public UpdateMembershipHandler(IInstituteMemberMembershipService service,
                                        IMembershipService membershipService,
                                        IInstituteMemberService instituteMemberService)
         {
@@ -22,7 +22,7 @@ namespace ASMS.Command.InstituteMemberMemberships.Handlers
             _instituteMemberService = instituteMemberService;
         }
 
-        public async Task<BaseApiResponse<long>> Handle(AssignMembershipCommand request, CancellationToken cancellationToken)
+        public async Task<BaseApiResponse<long>> Handle(UpdateMembershipCommand request, CancellationToken cancellationToken)
         {
             await RunValidations(request);
 
@@ -30,18 +30,21 @@ namespace ASMS.Command.InstituteMemberMemberships.Handlers
 
             SetPaymentAmmountSameAsMembershipPrice(request, membership);
 
+            await _service.SetInactiveMembershipsWithoutSave(request.InstituteMemberId);
+
             return await _service.CreateAsync(request, x =>
             {
                 x.ExpirationDate = x.StartDate.AddMonths(membership.MembershipType.MonthQuantity);
             });
         }
 
-        private async Task RunValidations(AssignMembershipCommand request)
+        private async Task RunValidations(UpdateMembershipCommand request)
         {
+            await _service.ValidateTryToAssignSameMembership(request.InstituteMemberId, request.MembershipId);
             await _instituteMemberService.ValidateExistingAsync(request.InstituteMemberId);
         }
 
-        private static void SetPaymentAmmountSameAsMembershipPrice(AssignMembershipCommand request, Membership membership)
+        private static void SetPaymentAmmountSameAsMembershipPrice(UpdateMembershipCommand request, Membership membership)
         {
             if (request.Payment != null)
                 request.Payment.Amount = membership.Price;
