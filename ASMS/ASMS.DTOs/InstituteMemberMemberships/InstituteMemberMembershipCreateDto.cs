@@ -17,5 +17,7 @@ namespace ASMS.DTOs.InstituteMemberMemberships
         public DateTime StartDate { get; set; }
 
         public PaymentDto? Payment { get; set; }
+
+        public IEnumerable<long>? Activities { get; set; }
     }
 }

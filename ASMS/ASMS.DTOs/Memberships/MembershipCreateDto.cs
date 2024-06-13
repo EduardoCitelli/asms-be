@@ -14,5 +14,7 @@ namespace ASMS.DTOs.Memberships
         [Required(ErrorMessage = "Field {0} is required")]
         [Range(1, long.MaxValue, ErrorMessage = "Field {0} must be greater than {1} and less than {2}")]
         public decimal Price { get; set; }
+
+        public int? ActivityQuantity { get; set; }
     }
 }

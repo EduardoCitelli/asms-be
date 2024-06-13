@@ -12,6 +12,8 @@ namespace ASMS.Domain.Entities
 
         public decimal Price { get; set; }
 
+        public int? ActivityQuantity { get; set; }
+
         public virtual MembershipType MembershipType { get; set; }
 
         public virtual Institute Institute { get; set; }

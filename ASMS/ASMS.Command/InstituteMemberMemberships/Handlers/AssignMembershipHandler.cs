@@ -1,6 +1,7 @@
 ﻿using ASMS.Command.InstituteMemberMemberships.Commands;
 using ASMS.Domain.Entities;
 using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Services.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -24,20 +25,28 @@ namespace ASMS.Command.InstituteMemberMemberships.Handlers
 
         public async Task<BaseApiResponse<long>> Handle(AssignMembershipCommand request, CancellationToken cancellationToken)
         {
-            await RunValidations(request);
-
             var membership = await _membershipService.GetEntityByIdAsync(request.MembershipId, x => x.Include(x => x.MembershipType));
 
+            await RunValidations(request, membership);
+
             SetPaymentAmmountSameAsMembershipPrice(request, membership);
+
+            await SetActivitiesToInstituteMember(request, membership);
 
             return await _service.CreateAsync(request, x =>
             {
                 x.ExpirationDate = x.StartDate.AddMonths(membership.MembershipType.MonthQuantity);
+
+                if (membership.MembershipType.IsByQuantity)
+                    x.RemainingClasses = membership.MembershipType.ClassQuantity;
             });
         }
 
-        private async Task RunValidations(AssignMembershipCommand request)
+        private async Task RunValidations(AssignMembershipCommand request, Membership membership)
         {
+            if (!membership.IsPremium && request.Activities == null)
+                throw new BadRequestException("If membership is not premium you shoul define allowed activities");
+
             await _instituteMemberService.ValidateExistingAsync(request.InstituteMemberId);
         }
 
@@ -45,6 +54,12 @@ namespace ASMS.Command.InstituteMemberMemberships.Handlers
         {
             if (request.Payment != null)
                 request.Payment.Amount = membership.Price;
+        }
+
+        private async Task SetActivitiesToInstituteMember(AssignMembershipCommand request, Membership membership)
+        {
+            if (!membership.IsPremium)
+                await _instituteMemberService.SetActivitiesToInstituteMemberWithoutSaveAsync(request.InstituteMemberId, request.Activities!);
         }
     }
 }

@@ -12,7 +12,9 @@
 
         public DateTime ExpirationDate { get; set; }
 
-        public DateTime? LastPaymentDate { get; set; }
+        public DateTime? LastFullPaymentDate { get; set; }
+
+        public int? RemainingClasses { get; set; }
 
         public virtual InstituteMember InstituteMember { get; set; }
 

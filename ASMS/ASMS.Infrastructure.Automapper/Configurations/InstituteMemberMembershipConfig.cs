@@ -12,7 +12,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #region Map to entity
             profile.CreateMap<InstituteMemberMembershipCreateDto, InstituteMemberMembership>()
                    .ForMember(x => x.IsActiveMembership, config => config.MapFrom(dto => dto.Payment != null))
-                   .ForMember(x => x.LastPaymentDate, config => config.MapFrom(dto => dto.Payment != null ? DateTime.UtcNow : (DateTime?)null))
+                   .ForMember(x => x.LastFullPaymentDate, config => config.MapFrom(dto => dto.Payment != null ? DateTime.UtcNow : (DateTime?)null))
                    .ForMember(x => x.Payments, config => config.MapFrom(dto => dto.Payment));
 
             profile.CreateMap<PaymentDto, ICollection<Payment>>()

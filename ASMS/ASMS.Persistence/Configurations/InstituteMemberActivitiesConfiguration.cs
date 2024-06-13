@@ -17,8 +17,6 @@ namespace ASMS.Persistence.Configurations
                    .WithMany(x => x.AllowedActivities)
                    .HasForeignKey(x => x.InstituteMemberId)
                    .OnDelete(DeleteBehavior.ClientCascade);
-
-            builder.HasAlternateKey(x => new { x.InstituteMemberId, x.ActivityId });
         }
     }
 }

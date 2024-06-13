@@ -1,6 +1,7 @@
 ﻿using ASMS.Command.InstituteMemberMemberships.Commands;
 using ASMS.Domain.Entities;
 using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Services.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -24,22 +25,31 @@ namespace ASMS.Command.InstituteMemberMemberships.Handlers
 
         public async Task<BaseApiResponse<long>> Handle(UpdateMembershipCommand request, CancellationToken cancellationToken)
         {
-            await RunValidations(request);
-
             var membership = await _membershipService.GetEntityByIdAsync(request.MembershipId, x => x.Include(x => x.MembershipType));
+
+            await RunValidations(request, membership);
 
             SetPaymentAmmountSameAsMembershipPrice(request, membership);
 
             await _service.SetInactiveMembershipsWithoutSave(request.InstituteMemberId);
 
+            if (!membership.IsPremium)
+                await _instituteMemberService.SetActivitiesToInstituteMemberWithoutSaveAsync(request.InstituteMemberId, request.Activities!);
+
             return await _service.CreateAsync(request, x =>
             {
                 x.ExpirationDate = x.StartDate.AddMonths(membership.MembershipType.MonthQuantity);
+
+                if (membership.MembershipType.IsByQuantity)
+                    x.RemainingClasses = membership.MembershipType.ClassQuantity;
             });
         }
 
-        private async Task RunValidations(UpdateMembershipCommand request)
+        private async Task RunValidations(UpdateMembershipCommand request, Membership membership)
         {
+            if (!membership.IsPremium && request.Activities == null)
+                throw new BadRequestException("If membership is not premium you shoul define allowed activities");
+
             await _service.ValidateTryToAssignSameMembership(request.InstituteMemberId, request.MembershipId);
             await _instituteMemberService.ValidateExistingAsync(request.InstituteMemberId);
         }

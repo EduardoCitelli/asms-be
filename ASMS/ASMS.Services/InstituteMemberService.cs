@@ -54,5 +54,17 @@ namespace ASMS.Services
         {
             return await DeleteBaseAsync(id);
         }
+
+        public async Task SetActivitiesToInstituteMemberWithoutSaveAsync(long instituteMemberId, IEnumerable<long> activities)
+        {
+            var entity = await TryGetExistentEntityBaseAsync(instituteMemberId, x => x.Include(x => x.AllowedActivities));
+
+            entity.AllowedActivities = activities.Select(x => new InstituteMemberActivities
+            {
+                ActivityId = x,
+            }).ToList();
+
+            await _repository.UpdateAsync(entity);
+        }
     }
 }
