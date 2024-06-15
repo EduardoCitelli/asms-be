@@ -47,8 +47,14 @@ namespace ASMS.Command.InstituteMemberMemberships.Handlers
 
         private async Task RunValidations(UpdateMembershipCommand request, Membership membership)
         {
-            if (!membership.IsPremium && request.Activities == null)
-                throw new BadRequestException("If membership is not premium you shoul define allowed activities");
+            if (!membership.IsPremium)
+            {
+                if (request.Activities == null)
+                    throw new BadRequestException("If membership is not premium you should define allowed activities");
+
+                if (request.Activities.Count() > membership.ActivityQuantity)
+                    throw new BadRequestException("The activities to add should be less than the allowed activities by the membership");
+            }
 
             await _service.ValidateTryToAssignSameMembership(request.InstituteMemberId, request.MembershipId);
             await _instituteMemberService.ValidateExistingAsync(request.InstituteMemberId);
