@@ -6,6 +6,7 @@ using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace ASMS.Services
 {
@@ -56,6 +57,18 @@ namespace ASMS.Services
             entities.ForEach(x => x.IsActiveMembership = false);
 
             await _repository.UpdateCollectionAsync(entities);
+        }
+
+        public async Task UpdateWithoutSaveAsync(InstituteMemberMembership entity)
+        {
+            await _repository.UpdateAsync(entity);
+        }
+
+        public async Task<InstituteMemberMembership> GetEntityActiveByInstituteMemberAsync(long instituteMemberId, Func<IQueryable<InstituteMemberMembership>, IIncludableQueryable<InstituteMemberMembership, object>>? include = null)
+        {
+            var response = await _repository.FindSingleAsync(x => x.InstituteMemberId == instituteMemberId, include, x => x.StartDate);
+
+            return response ?? throw new NotFoundException($"Membership for user with id:{instituteMemberId} not found");
         }
     }
 }

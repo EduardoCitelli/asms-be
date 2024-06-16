@@ -14,7 +14,8 @@ namespace ASMS.Persistence.Abstractions
                                  Expression<Func<TEntity, object>>? orderBy = null);
 
         Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> query,
-                                       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
+                                       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                       Expression<Func<TEntity, object>>? orderBy = null);
 
         Task<bool> FindExistAsync(Expression<Func<TEntity, bool>> query,
                                   Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);

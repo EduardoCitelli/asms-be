@@ -45,9 +45,9 @@ namespace ASMS.Services
             return await ExistBaseAsync(expression);
         }
 
-        public async Task<BaseApiResponse<PaymentSingleDto>> CreateAsync(PaymentCreateDto PaymentCreateDto)
+        public async Task<BaseApiResponse<PaymentSingleDto>> CreateAsync(PaymentCreateDto PaymentCreateDto, Action<Payment>? actionBeforeSave = null)
         {
-            return await CreateBaseAsync(PaymentCreateDto);
+            return await CreateBaseAsync(PaymentCreateDto, actionBeforeSave);
         }
 
         public async Task<BaseApiResponse<PaymentSingleDto>> UpdateAsync(PaymentUpdateDto PaymentUpdateDto)

@@ -17,6 +17,6 @@ namespace ASMS.Domain.Entities
 
         public virtual Institute Institute { get; set; }
 
-        public virtual InstituteMemberMembership PaidMembership { get; set; }
+        public virtual InstituteMemberMembership MembershipPayment { get; set; }
     }
 }

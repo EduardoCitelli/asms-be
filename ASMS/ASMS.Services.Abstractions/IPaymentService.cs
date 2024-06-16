@@ -17,7 +17,7 @@ namespace ASMS.Services.Abstractions
                                                                            int pageSize = 10, 
                                                                            Func<IQueryable<Payment>, IIncludableQueryable<Payment, object>>? include = null);
         Task<BaseApiResponse<PaymentSingleDto>> GetOneAsync(int id);
-        Task<BaseApiResponse<PaymentSingleDto>> CreateAsync(PaymentCreateDto PaymentCreateDto);
+        Task<BaseApiResponse<PaymentSingleDto>> CreateAsync(PaymentCreateDto PaymentCreateDto, Action<Payment>? actionBeforeSave = null);
         Task<BaseApiResponse<PaymentSingleDto>> DeleteAsync(int id);
         Task<bool> ExistEntityAsync(Expression<Func<Payment, bool>> expression);
         Task<BaseApiResponse<PaymentSingleDto>> UpdateAsync(PaymentUpdateDto PaymentUpdateDto);

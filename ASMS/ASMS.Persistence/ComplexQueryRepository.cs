@@ -55,12 +55,20 @@ namespace ASMS.Persistence
         }
 
         public async Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> query,
-                                                    Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+                                                    Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                                    Expression<Func<TEntity, object>>? orderBy = null)
         {
             if (include == null)
-                return await _dbSet.SingleOrDefaultAsync(query);
+            {
+                return orderBy != null
+                    ? await _dbSet.OrderBy(orderBy)
+                                       .AsNoTracking()
+                                       .SingleOrDefaultAsync(query)
+                    : await _dbSet.SingleOrDefaultAsync(query);
+            }
 
-            var queryable = include(_dbSet.AsQueryable());
+            var queryable = orderBy != null ? include(_dbSet.OrderBy(orderBy).AsQueryable()) 
+                                            : include(_dbSet.AsQueryable());
 
             return await queryable.SingleOrDefaultAsync(query);
         }

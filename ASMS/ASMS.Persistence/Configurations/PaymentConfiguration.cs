@@ -18,7 +18,7 @@ namespace ASMS.Persistence.Configurations
                    .WithMany(x => x.Payments)
                    .HasForeignKey(x => x.InstituteId);
 
-            builder.HasOne(x => x.PaidMembership)
+            builder.HasOne(x => x.MembershipPayment)
                    .WithMany(x => x.Payments)
                    .HasForeignKey(x => x.InstituteMemberMembershipId)
                    .OnDelete(DeleteBehavior.ClientCascade);

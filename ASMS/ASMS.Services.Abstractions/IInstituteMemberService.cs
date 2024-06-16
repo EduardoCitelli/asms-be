@@ -26,5 +26,7 @@ namespace ASMS.Services.Abstractions
         Task ValidateExistingAsync(long key);
 
         Task SetActivitiesToInstituteMemberWithoutSaveAsync(long instituteMemberId, IEnumerable<long> activities);
+
+        Task<InstituteMember> GetEntityByIdAsync(long key, Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null);
     }
 }

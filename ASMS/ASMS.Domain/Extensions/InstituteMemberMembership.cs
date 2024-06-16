@@ -2,18 +2,24 @@
 {
     public partial class InstituteMemberMembership
     {
-        public bool IsActive => !NeedToPay &&
-                                LastFullPaymentDate != null &&                                
-                                Payments.Where(x => x.EmittedDate.Day >= LastFullPaymentDate.Value.Day)
-                                        .Sum(x => x.Amount) >= Membership.Price;
+        public bool IsExpired => ExpirationDate < DateTime.UtcNow;
 
-        public bool NeedToPay => ExpirationDate < DateTime.UtcNow ||
-                                 RemainingClasses != null && RemainingClasses <= 0;
+        public bool HasExpiredClasses => RemainingClasses != null && RemainingClasses <= 0;
 
-        public void HandleExpirationDate(bool updateSinceToday)
+        public decimal PaymentForCurrentPeriod => LastFullPaymentDate == null ? 0 :
+                                                  Payments.Where(x => x.EmittedDate.Day >= LastFullPaymentDate.Value.Day)
+                                                          .Sum(x => x.Amount);
+
+        public bool AlreadyPaid => PaymentForCurrentPeriod >= Membership.Price;
+
+        public bool NeedToPay => IsExpired || HasExpiredClasses || !AlreadyPaid;
+
+        public decimal RemainingPayment => Membership.Price - PaymentForCurrentPeriod;
+
+        public void HandleExpirationDate(bool updateByExpirationDate)
         {
             var month = Membership.MembershipType.MonthQuantity;
-            ExpirationDate = updateSinceToday ? DateTime.UtcNow.AddMonths(month) : ExpirationDate.AddMonths(month);
+            ExpirationDate = updateByExpirationDate ? ExpirationDate.AddMonths(month) : DateTime.UtcNow.AddMonths(month);
         }
     }
 }
