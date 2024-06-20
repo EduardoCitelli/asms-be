@@ -1,5 +1,6 @@
 ﻿using ASMS.Domain.Entities;
 using ASMS.DTOs.Activities;
+using ASMS.DTOs.Shared;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
@@ -15,6 +16,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #region Map From Entity
             profile.CreateMap<Activity, ActivitySingleDto>();
             profile.CreateMap<Activity, ActivityListDto>();
+            profile.CreateMap<Activity, ComboDto<long>>();
             #endregion
 
             return profile;

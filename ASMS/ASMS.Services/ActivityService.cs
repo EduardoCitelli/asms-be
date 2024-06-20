@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Activities;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
@@ -50,6 +51,11 @@ namespace ASMS.Services
                                          Func<IQueryable<Activity>, IIncludableQueryable<Activity, object>>? include = null)
         {
             return await ExistBaseAsync(query, include);
+        }
+
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetForComboAsync()
+        {
+            return await GetForComboBaseAsync();
         }
     }
 }

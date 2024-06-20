@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Activities;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Queries.Activities.Requests;
 using MediatR;
@@ -18,17 +19,21 @@ namespace ASMS.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
         public async Task<BaseApiResponse<PagedList<ActivityListDto>>> Get([FromQuery] GetAllActivities request)
         {
             return await _mediator.Send(request);
         }
 
         [HttpGet("{activityId}")]
-        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
         public async Task<BaseApiResponse<ActivitySingleDto>> GetById([FromRoute] long activityId)
         {
             return await _mediator.Send(new GetActivityById(activityId));
+        }
+
+        [HttpGet("combos")]
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> Combo()
+        {
+            return await _mediator.Send(new GetAllActivitiesForCombo());
         }
 
         [HttpPost]
