@@ -26,11 +26,15 @@ namespace ASMS.Queries.InstituteMembers.Handlers
             return await _instituteMemberService.GetListAsync(request.Page,
                                                               request.Size,
                                                               ExcludeAdminUsers(),
-                                                              IncludeUser());
+                                                              IncludeUserAndMembership());
         }
 
-        private static Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>> IncludeUser() => x => x.Include(x => x.User)
-                                                                                                                               .ThenInclude(x => x.UserRoles);
+        private static Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>> IncludeUserAndMembership() => x => x.Include(x => x.User)
+                                                                                                                                            .ThenInclude(x => x.UserRoles)
+                                                                                                                                            .Include(x => x.Memberships)
+                                                                                                                                            .ThenInclude(x => x.Payments)
+                                                                                                                                            .Include(x => x.Memberships)
+                                                                                                                                            .ThenInclude(x => x.Membership);
 
         private static Expression<Func<InstituteMember, bool>> ExcludeAdminUsers() => x => !x.User.UserRoles.Any(x => x.RoleId == RoleTypeEnum.SuperAdmin);
     }

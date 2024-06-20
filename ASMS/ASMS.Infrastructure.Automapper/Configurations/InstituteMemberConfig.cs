@@ -2,6 +2,8 @@
 using ASMS.Domain.Entities;
 using ASMS.DTOs.InstituteMembers;
 using ASMS.DTOs.Shared;
+using AutoMapper;
+using System.Linq.Expressions;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
@@ -37,10 +39,17 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             profile.CreateMap<InstituteMember, PersonalInfoDto>();
 
             profile.CreateMap<InstituteMember, InstituteMemberListDto>()
-                   .ForMember(dto => dto.FullName, conf => conf.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"));
+                   .ForMember(dto => dto.FullName, conf => conf.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"))
+                   .ForMember(dto => dto.HasMembership, conf => conf.MapFrom(entity => entity.Memberships.Any(x => x.IsActiveMembership)))
+                   .ForMember(dto => dto.NeedToPayMembership, conf => conf.MapFrom(GetNeedToPayQuery()));
             #endregion
 
             return profile;
+        }
+
+        private static Expression<Func<InstituteMember, bool?>> GetNeedToPayQuery()
+        {
+            return entity => !entity.Memberships.Any(x => x.IsActiveMembership) || entity.Memberships.SingleOrDefault(x => x.IsActiveMembership).NeedToPay;
         }
     }
 }
