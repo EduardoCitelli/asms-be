@@ -37,7 +37,7 @@ namespace ASMS.Command.Payments.Handlers
 
             await UpdateMembershipForFullPayment(request, instituteMemberMembership, membership);
 
-            var response = await _service.CreateAsync(request, SetInstituteMemberMembershipId(instituteMemberMembership));
+            var response = await _service.CreateAsync(request, SetInstituteMemberMembershipId(instituteMemberMembership.Id));
 
             return response;
         }
@@ -60,10 +60,8 @@ namespace ASMS.Command.Payments.Handlers
         {
             if (IsFullPayment(request, instituteMemberMembership))
             {
-                instituteMemberMembership.LastFullPaymentDate = DateTime.UtcNow;
-
-                if (membership.MembershipType.IsByQuantity)
-                    instituteMemberMembership.RemainingClasses = membership.MembershipType.ClassQuantity;
+                instituteMemberMembership.LastFullPaymentDate = DateTime.UtcNow;                
+                instituteMemberMembership.RemainingClasses = membership.MembershipType.ClassQuantity;
 
                 instituteMemberMembership.HandleExpirationDate(request.UpdateByExpirationDate);
 
@@ -74,9 +72,7 @@ namespace ASMS.Command.Payments.Handlers
         private static bool IsFullPayment(CreatePayment request, InstituteMemberMembership instituteMemberMembership) =>
             request.Amount >= instituteMemberMembership.RemainingPayment;
 
-        private static Action<Payment> SetInstituteMemberMembershipId(InstituteMemberMembership instituteMemberMembership)
-        {
-            return x => x.InstituteMemberMembershipId = instituteMemberMembership.Id;
-        }
+        private static Action<Payment> SetInstituteMemberMembershipId(long instituteMemberMembershipId) =>
+            x => x.InstituteMemberMembershipId = instituteMemberMembershipId;
     }
 }

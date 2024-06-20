@@ -56,19 +56,26 @@ namespace ASMS.Persistence
 
         public async Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> query,
                                                     Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-                                                    Expression<Func<TEntity, object>>? orderBy = null)
+                                                    Expression<Func<TEntity, object>>? orderBy = null,
+                                                    bool isDesc = false)
         {
             if (include == null)
             {
-                return orderBy != null
-                    ? await _dbSet.OrderBy(orderBy)
-                                       .AsNoTracking()
-                                       .SingleOrDefaultAsync(query)
-                    : await _dbSet.SingleOrDefaultAsync(query);
+                if (orderBy == null)
+                    return await _dbSet.SingleOrDefaultAsync(query);
+
+                return isDesc ? await _dbSet.OrderByDescending(orderBy)
+                                            .AsNoTracking()
+                                            .SingleOrDefaultAsync(query)
+                              : await _dbSet.OrderBy(orderBy)
+                                            .AsNoTracking()
+                                            .SingleOrDefaultAsync(query);
             }
 
-            var queryable = orderBy != null ? include(_dbSet.OrderBy(orderBy).AsQueryable()) 
-                                            : include(_dbSet.AsQueryable());
+            var queryable = orderBy == null ? include(_dbSet.AsQueryable()) 
+                                            : isDesc
+                                            ? include(_dbSet.OrderByDescending(orderBy).AsQueryable())
+                                            : include(_dbSet.OrderBy(orderBy).AsQueryable());
 
             return await queryable.SingleOrDefaultAsync(query);
         }
@@ -76,8 +83,8 @@ namespace ASMS.Persistence
         public int GetCount(Expression<Func<TEntity, bool>>? query = null)
         {
             var response = _dbSet.AsNoTracking();
-            
-            if (query != null)                
+
+            if (query != null)
                 response = response.Where(query).AsNoTracking();
 
             return response.Count();
