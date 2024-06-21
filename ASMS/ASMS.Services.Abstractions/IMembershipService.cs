@@ -15,5 +15,6 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<MembershipSingleDto>> GetOneAsync(long id);
         Task<BaseApiResponse<MembershipSingleDto>> UpdateAsync(MembershipUpdateDto dto);
         Task<Membership> GetEntityByIdAsync(long key, Func<IQueryable<Membership>, IIncludableQueryable<Membership, object>>? include = null);
+        Task<BaseApiResponse<IEnumerable<MembershipComboDto>>> GetForComboAsync();
     }
 }

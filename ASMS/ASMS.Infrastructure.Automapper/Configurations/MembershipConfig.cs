@@ -15,6 +15,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #region Map From Entity
             profile.CreateMap<Membership, MembershipSingleDto>();
             profile.CreateMap<Membership, MembershipListDto>();
+            profile.CreateMap<Membership, MembershipComboDto>();
             #endregion
 
             return profile;

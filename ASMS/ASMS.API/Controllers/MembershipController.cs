@@ -31,6 +31,12 @@ namespace ASMS.API.Controllers
             return await _mediator.Send(new GetMembershipById(membershipId));
         }
 
+        [HttpGet("combos")]
+        public async Task<BaseApiResponse<IEnumerable<MembershipComboDto>>> GetCombos()
+        {
+            return await _mediator.Send(new GetAllMembershipsForCombo());
+        }
+
         [HttpPost]
         [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager}")]
         public async Task<BaseApiResponse<MembershipSingleDto>> Create([FromBody] MembershipCreateCommand command)

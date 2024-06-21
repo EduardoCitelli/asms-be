@@ -31,6 +31,11 @@ namespace ASMS.Services
             return await GetOneDtoBaseAsync(id);
         }
 
+        public async Task<BaseApiResponse<IEnumerable<MembershipComboDto>>> GetForComboAsync()
+        {
+            return await GetForComboBaseAsync<MembershipComboDto>();
+        }
+
         public async Task<BaseApiResponse<MembershipSingleDto>> CreateAsync(MembershipCreateDto dto)
         {
             return await CreateBaseAsync(dto);
