@@ -6,7 +6,7 @@ namespace ASMS.Infrastructure.Automapper.Converters
     {
         public ICollection<T2> Convert(T source, ICollection<T2> destination, ResolutionContext context)
         {
-            return new List<T2>() { context.Mapper.Map<T2>(source) };
+            return source == null ? new List<T2>() : new List<T2>() { context.Mapper.Map<T2>(source) };
         }
     }
 }

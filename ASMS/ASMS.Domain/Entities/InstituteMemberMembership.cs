@@ -6,7 +6,7 @@
 
         public long MembershipId { get; set; }
 
-        public bool IsActiveMembership { get; set; }
+        public bool IsActiveMembership { get; set; } = true;
 
         public DateTime StartDate { get; set; } = DateTime.UtcNow;
 
