@@ -67,7 +67,7 @@ namespace ASMS.Services
         public async Task<InstituteMemberMembership> GetEntityActiveByInstituteMemberAsync(long instituteMemberId, 
                                                                                            Func<IQueryable<InstituteMemberMembership>, IIncludableQueryable<InstituteMemberMembership, object>>? include = null)
         {
-            var response = await _repository.FindSingleAsync(x => x.InstituteMemberId == instituteMemberId, include, x => x.StartDate, true);
+            var response = await _repository.FindSingleAsync(x => x.InstituteMemberId == instituteMemberId && x.IsActiveMembership, include, x => x.StartDate, true);
 
             return response ?? throw new NotFoundException($"Membership for user with id:{instituteMemberId} not found");
         }

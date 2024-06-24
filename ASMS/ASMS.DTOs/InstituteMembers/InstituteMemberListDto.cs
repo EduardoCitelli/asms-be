@@ -13,5 +13,7 @@
         public bool HasMembership { get; set; }
 
         public decimal RemainingPayment { get; set; }
+
+        public decimal MembershipPrice { get; set; }
     }
 }

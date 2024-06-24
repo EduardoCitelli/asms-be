@@ -37,9 +37,7 @@ namespace ASMS.Command.Payments.Handlers
 
             await UpdateMembershipForFullPayment(request, instituteMemberMembership, membership);
 
-            var response = await _service.CreateAsync(request, SetInstituteMemberMembershipId(instituteMemberMembership.Id));
-
-            return response;
+            return await _service.CreateAsync(request, SetInstituteMemberMembershipId(instituteMemberMembership.Id));
         }
 
         private static Membership ValidateAsync(CreatePayment request, InstituteMemberMembership instituteMemberMembership)

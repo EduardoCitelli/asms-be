@@ -42,6 +42,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
                    .ForMember(dto => dto.FullName, conf => conf.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"))
                    .ForMember(dto => dto.HasMembership, conf => conf.MapFrom(entity => entity.Memberships.Any(x => x.IsActiveMembership)))
                    .ForMember(dto => dto.RemainingPayment, conf => conf.MapFrom(GetRemainingPaymentQuery()))
+                   .ForMember(dto => dto.MembershipPrice, conf => conf.MapFrom(GetMembershipPriceQuery()))
                    .ForMember(dto => dto.NeedToPayMembership, conf => conf.MapFrom(GetNeedToPayQuery()));
             #endregion
 
@@ -56,6 +57,11 @@ namespace ASMS.Infrastructure.Automapper.Configurations
         private static Expression<Func<InstituteMember, decimal?>> GetRemainingPaymentQuery()
         {
             return entity => entity.Memberships.SingleOrDefault(x => x.IsActiveMembership) == null ? 0 : entity.Memberships.SingleOrDefault(x => x.IsActiveMembership).RemainingPayment;
+        }
+
+        private static Expression<Func<InstituteMember, decimal?>> GetMembershipPriceQuery()
+        {
+            return entity => entity.Memberships.SingleOrDefault(x => x.IsActiveMembership) == null ? 0 : entity.Memberships.SingleOrDefault(x => x.IsActiveMembership).Membership.Price;
         }
     }
 }

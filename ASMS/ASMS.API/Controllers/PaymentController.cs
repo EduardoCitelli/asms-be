@@ -21,5 +21,12 @@ namespace ASMS.API.Controllers
         {
             return await _mediator.Send(command);
         }
+
+        [HttpPost("force")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<PaymentSingleDto>> Create(CreateForcePayment command)
+        {
+            return await _mediator.Send(command);
+        }
     }
 }
