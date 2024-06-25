@@ -33,6 +33,8 @@ namespace ASMS.API.Extensions
             services.AddScoped<IInstituteIdService, InstituteIdService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
 
+            services.AddSingleton<ITranslateService, TranslateService>();
+
             services.AddApplicationInsightsTelemetry(configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
             return services;
