@@ -25,5 +25,7 @@
         public virtual ICollection<InstituteClass> InstituteClasses { get; set; } = new List<InstituteClass>();
 
         public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+        public virtual ICollection<InstituteClassBlock> InstituteClassBlocks { get; set; } = new List<InstituteClassBlock>();
     }
 }

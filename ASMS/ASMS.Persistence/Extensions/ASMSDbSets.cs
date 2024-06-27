@@ -11,7 +11,7 @@ namespace ASMS.Persistence
         public virtual DbSet<InstituteClass> InstituteClasses => Set<InstituteClass>();
         public virtual DbSet<InstituteMember> InstitutesMembers => Set<InstituteMember>();
         public virtual DbSet<InstituteMemberActivities> InstituteMemberActivities => Set<InstituteMemberActivities>();
-        public virtual DbSet<InstituteMemberInstituteClass> InstituteMemberInstituteClasses => Set<InstituteMemberInstituteClass>();
+        public virtual DbSet<InstituteMemberInstituteClassBlock> InstituteMemberInstituteClassBlocks => Set<InstituteMemberInstituteClassBlock>();
         public virtual DbSet<InstituteMemberMembership> InstituteMemberMemberships => Set<InstituteMemberMembership>();
         public virtual DbSet<InstituteMemberNote> InstituteMemberNotes => Set<InstituteMemberNote>();
         public virtual DbSet<InstitutePlan> InstitutePlans => Set<InstitutePlan>();
@@ -25,5 +25,6 @@ namespace ASMS.Persistence
         public virtual DbSet<StaffMember> StaffMembers => Set<StaffMember>();
         public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<UserRole> UserRoles => Set<UserRole>();
+        public virtual DbSet<InstituteClassBlock> InstituteClassBlocks => Set<InstituteClassBlock>();
     }
 }

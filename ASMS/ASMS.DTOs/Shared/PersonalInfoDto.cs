@@ -12,7 +12,7 @@ namespace ASMS.DTOs.Shared
         public string Phone { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Field {0} is required")]
-        [MinLength(6, ErrorMessage = "Field {0} must be longer than {1}")]
+        [MinLength(3, ErrorMessage = "Field {0} must be longer than {1}")]
         public string AddressStreet { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Field {0} is required")]

@@ -12,7 +12,7 @@ namespace ASMS.Domain.Entities
 
         public virtual ICollection<InstituteMemberMembership> Memberships { get; set; } = new List<InstituteMemberMembership>();
 
-        public virtual ICollection<InstituteMemberInstituteClass> Classes { get; set; } = new List<InstituteMemberInstituteClass>();
+        public virtual ICollection<InstituteMemberInstituteClassBlock> Classes { get; set; } = new List<InstituteMemberInstituteClassBlock>();
 
         public virtual ICollection<InstituteMemberNote> Notes { get; set; } = new List<InstituteMemberNote>();
 

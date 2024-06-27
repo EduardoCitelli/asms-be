@@ -60,9 +60,13 @@ namespace ASMS.Persistence
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
             base.ConfigureConventions(configurationBuilder);
+
             configurationBuilder.Properties<DateOnly>()
                                 .HaveConversion<DateOnlyConverter, DateOnlyComparer>()
                                 .HaveColumnType(DateBdTypeName);
+
+            configurationBuilder.Properties<TimeOnly>()
+                                .HaveConversion<TimeOnlyConverter, TimeOnlyComparer>();
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)

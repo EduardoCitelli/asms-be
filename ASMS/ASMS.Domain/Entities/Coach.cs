@@ -13,5 +13,9 @@ namespace ASMS.Domain.Entities
         public virtual ICollection<InstituteClass> PrincipalClasses { get; set; } = new List<InstituteClass>();
 
         public virtual ICollection<InstituteClass> AuxClasses { get; set; } = new List<InstituteClass>();
+
+        public virtual ICollection<InstituteClassBlock> PrincipalBlocks { get; set; } = new List<InstituteClassBlock>();
+
+        public virtual ICollection<InstituteClassBlock> AuxBlocks { get; set; } = new List<InstituteClassBlock>();
     }
 }

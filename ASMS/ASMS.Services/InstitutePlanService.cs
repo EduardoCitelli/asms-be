@@ -53,7 +53,7 @@ namespace ASMS.Services
             ValidateAlreadySetPlan(request, existingPlan);
 
             existingPlan.IsCurrentPlan = false;
-            existingPlan.FinishDate = DateOnly.FromDateTime(DateTime.Now);
+            existingPlan.FinishDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
             await _repository.UpdateAsync(existingPlan);
         }

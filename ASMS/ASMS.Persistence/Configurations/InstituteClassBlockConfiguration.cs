@@ -1,14 +1,19 @@
 ﻿using ASMS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ASMS.Persistence.Configurations
 {
-    public class InstituteClassConfiguration : IEntityTypeConfiguration<InstituteClass>
+    public class InstituteClassBlockConfiguration : IEntityTypeConfiguration<InstituteClassBlock>
     {
-        public void Configure(EntityTypeBuilder<InstituteClass> builder)
+        public void Configure(EntityTypeBuilder<InstituteClassBlock> builder)
         {
-            builder.Property(x => x.Description)
+            builder.Property(x => x.ClassStatus)
                    .IsRequired();
 
             builder.Property(x => x.StartTime)
@@ -17,31 +22,28 @@ namespace ASMS.Persistence.Configurations
             builder.Property(x => x.FinishTime)
                    .IsRequired();
 
-            builder.Property(x => x.IsRecurrence)
-                   .IsRequired();
-
-            builder.HasOne(x => x.Activity)
-                   .WithMany(x => x.InstituteClasses)
-                   .HasForeignKey(x => x.ActivityId)
-                   .OnDelete(DeleteBehavior.ClientCascade);
-
             builder.HasOne(x => x.PrincipalCoach)
-                   .WithMany(x => x.PrincipalClasses)
+                   .WithMany(x => x.PrincipalBlocks)
                    .HasForeignKey(x => x.PrincipalCoachId)
                    .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(x => x.AuxCoach)
-                   .WithMany(x => x.AuxClasses)
+                   .WithMany(x => x.AuxBlocks)
                    .HasForeignKey(x => x.AuxCoachId);
 
             builder.HasOne(x => x.Room)
-                   .WithMany(x => x.InstituteClasses)
+                   .WithMany(x => x.Blocks)
                    .HasForeignKey(x => x.RoomId)
                    .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(x => x.Institute)
-                   .WithMany(x => x.InstituteClasses)
+                   .WithMany(x => x.InstituteClassBlocks)
                    .HasForeignKey(x => x.InstituteId);
+
+            builder.HasOne(x => x.Header)
+                   .WithMany(x => x.Blocks)
+                   .HasForeignKey(x => x.InstituteClassId)
+                   .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

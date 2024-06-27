@@ -18,6 +18,17 @@ namespace ASMS.Persistence.Conventions
     }
 
     /// <summary>
+    /// Converts <see cref="TimeOnly" /> to <see cref="TimeSpan"/> and vice versa.
+    /// </summary>
+    public class TimeOnlyConverter : ValueConverter<TimeOnly, TimeSpan>
+    {
+        public TimeOnlyConverter() : base(
+            timeOnly => timeOnly.ToTimeSpan(),
+            timeSpan => TimeOnly.FromTimeSpan(timeSpan))
+        { }
+    }
+
+    /// <summary>
     /// Compares <see cref="DateOnly" />.
     /// </summary>
     public class DateOnlyComparer : ValueComparer<DateOnly>
@@ -30,6 +41,17 @@ namespace ASMS.Persistence.Conventions
             d => d.GetHashCode())
         {
         }
+    }
+
+    /// <summary>
+    /// Compares <see cref="TimeOnly" />.
+    /// </summary>
+    public class TimeOnlyComparer : ValueComparer<TimeOnly>
+    {
+        public TimeOnlyComparer() : base(
+            (x, y) => x.Ticks == y.Ticks,
+            timeOnly => timeOnly.GetHashCode())
+        { }
     }
 
     /// <summary>

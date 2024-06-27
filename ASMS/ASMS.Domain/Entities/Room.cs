@@ -13,5 +13,9 @@ namespace ASMS.Domain.Entities
         public int MembersCapacity { get; set; }
 
         public virtual Institute Institute { get; set; }
+
+        public virtual ICollection<InstituteClass> InstituteClasses { get; set; } = new List<InstituteClass>();
+
+        public virtual ICollection<InstituteClassBlock> Blocks { get; set; } = new List<InstituteClassBlock>();
     }
 }

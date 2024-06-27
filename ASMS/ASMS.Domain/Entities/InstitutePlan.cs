@@ -10,7 +10,7 @@ namespace ASMS.Domain.Entities
 
         public bool IsCurrentPlan { get; set; } = true;
 
-        public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
 
         public DateOnly? FinishDate { get; set; }
 

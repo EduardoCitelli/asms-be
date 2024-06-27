@@ -9,5 +9,7 @@ namespace ASMS.Domain.Entities
         public int? MemberMinQuantity { get; set; }
 
         public virtual Institute Institute { get; set; }
+
+        public virtual ICollection<InstituteClass> InstituteClasses { get; set; }
     }
 }

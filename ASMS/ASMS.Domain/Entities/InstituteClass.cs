@@ -1,5 +1,4 @@
-﻿using ASMS.CrossCutting.Enums;
-using ASMS.Domain.Abstractions;
+﻿using ASMS.Domain.Abstractions;
 
 namespace ASMS.Domain.Entities
 {
@@ -7,11 +6,27 @@ namespace ASMS.Domain.Entities
     {
         public long InstituteId { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public long ActivityId { get; set; }
 
-        public DateTime FinishTime { get; set; }
+        public long PrincipalCoachId { get; set; }
 
-        public ClassStatus ClassStatus { get; set; }
+        public long? AuxCoachId { get; set; }
+
+        public long RoomId { get; set; }
+
+        public string Description { get; set; } = string.Empty;
+
+        public TimeOnly StartTime { get; set; }
+
+        public TimeOnly FinishTime { get; set; }
+
+        public bool IsRecurrence { get; set; }
+
+        public DateTime? FromRange { get; set; }
+
+        public DateTime? ToRange { get; set; }
+
+        public ICollection<InstituteClassDayOfWeek>? DaysOfWeek { get; set; }
 
         public virtual Activity Activity { get; set; }
 
@@ -23,6 +38,6 @@ namespace ASMS.Domain.Entities
 
         public virtual Room Room { get; set; }
 
-        public virtual ICollection<InstituteMemberInstituteClass> InstituteMembers { get; set; } = new List<InstituteMemberInstituteClass>();
+        public ICollection<InstituteClassBlock> Blocks { get; set; } = new List<InstituteClassBlock>();
     }
 }
