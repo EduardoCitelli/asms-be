@@ -2,11 +2,11 @@
 
 namespace ASMS.Infrastructure.Automapper.Converters
 {
-    public class SingleObjectToListConverter<T, T2> : ITypeConverter<T, ICollection<T2>>
+    public class SingleObjectToListConverter<TSource, TDestination> : ITypeConverter<TSource, ICollection<TDestination>>
     {
-        public ICollection<T2> Convert(T source, ICollection<T2> destination, ResolutionContext context)
+        public ICollection<TDestination> Convert(TSource source, ICollection<TDestination> destination, ResolutionContext context)
         {
-            return source == null ? new List<T2>() : new List<T2>() { context.Mapper.Map<T2>(source) };
+            return source == null ? new List<TDestination>() : new List<TDestination>() { context.Mapper.Map<TDestination>(source) };
         }
     }
 }

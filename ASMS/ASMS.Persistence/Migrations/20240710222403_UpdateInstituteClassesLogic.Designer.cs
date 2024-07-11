@@ -4,6 +4,7 @@ using ASMS.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASMS.Persistence.Migrations
 {
     [DbContext(typeof(ASMSDbContext))]
-    partial class ASMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240710222403_UpdateInstituteClassesLogic")]
+    partial class UpdateInstituteClassesLogic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,9 +272,6 @@ namespace ASMS.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("FinishDateTime")
                         .HasColumnType("datetime2");
@@ -871,52 +870,52 @@ namespace ASMS.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8589),
+                            CreatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5524),
                             Description = "Super usuario con acceso a todos los modulos del sistema",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "SuperAdmin",
-                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8591)
+                            UpdatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5525)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8695),
+                            CreatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5650),
                             Description = "Manager de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Manager",
-                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8695)
+                            UpdatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5650)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8698),
+                            CreatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5654),
                             Description = "Miembro administrativo de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "StaffMember",
-                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8698)
+                            UpdatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5655)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8700),
+                            CreatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5658),
                             Description = "Profesor de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Coach",
-                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8701)
+                            UpdatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5658)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8761),
+                            CreatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5661),
                             Description = "Miembro/Cliente de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Member",
-                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8761)
+                            UpdatedAt = new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5661)
                         });
                 });
 

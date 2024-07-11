@@ -23,6 +23,14 @@ namespace ASMS.API.Extensions
                     BearerFormat = "JWT"
                 });
 
+                options.AddSecurityDefinition("minutes-offset", new OpenApiSecurityScheme
+                {
+                    Name = "minutes-offset",
+                    In = ParameterLocation.Header,
+                    Description = "minutes client offset",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
                 options.SchemaGeneratorOptions.CustomTypeMappings.Add(typeof(IFormFile), () => new OpenApiSchema
                 {
                     Type = "file",
@@ -38,6 +46,17 @@ namespace ASMS.API.Extensions
                             {
                                 Type = ReferenceType.SecurityScheme,
                                 Id = JwtBearerDefaults.AuthenticationScheme,
+                            }
+                        },
+                        Array.Empty<string>()
+                    },
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "minutes-offset",
                             }
                         },
                         Array.Empty<string>()

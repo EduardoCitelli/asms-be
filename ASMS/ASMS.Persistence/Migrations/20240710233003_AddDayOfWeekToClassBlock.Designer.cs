@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASMS.Persistence.Migrations
 {
     [DbContext(typeof(ASMSDbContext))]
-    [Migration("20240627015313_UpdateInstituteClassesLogic")]
-    partial class UpdateInstituteClassesLogic
+    [Migration("20240710233003_AddDayOfWeekToClassBlock")]
+    partial class AddDayOfWeekToClassBlock
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -273,7 +273,10 @@ namespace ASMS.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FinishTime")
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FinishDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("InstituteClassId")
@@ -295,7 +298,7 @@ namespace ASMS.Persistence.Migrations
                     b.Property<long>("RoomId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -318,7 +321,13 @@ namespace ASMS.Persistence.Migrations
 
             modelBuilder.Entity("ASMS.Domain.Entities.InstituteClassDayOfWeek", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
                     b.Property<long>("InstituteClassId")
@@ -326,7 +335,7 @@ namespace ASMS.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("InstituteClassId", "Id");
+                    b.HasAlternateKey("InstituteClassId", "DayOfWeek");
 
                     b.ToTable("InstituteClassDayOfWeek");
                 });
@@ -864,52 +873,52 @@ namespace ASMS.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8605),
+                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8589),
                             Description = "Super usuario con acceso a todos los modulos del sistema",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "SuperAdmin",
-                            UpdatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8607)
+                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8591)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8721),
+                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8695),
                             Description = "Manager de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Manager",
-                            UpdatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8722)
+                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8695)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8724),
+                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8698),
                             Description = "Miembro administrativo de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "StaffMember",
-                            UpdatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8724)
+                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8698)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8727),
+                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8700),
                             Description = "Profesor de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Coach",
-                            UpdatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8727)
+                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8701)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8729),
+                            CreatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8761),
                             Description = "Miembro/Cliente de la institución",
                             IsDelete = false,
                             LastEditedBy = "admin",
                             Name = "Member",
-                            UpdatedAt = new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8729)
+                            UpdatedAt = new DateTime(2024, 7, 10, 23, 30, 3, 324, DateTimeKind.Utc).AddTicks(8761)
                         });
                 });
 

@@ -14,5 +14,6 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<PagedList<CoachListDto>>> GetListAsync(int pageNumber = 1, int pageSize = 10, Expression<Func<Coach, bool>>? query = null, Func<IQueryable<Coach>, IIncludableQueryable<Coach, object>>? include = null);
         Task<BaseApiResponse<CoachSingleDto>> GetOneAsync(long id);
         Task<BaseApiResponse<CoachSingleDto>> UpdateAsync(CoachUpdateDto dto);
+        Task ValidateExistingAsync(long key);
     }
 }

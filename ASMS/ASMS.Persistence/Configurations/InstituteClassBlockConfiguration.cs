@@ -16,10 +16,10 @@ namespace ASMS.Persistence.Configurations
             builder.Property(x => x.ClassStatus)
                    .IsRequired();
 
-            builder.Property(x => x.StartTime)
+            builder.Property(x => x.StartDateTime)
                    .IsRequired();
 
-            builder.Property(x => x.FinishTime)
+            builder.Property(x => x.FinishDateTime)
                    .IsRequired();
 
             builder.HasOne(x => x.PrincipalCoach)

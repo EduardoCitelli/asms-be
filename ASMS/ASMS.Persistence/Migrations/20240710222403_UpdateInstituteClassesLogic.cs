@@ -69,8 +69,8 @@ namespace ASMS.Persistence.Migrations
                     PrincipalCoachId = table.Column<long>(type: "bigint", nullable: false),
                     AuxCoachId = table.Column<long>(type: "bigint", nullable: true),
                     RoomId = table.Column<long>(type: "bigint", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FinishTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FinishDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClassStatus = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -112,13 +112,15 @@ namespace ASMS.Persistence.Migrations
                 name: "InstituteClassDayOfWeek",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DayOfWeek = table.Column<int>(type: "int", nullable: false),
                     InstituteClassId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InstituteClassDayOfWeek", x => x.Id);
-                    table.UniqueConstraint("AK_InstituteClassDayOfWeek_InstituteClassId_Id", x => new { x.InstituteClassId, x.Id });
+                    table.UniqueConstraint("AK_InstituteClassDayOfWeek_InstituteClassId_DayOfWeek", x => new { x.InstituteClassId, x.DayOfWeek });
                     table.ForeignKey(
                         name: "FK_InstituteClassDayOfWeek_InstituteClasses_InstituteClassId",
                         column: x => x.InstituteClassId,
@@ -162,35 +164,35 @@ namespace ASMS.Persistence.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8605), new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8607) });
+                values: new object[] { new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5524), new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5525) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8721), new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8722) });
+                values: new object[] { new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5650), new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5650) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8724), new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8724) });
+                values: new object[] { new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5654), new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5655) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 4,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8727), new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8727) });
+                values: new object[] { new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5658), new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5658) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 5,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8729), new DateTime(2024, 6, 27, 1, 53, 13, 309, DateTimeKind.Utc).AddTicks(8729) });
+                values: new object[] { new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5661), new DateTime(2024, 7, 10, 22, 24, 2, 992, DateTimeKind.Utc).AddTicks(5661) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_InstituteClassBlocks_AuxCoachId",

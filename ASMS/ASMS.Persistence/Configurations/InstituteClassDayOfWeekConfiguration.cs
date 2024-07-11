@@ -13,7 +13,7 @@ namespace ASMS.Persistence.Configurations
                    .HasForeignKey(x => x.InstituteClassId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasAlternateKey(x => new { x.InstituteClassId, x.Id });
+            builder.HasAlternateKey(x => new { x.InstituteClassId, x.DayOfWeek });
         }
     }
 }

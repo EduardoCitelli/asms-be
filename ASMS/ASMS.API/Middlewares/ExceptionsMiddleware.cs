@@ -1,8 +1,6 @@
 ﻿using ASMS.Infrastructure;
 using ASMS.Infrastructure.Exceptions;
 using ASMS.Services.Abstractions;
-using GTranslate;
-using GTranslate.Translators;
 using System.Globalization;
 using System.Net;
 using System.Text.Json;
@@ -16,7 +14,7 @@ namespace ASMS.API.Middlewares
         private string _request;
         private string _languague;
 
-        public ExceptionsMiddleware(ILogger<ExceptionsMiddleware> logger, 
+        public ExceptionsMiddleware(ILogger<ExceptionsMiddleware> logger,
                                     ITranslateService translateService)
         {
             _logger = logger;

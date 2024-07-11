@@ -19,5 +19,6 @@ namespace ASMS.Services.Abstractions
         Task<BaseApiResponse<PagedList<ActivityListDto>>> GetListAsync(int pageNumber = 1, int pageSize = 10, Expression<Func<Activity, bool>>? query = null, Func<IQueryable<Activity>, IIncludableQueryable<Activity, object>>? include = null);
         Task<BaseApiResponse<ActivitySingleDto>> GetOneAsync(long id);
         Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetForComboAsync();
+        Task ValidateExistingAsync(long key);
     }
 }

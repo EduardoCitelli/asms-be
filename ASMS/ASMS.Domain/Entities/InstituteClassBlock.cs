@@ -15,9 +15,11 @@ namespace ASMS.Domain.Entities
 
         public long RoomId { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public DateTime StartDateTime { get; set; }
 
-        public DateTime FinishTime { get; set; }
+        public DateTime FinishDateTime { get; set; }
+
+        public DayOfWeek DayOfWeek { get; set; }
 
         public ClassStatus ClassStatus { get; set; }
 

@@ -28,10 +28,13 @@ namespace ASMS.API.Extensions
             services.AddTransient<IInstitutePlanService, InstitutePlanService>();
             services.AddTransient<IInstituteMemberMembershipService, InstituteMemberMembershipService>();
             services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<IInstituteClassService, InstituteClassService>();
+            services.AddTransient<IInstituteClassBlockService, InstituteClassBlockService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IInstituteIdService, InstituteIdService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
+            services.AddScoped<IClientTimeOffsetService, ClientTimeOffsetService>();
 
             services.AddSingleton<ITranslateService, TranslateService>();
 

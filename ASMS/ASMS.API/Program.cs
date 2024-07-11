@@ -11,7 +11,11 @@ var services = builder.Services;
 
 services.AddControllers()
         .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; })
-        .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter()); });
+        .AddJsonOptions(options => 
+        { 
+            options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+            options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+        });
 
 services.AddContext(builder.Configuration);
 

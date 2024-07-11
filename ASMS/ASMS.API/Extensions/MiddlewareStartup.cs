@@ -9,12 +9,13 @@ namespace ASMS.API.Extensions
             services.AddScoped<InstituteTenantMiddleware>();
             services.AddScoped<ExceptionsMiddleware>();
             services.AddScoped<UserInfoMiddleware>();
-
+            services.AddScoped<ClientOffsetMiddleware>();
             return services;
         }
 
         public static WebApplication UseMiddlewares(this WebApplication app)
         {
+            app.UseMiddleware<ClientOffsetMiddleware>();
             app.UseMiddleware<ExceptionsMiddleware>();
             app.UseMiddleware<InstituteTenantMiddleware>();
             app.UseMiddleware<UserInfoMiddleware>();

@@ -1,7 +1,9 @@
 ﻿namespace ASMS.Domain.Entities
 {
-    public class InstituteClassDayOfWeek : BaseEntity<DayOfWeek>
+    public partial class InstituteClassDayOfWeek : BaseEntity<long>
     {
+        public DayOfWeek DayOfWeek { get; set; }
+
         public long InstituteClassId { get; set; }
 
         public InstituteClass InstituteClass { get; set; }
