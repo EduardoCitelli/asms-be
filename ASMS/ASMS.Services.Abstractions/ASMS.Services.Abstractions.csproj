@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Coravel" Version="5.0.4" />
     <PackageReference Include="GTranslate" Version="2.2.0" />
   </ItemGroup>
 

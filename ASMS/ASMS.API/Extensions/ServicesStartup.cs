@@ -5,6 +5,7 @@ using ASMS.Persistence;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services;
 using ASMS.Services.Abstractions;
+using ASMS.Services.Schedules;
 
 namespace ASMS.API.Extensions
 {
@@ -30,6 +31,7 @@ namespace ASMS.API.Extensions
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IInstituteClassService, InstituteClassService>();
             services.AddTransient<IInstituteClassBlockService, InstituteClassBlockService>();
+            services.AddTransient<UpdateClassesStatusDaily>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IInstituteIdService, InstituteIdService>();

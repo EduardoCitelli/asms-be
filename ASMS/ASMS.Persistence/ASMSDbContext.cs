@@ -37,7 +37,7 @@ namespace ASMS.Persistence
             {
                 var type = entity.ClrType;
 
-                if (typeof(IIsInstituteEntity).IsAssignableFrom(type) && _instituteId != 0)
+                if (typeof(IIsInstituteEntity).IsAssignableFrom(type))
                 {
                     var method = typeof(ASMSDbContext).GetMethod(nameof(GetInsituteIdFilter), BindingFlags.NonPublic | BindingFlags.Static)?
                                                       .MakeGenericMethod(type);
@@ -51,7 +51,7 @@ namespace ASMS.Persistence
 
         private static LambdaExpression GetInsituteIdFilter<TEntity>(ASMSDbContext context) where TEntity : class, IIsInstituteEntity
         {
-            Expression<Func<TEntity, bool>> filter = x => x.InstituteId == context._instituteId && !x.IsDelete;
+            Expression<Func<TEntity, bool>> filter = x => !x.IsDelete && (context._instituteId == 0 || x.InstituteId == context._instituteId);
             return filter;
         }
 

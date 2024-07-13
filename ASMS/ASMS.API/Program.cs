@@ -11,8 +11,8 @@ var services = builder.Services;
 
 services.AddControllers()
         .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; })
-        .AddJsonOptions(options => 
-        { 
+        .AddJsonOptions(options =>
+        {
             options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
             options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
         });
@@ -31,6 +31,7 @@ services.AddJwt(builder.Configuration);
 
 services.ConfigureServices(builder.Configuration);
 services.ConfigureMiddlewares();
+services.ConfigureScheduler();
 
 var app = builder.Build();
 
@@ -48,6 +49,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseMiddlewares();
+
+app.UseSchedulers();
 
 app.UseEndpoints(endpoints =>
 {

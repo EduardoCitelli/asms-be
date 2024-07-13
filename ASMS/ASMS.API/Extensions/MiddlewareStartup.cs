@@ -13,7 +13,7 @@ namespace ASMS.API.Extensions
             return services;
         }
 
-        public static WebApplication UseMiddlewares(this WebApplication app)
+        public static IApplicationBuilder UseMiddlewares(this IApplicationBuilder app)
         {
             app.UseMiddleware<ClientOffsetMiddleware>();
             app.UseMiddleware<ExceptionsMiddleware>();
