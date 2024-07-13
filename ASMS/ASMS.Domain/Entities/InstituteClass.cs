@@ -2,7 +2,7 @@
 
 namespace ASMS.Domain.Entities
 {
-    public class InstituteClass : AuditEntity<long>, IIsInstituteEntity
+    public partial class InstituteClass : AuditEntity<long>, IIsInstituteEntity
     {
         public long InstituteId { get; set; }
 

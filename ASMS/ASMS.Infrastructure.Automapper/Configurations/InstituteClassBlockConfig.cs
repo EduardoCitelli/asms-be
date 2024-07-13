@@ -20,6 +20,16 @@ namespace ASMS.Infrastructure.Automapper.Configurations
                    .AfterMap((dto, entity) => entity.FinishDateTime = entity.StartDateTime.AddMinutes(dto.MinutesDuration))
                    .AfterMap((dto, entity) => entity.ClassStatus = ClassStatus.New);
 
+            profile.CreateMap<InstituteClassUpdateDto, IEnumerable<InstituteClassBlock>>()
+                   .ConvertUsing<InstituteClassUpdateDtoToClassBlockConverter>();
+
+            profile.CreateMap<InstituteClassUpdateDto, InstituteClassBlock>()
+                   .ForMember(entity => entity.StartDateTime, 
+                                        config => config.MapFrom((dto, entity) => entity.StartDateTime.RemoveOffset(dto.ClientOffset)
+                                                                                                      .SetTime(dto.StartTime)
+                                                                                                      .AddOffset(dto.ClientOffset)))
+                   .AfterMap((dto, entity) => entity.FinishDateTime = entity.StartDateTime.AddMinutes(dto.MinutesDuration));
+
             #endregion
 
             #region Map from entity

@@ -1,7 +1,5 @@
-﻿using ASMS.CrossCutting.Services;
-using ASMS.CrossCutting.Services.Abstractions;
+﻿using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.Domain.Abstractions;
-using ASMS.Domain.Entities;
 using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Conventions;
 using ASMS.Persistence.Extensions;

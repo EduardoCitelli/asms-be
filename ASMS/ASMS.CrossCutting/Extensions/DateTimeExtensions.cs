@@ -24,5 +24,10 @@
         {
             return date + time;
         }
+
+        public static DateTime RemoveOffset(this DateTime date, TimeSpan time)
+        {
+            return date - time;
+        }
     }
 }

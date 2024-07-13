@@ -15,7 +15,7 @@ namespace ASMS.Persistence
         {
         }
 
-        public async Task<TEntity?> GetByIdAsync(TKey id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        public async Task<TEntity?> GetByIdAsync(TKey id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null)
         {
             //var ids = id!.GetType()
             //             .GetProperties()
