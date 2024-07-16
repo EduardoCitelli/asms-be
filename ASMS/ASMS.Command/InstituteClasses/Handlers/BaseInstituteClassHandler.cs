@@ -2,7 +2,7 @@
 using ASMS.CrossCutting.Extensions;
 using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.Domain.Entities;
-using ASMS.DTOs.InstituteClass;
+using ASMS.DTOs.InstituteClasses;
 using ASMS.Infrastructure.Exceptions;
 using ASMS.Services.Abstractions;
 using MediatR;

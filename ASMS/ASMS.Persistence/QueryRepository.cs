@@ -27,7 +27,7 @@ namespace ASMS.Persistence
 
             var response = include is null ?
                 await _dbSet.FindAsync(id) :
-                await  include(_dbSet.AsNoTracking()).SingleAsync(x => x.Id!.Equals(id));
+                await  include(_dbSet.AsNoTracking()).SingleOrDefaultAsync(x => x.Id!.Equals(id));
 
             if (response != null)
                 _dbContext.Entry(response).State = EntityState.Detached;

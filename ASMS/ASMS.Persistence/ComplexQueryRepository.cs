@@ -14,7 +14,7 @@ namespace ASMS.Persistence
         {
         }
 
-        public IQueryable<TEntity> GetAll(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        public IQueryable<TEntity> GetAll(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                           Expression<Func<TEntity, object>>? orderBy = null)
         {
             var response = _dbSet.AsQueryable().AsNoTracking();
@@ -29,7 +29,7 @@ namespace ASMS.Persistence
         }
 
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> query,
-                                        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                         Expression<Func<TEntity, object>>? orderBy = null)
         {
             var response = _dbSet.Where(query).AsNoTracking();

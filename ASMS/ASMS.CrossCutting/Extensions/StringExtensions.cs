@@ -1,4 +1,6 @@
-﻿namespace ASMS.CrossCutting.Extensions
+﻿using System.Reflection;
+
+namespace ASMS.CrossCutting.Extensions
 {
     public static partial class StringExtensions
     {
@@ -16,6 +18,11 @@
         {
             var className = typeof(T).Name;
             return $"{className}Repository";
+        }
+
+        public static MethodInfo GetStringMethodWithOneStringParameter(string methodName)
+        {
+            return typeof(string).GetMethod(methodName, new[] { typeof(string) })!;
         }
     }
 }

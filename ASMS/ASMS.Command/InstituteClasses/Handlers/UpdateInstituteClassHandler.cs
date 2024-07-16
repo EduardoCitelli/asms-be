@@ -3,7 +3,7 @@ using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Extensions;
 using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.Domain.Entities;
-using ASMS.DTOs.InstituteClass;
+using ASMS.DTOs.InstituteClasses;
 using ASMS.Infrastructure;
 using ASMS.Services.Abstractions;
 using AutoMapper;
@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 
 namespace ASMS.Command.InstituteClasses.Handlers
 {
-    public class UpdateInstituteClassHandler : BaseInstituteClassHandler<UpdateInstituteClass, BaseApiResponse<bool>>
+    public class UpdateInstituteClassHandler : BaseInstituteClassHandler<UpdateInstituteClass, BaseApiResponse<InstituteClassSingleDto>>
     {
         private readonly ICoachService _coachService;
         private readonly IRoomService _roomService;
@@ -43,7 +43,7 @@ namespace ASMS.Command.InstituteClasses.Handlers
             await ValidateRecurrenceClass(request);
         }
 
-        protected override async Task<BaseApiResponse<bool>> RunLogicAsync(UpdateInstituteClass request)
+        protected override async Task<BaseApiResponse<InstituteClassSingleDto>> RunLogicAsync(UpdateInstituteClass request)
         {
             return await _service.UpdateAsync(request, request.Id, MapPendingBlocks(), IncludeBlocksAndDaysOfWeek());
         }

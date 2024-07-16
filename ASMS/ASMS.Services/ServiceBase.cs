@@ -71,12 +71,36 @@ namespace ASMS.Services
         }
 
         /// <summary>
+        /// Base method to get all entities paginated as dtos with filters
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="query"></param>
+        /// <param name="include"></param>
+        /// <returns></returns>
+        protected async Task<BaseApiResponse<PagedList<TListDto>>> GetAllDtosPaginatedBaseAsync(PagedFilterRequestDto request,
+                                                                                                Expression<Func<TEntity, bool>>? query = null,
+                                                                                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null)
+        {
+            var result = query is null ? _repository.GetAll(include, null) : _repository.Find(query, include, null);
+
+            if (request.RootFilter != null)
+                result = result.ApplyFilter(request.RootFilter);
+
+            var dtos = _mapper.ProjectTo<TListDto>(result);
+
+            var pagedResponse = await ListExtensions.ToPagedList(dtos, request.Page, request.Size);
+
+            return new BaseApiResponse<PagedList<TListDto>>(pagedResponse);
+        }
+
+        /// <summary>
         /// Base method to get one entity as dto
         /// </summary>
         /// <param name="key"></param>
         /// <param name="include"></param>
         /// <returns></returns>
-        protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        protected async Task<BaseApiResponse<TSingleDto>> GetOneDtoBaseAsync(TKey key, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null)
         {
             var result = await TryGetExistentEntityBaseAsync(key, include);
 
@@ -162,7 +186,7 @@ namespace ASMS.Services
         protected async Task<BaseApiResponse<TSingleDto>> UpdateBaseAsync<TUpdateDto>(TUpdateDto request, 
                                                                                       TKey key, 
                                                                                       Action<TUpdateDto, TEntity>? beforeAction = null,
-                                                                                      Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+                                                                                      Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null)
         {
             var entity = await TryGetExistentEntityBaseAsync(key, include);
 
@@ -225,7 +249,7 @@ namespace ASMS.Services
         /// <param name="include"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
-        protected async Task<TEntity> TryGetExistentEntityBaseAsync(TKey key, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        protected async Task<TEntity> TryGetExistentEntityBaseAsync(TKey key, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null)
         {
             var existentEntity = await _repository.GetByIdAsync(key, include);
 

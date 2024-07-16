@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace ASMS.DTOs.InstituteClass
+namespace ASMS.DTOs.InstituteClasses
 {
     public class InstituteClassUpdateDto
     {

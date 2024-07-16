@@ -1,7 +1,7 @@
 ﻿using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Extensions;
 using ASMS.Domain.Entities;
-using ASMS.DTOs.InstituteClass;
+using ASMS.DTOs.InstituteClasses;
 using ASMS.Infrastructure.Automapper.Converters;
 using System.Linq.Expressions;
 

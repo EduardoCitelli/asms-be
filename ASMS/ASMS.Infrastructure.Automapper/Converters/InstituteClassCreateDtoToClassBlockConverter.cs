@@ -1,6 +1,6 @@
 ﻿using ASMS.CrossCutting.Extensions;
 using ASMS.Domain.Entities;
-using ASMS.DTOs.InstituteClass;
+using ASMS.DTOs.InstituteClasses;
 using AutoMapper;
 
 namespace ASMS.Infrastructure.Automapper.Converters

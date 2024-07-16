@@ -1,6 +1,5 @@
-﻿using ASMS.CrossCutting.Enums;
-using ASMS.Domain.Entities;
-using ASMS.DTOs.InstituteClass;
+﻿using ASMS.Domain.Entities;
+using ASMS.DTOs.InstituteClasses;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
@@ -20,7 +19,12 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #endregion
 
             #region Map from entity
+            profile.CreateMap<InstituteClass, InstituteClassListDto>()
+                   .ForMember(dto => dto.DaysOfWeek, config => config.MapFrom(entity => entity.DaysOfWeek.Select(x => x.DayOfWeek)));
 
+            profile.CreateMap<InstituteClass, InstituteClassSingleDto>()
+                   .ForMember(dto => dto.DaysOfWeek, config => config.MapFrom(entity => entity.DaysOfWeek.Select(x => x.DayOfWeek)))
+                   .ForMember(dto => dto.MinutesDuration, config => config.MapFrom(entity => (entity.FinishTime - entity.StartTime).TotalMinutes));
             #endregion
 
             return profile;

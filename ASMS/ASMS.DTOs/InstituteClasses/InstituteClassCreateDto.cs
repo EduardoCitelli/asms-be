@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ASMS.DTOs.InstituteClass
+namespace ASMS.DTOs.InstituteClasses
 {
     public class InstituteClassCreateDto : InstituteClassUpdateDto
     {
