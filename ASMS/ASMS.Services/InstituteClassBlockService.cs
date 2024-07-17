@@ -1,5 +1,11 @@
 ﻿using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Extensions;
+using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
+using ASMS.DTOs.InstituteClassBlocks;
+using ASMS.DTOs.Shared;
+using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
@@ -41,6 +47,46 @@ namespace ASMS.Services
                 await _repository.UpdateCollectionAsync(response);
                 await _uow.SaveChangesAsync();
             }
+        }
+
+        public async Task<BaseApiResponse<PagedList<InstituteClassBlockListDto>>> GetAllDtosPaginatedAsync(PagedFilterRequestDto request,
+                                                                                                           Expression<Func<InstituteClassBlock, bool>>? query = null,
+                                                                                                           Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null)
+        {
+            var result = query is null ? _repository.GetAll(include, null) : _repository.Find(query, include, null);
+
+            if (request.RootFilter != null)
+                result = result.ApplyFilter(request.RootFilter);
+
+            var dtos = _mapper.ProjectTo<InstituteClassBlockListDto>(result);
+
+            var pagedResponse = await ListExtensions.ToPagedList(dtos, request.Page, request.Size);
+
+            return new BaseApiResponse<PagedList<InstituteClassBlockListDto>>(pagedResponse);
+        }
+
+        public async Task<BaseApiResponse<InstituteClassBlockSingleDto>> GetOneDtoAsync(long key,
+                                                                                        Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null)
+        {
+            var result = await TryGetExistentEntityAsync(key, include);
+
+            var dto = _mapper.Map<InstituteClassBlockSingleDto>(result);
+
+            return new BaseApiResponse<InstituteClassBlockSingleDto>(dto);
+        }
+
+        protected async Task<InstituteClassBlock> TryGetExistentEntityAsync(long key,
+                                                                                Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null)
+        {
+            var existentEntity = await _repository.GetByIdAsync(key, include);
+
+            if (existentEntity == null)
+            {
+                var message = $"Entity: Class Block with key: {key} does not exist";
+                throw new NotFoundException(message);
+            }
+
+            return existentEntity;
         }
     }
 }

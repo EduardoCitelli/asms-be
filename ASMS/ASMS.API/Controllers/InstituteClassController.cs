@@ -21,6 +21,7 @@ namespace ASMS.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
         public async Task<BaseApiResponse<PagedList<InstituteClassListDto>>> Get([FromQuery] GetInstituteClasses request)
         {
             request.RootFilter = request.Filter.IsNullOrEmpty() ? null : JsonConvert.DeserializeObject<RootFilter>(request.Filter);
@@ -28,6 +29,7 @@ namespace ASMS.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
         public async Task<BaseApiResponse<InstituteClassSingleDto>> GetById([FromRoute] long id)
         {
             return await _mediator.Send(new GetInstituteClassById(id));
