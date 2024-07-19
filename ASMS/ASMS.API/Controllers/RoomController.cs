@@ -2,7 +2,9 @@
 using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Rooms;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
+using ASMS.Queries.Coaches.Requests;
 using ASMS.Queries.Rooms.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +31,13 @@ namespace ASMS.API.Controllers
         public async Task<BaseApiResponse<RoomSingleDto>> GetById([FromRoute] long roomId)
         {
             return await _mediator.Send(new GetRoomByIdRequest(roomId));
+        }
+
+        [HttpGet("combos")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetCombos()
+        {
+            return await _mediator.Send(new GetRoomCombo());
         }
 
         [HttpPost]

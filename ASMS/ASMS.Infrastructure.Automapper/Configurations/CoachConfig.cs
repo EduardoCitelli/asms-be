@@ -36,6 +36,9 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
             profile.CreateMap<Coach, CoachListDto>()
                    .ForMember(dto => dto.FullName, conf => conf.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"));
+
+            profile.CreateMap<Coach, ComboDto<long>>()
+                   .ForMember(dto => dto.Name, config => config.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"));
             #endregion
 
             return profile;

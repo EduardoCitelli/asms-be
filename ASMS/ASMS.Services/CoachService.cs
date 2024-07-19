@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.Coaches;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
@@ -31,6 +32,11 @@ namespace ASMS.Services
         public async Task<BaseApiResponse<CoachSingleDto>> GetOneAsync(long id)
         {
             return await GetOneDtoBaseAsync(id, x => x.Include(x => x.User));
+        }
+
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetComboAsync()
+        {
+            return await GetForComboBaseAsync();
         }
 
         public async Task<BaseApiResponse<CoachSingleDto>> CreateAsync(CoachCreateDto dto)

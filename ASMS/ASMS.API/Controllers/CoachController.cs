@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.Coaches;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Queries.Coaches.Requests;
 using MediatR;
@@ -29,6 +30,13 @@ namespace ASMS.API.Controllers
         public async Task<BaseApiResponse<CoachSingleDto>> GetById([FromRoute] long coachId)
         {
             return await _mediator.Send(new GetCoachById(coachId));
+        }
+
+        [HttpGet("combos")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetCombos()
+        {
+            return await _mediator.Send(new GetCoachCombo());
         }
 
         [HttpPost]

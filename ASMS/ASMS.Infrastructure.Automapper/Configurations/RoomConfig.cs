@@ -1,5 +1,6 @@
 ﻿using ASMS.Domain.Entities;
 using ASMS.DTOs.Rooms;
+using ASMS.DTOs.Shared;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
 {
@@ -15,6 +16,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #region Map From Entity
             profile.CreateMap<Room, RoomSingleDto>();
             profile.CreateMap<Room, RoomListDto>();
+            profile.CreateMap<Room, ComboDto<long>>();
             #endregion
 
             return profile;
