@@ -15,7 +15,7 @@ namespace ASMS.CrossCutting.Utils
 
         public override void Write(Utf8JsonWriter writer, TimeOnly value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString("t"));
+            writer.WriteStringValue(value.ToString(Format));
         }
     }
 }
