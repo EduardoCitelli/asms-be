@@ -32,9 +32,15 @@ namespace ASMS.Command.InstituteClasses.Handlers
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
         {
+            SetClientOffset((request as InstituteClassUpdateDto)!);
             await BasicExistentValidationAsync(request);
             await InstituteClassValidationsAsync(request);
             return await RunLogicAsync(request);
+        }
+
+        private void SetClientOffset(InstituteClassUpdateDto request)
+        {
+            request.ClientOffset = _clientOffset;
         }
 
         /// <summary>

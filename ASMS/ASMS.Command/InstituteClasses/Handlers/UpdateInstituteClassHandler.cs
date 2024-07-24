@@ -34,7 +34,6 @@ namespace ASMS.Command.InstituteClasses.Handlers
 
         protected override async Task BasicExistentValidationAsync(UpdateInstituteClass request)
         {
-            request.ClientOffset = _clientOffset;
             await BasicExistentValidations(request);
         }
 

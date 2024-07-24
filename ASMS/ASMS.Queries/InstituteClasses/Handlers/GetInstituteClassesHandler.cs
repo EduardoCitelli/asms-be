@@ -1,9 +1,11 @@
-﻿using ASMS.CrossCutting.Utils;
+﻿using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.InstituteClasses;
 using ASMS.Infrastructure;
 using ASMS.Queries.InstituteClasses.Requests;
 using ASMS.Services.Abstractions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASMS.Queries.InstituteClasses.Handlers
 {
@@ -18,7 +20,7 @@ namespace ASMS.Queries.InstituteClasses.Handlers
 
         public async Task<BaseApiResponse<PagedList<InstituteClassListDto>>> Handle(GetInstituteClasses request, CancellationToken cancellationToken)
         {
-            return await _instituteClassService.GetAllAsync(request);
+            return await _instituteClassService.GetAllAsync(request, x => x.Blocks.Any(x => x.ClassStatus == ClassStatus.New), x => x.Include(x => x.Blocks));
         }
     }
 }
