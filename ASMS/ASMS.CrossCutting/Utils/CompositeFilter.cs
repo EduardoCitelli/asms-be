@@ -83,7 +83,16 @@ namespace ASMS.CrossCutting.Utils
             if (filter.Value == null || string.IsNullOrWhiteSpace(filter.Value.ToString()))
                 return null;
 
-            var property = Expression.Property(parameter, filter.Field);
+            MemberExpression selector = null;
+            Expression current = parameter;
+
+            foreach (var part in filter.Field.Split('.'))
+            {
+                selector = Expression.PropertyOrField(current, part);
+                current = selector;
+            }
+
+            var property = current;
             var constant = Expression.Constant(filter.Value);
 
             switch (filter.Operator.ToLower())
