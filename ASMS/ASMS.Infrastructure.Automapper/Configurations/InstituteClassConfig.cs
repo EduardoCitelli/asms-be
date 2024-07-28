@@ -20,6 +20,8 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
             #region Map from entity
             profile.CreateMap<InstituteClass, InstituteClassListDto>()
+                   .ForMember(dto => dto.FromRange, config => config.MapFrom(entity => entity.FromRange.HasValue ? DateOnly.FromDateTime(entity.FromRange.Value) : (DateOnly?)null))
+                   .ForMember(dto => dto.ToRange, config => config.MapFrom(entity => entity.ToRange.HasValue ? DateOnly.FromDateTime(entity.ToRange.Value) : (DateOnly?)null))
                    .ForMember(dto => dto.DaysOfWeek, config => config.MapFrom(entity => entity.DaysOfWeek.Select(x => x.DayOfWeek)));
 
             profile.CreateMap<InstituteClass, InstituteClassSingleDto>()

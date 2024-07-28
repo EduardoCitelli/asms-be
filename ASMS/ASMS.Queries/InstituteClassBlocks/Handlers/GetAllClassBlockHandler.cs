@@ -21,7 +21,7 @@ namespace ASMS.Queries.InstituteClassBlocks.Handlers
 
         public async Task<BaseApiResponse<PagedList<InstituteClassBlockListDto>>> Handle(GetAllClassBlocks request, CancellationToken cancellationToken)
         {
-            return await _instituteClassBlockService.GetAllDtosPaginatedAsync(request, include: IncludeDependencies());
+            return await _instituteClassBlockService.GetAllDtosPaginatedAsync(request, null, IncludeDependencies(), x => x.StartDateTime);
         }
 
         private static Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>> IncludeDependencies()

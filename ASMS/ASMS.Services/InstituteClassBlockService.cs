@@ -51,9 +51,11 @@ namespace ASMS.Services
 
         public async Task<BaseApiResponse<PagedList<InstituteClassBlockListDto>>> GetAllDtosPaginatedAsync(PagedFilterRequestDto request,
                                                                                                            Expression<Func<InstituteClassBlock, bool>>? query = null,
-                                                                                                           Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null)
+                                                                                                           Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null,
+                                                                                                           Expression<Func<InstituteClassBlock, object>>? orderBy = null,
+                                                                                                           bool isDesc = false)
         {
-            var result = query is null ? _repository.GetAll(include, null) : _repository.Find(query, include, null);
+            var result = query is null ? _repository.GetAll(include, orderBy, isDesc) : _repository.Find(query, include, orderBy, isDesc);
 
             if (request.RootFilter != null)
                 result = result.ApplyFilter(request.RootFilter);

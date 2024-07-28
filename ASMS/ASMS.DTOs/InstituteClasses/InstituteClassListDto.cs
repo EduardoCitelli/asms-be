@@ -10,9 +10,9 @@
 
         public TimeOnly FinishTime { get; set; }
 
-        public DateTime? FromRange { get; set; }
+        public DateOnly? FromRange { get; set; }
 
-        public DateTime? ToRange { get; set; }
+        public DateOnly? ToRange { get; set; }
 
         public IEnumerable<DayOfWeek>? DaysOfWeek { get; set; }
     }

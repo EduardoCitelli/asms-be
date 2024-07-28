@@ -7,11 +7,13 @@ namespace ASMS.Persistence.Abstractions
     public interface IComplexQueryRespository<TEntity, in TKey> : IQueryRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         IQueryable<TEntity> GetAll(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
-                                   Expression<Func<TEntity, object>>? orderBy = null);
+                                   Expression<Func<TEntity, object>>? orderBy = null,
+                                   bool isDesc = false);
 
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> query,
                                  Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
-                                 Expression<Func<TEntity, object>>? orderBy = null);
+                                 Expression<Func<TEntity, object>>? orderBy = null,
+                                 bool isDesc = false);
 
         Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> query,
                                        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,

@@ -12,7 +12,9 @@ namespace ASMS.Services.Abstractions
     {
         Task<BaseApiResponse<PagedList<InstituteClassBlockListDto>>> GetAllDtosPaginatedAsync(PagedFilterRequestDto request,
                                                                                               Expression<Func<InstituteClassBlock, bool>>? query = null,
-                                                                                              Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null);
+                                                                                              Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null,
+                                                                                              Expression<Func<InstituteClassBlock, object>>? orderBy = null,
+                                                                                              bool isDesc = false);
 
         Task<BaseApiResponse<InstituteClassBlockSingleDto>> GetOneDtoAsync(long key,
                                                                            Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null);

@@ -93,7 +93,7 @@ namespace ASMS.CrossCutting.Utils
             }
 
             var property = current;
-            var constant = Expression.Constant(filter.Value);
+            var constant = property.Type.IsEnum ? Expression.Constant(Enum.ToObject(property.Type, filter.Value)) : Expression.Constant(filter.Value);
 
             switch (filter.Operator.ToLower())
             {
