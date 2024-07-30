@@ -77,7 +77,19 @@ namespace ASMS.Services
             return new BaseApiResponse<InstituteClassBlockSingleDto>(dto);
         }
 
-        protected async Task<InstituteClassBlock> TryGetExistentEntityAsync(long key,
+        public async Task<IEnumerable<TDto>> GetListDtoAsync<TDto>(Expression<Func<InstituteClassBlock, bool>>? query = null,
+                                                                   Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null,
+                                                                   Expression<Func<InstituteClassBlock, object>>? orderBy = null,
+                                                                   bool isDesc = false)
+        {
+            var result = query is null ? _repository.GetAll(include, orderBy, isDesc) : _repository.Find(query, include, orderBy, isDesc);
+
+            var dtos = _mapper.ProjectTo<TDto>(result);
+
+            return await dtos.ToListAsync();
+        }
+
+        private async Task<InstituteClassBlock> TryGetExistentEntityAsync(long key,
                                                                                 Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null)
         {
             var existentEntity = await _repository.GetByIdAsync(key, include);

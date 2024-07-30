@@ -44,6 +44,10 @@ namespace ASMS.Infrastructure.Automapper.Configurations
                    .ForMember(dto => dto.ActivityName, config => config.MapFrom(entity => entity.Header.Activity.Name))
                    .ForMember(dto => dto.RoomName, config => config.MapFrom(entity => entity.Room.Name))
                    .ForMember(dto => dto.AuxCoachName, config => config.MapFrom(entity => entity.AuxCoach == null ? "" : $"{entity.AuxCoach.User.LastName}, {entity.AuxCoach.User.FirstName}"));
+
+            profile.CreateMap<InstituteClassBlock, InstituteClassBlockCalendarDto>()
+                   .ForMember(dto => dto.PrincipalCoachName, config => config.MapFrom(entity => $"{entity.PrincipalCoach.User.LastName}, {entity.PrincipalCoach.User.FirstName}"))
+                   .ForMember(dto => dto.Description, config => config.MapFrom(entity => entity.Header.Description));
             #endregion
 
             return profile;

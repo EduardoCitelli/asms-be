@@ -29,5 +29,11 @@ namespace ASMS.API.Controllers
         {
             return await _mediator.Send(new GetClassBlockById(id));
         }
+
+        [HttpGet("calendar")]
+        public async Task<BaseApiResponse<IEnumerable<InstituteClassBlockCalendarDto>>> GetForCalendar([FromQuery] GetBlocksForCalendar request)
+        {
+            return await _mediator.Send(request);
+        }
     }
 }
