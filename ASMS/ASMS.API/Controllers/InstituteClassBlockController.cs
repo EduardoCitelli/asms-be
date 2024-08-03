@@ -1,4 +1,5 @@
-﻿using ASMS.CrossCutting.Extensions;
+﻿using ASMS.Command.InstituteClassBlocks.Commands;
+using ASMS.CrossCutting.Extensions;
 using ASMS.CrossCutting.Utils;
 using ASMS.CrossCutting.Utils.Models;
 using ASMS.DTOs.InstituteClassBlocks;
@@ -34,6 +35,12 @@ namespace ASMS.API.Controllers
         public async Task<BaseApiResponse<IEnumerable<InstituteClassBlockCalendarDto>>> GetForCalendar([FromQuery] GetBlocksForCalendar request)
         {
             return await _mediator.Send(request);
+        }
+
+        [HttpPut("{id}/[action]")]
+        public async Task<BaseApiResponse<bool>> Cancel([FromRoute] long id)
+        {
+            return await _mediator.Send(new CancelBlock(id));
         }
     }
 }

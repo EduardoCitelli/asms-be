@@ -85,7 +85,7 @@ namespace ASMS.Command.InstituteClasses.Handlers
         {
             return (dto, entity) =>
             {
-                var blocks = entity.Blocks.Where(x => x.StartDateTime > DateTime.UtcNow && x.ClassStatus == ClassStatus.New);
+                var blocks = entity.Blocks.Where(x => x.StartDateTime > DateTime.UtcNow && (x.ClassStatus == ClassStatus.Pending || x.ClassStatus == ClassStatus.Active));
 
                 if (blocks.Any())
                     _mapper.Map(dto, blocks);

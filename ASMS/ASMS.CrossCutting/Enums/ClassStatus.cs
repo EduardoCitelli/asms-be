@@ -2,8 +2,9 @@
 {
     public enum ClassStatus
     {
-        New = 1,
+        Pending = 1,
         Finished,
         Cancelled,
+        Active,
     }
 }

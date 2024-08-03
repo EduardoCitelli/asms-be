@@ -124,7 +124,7 @@ namespace ASMS.Command.InstituteClasses.Handlers
 
         private static Expression<Func<InstituteClassBlock, bool>> NotCancelledClass()
         {
-            return x => x.ClassStatus == ClassStatus.New;
+            return x => x.ClassStatus == ClassStatus.Pending || x.ClassStatus == ClassStatus.Active;
         }
     }
 }

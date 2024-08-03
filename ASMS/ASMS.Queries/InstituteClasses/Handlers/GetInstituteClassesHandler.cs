@@ -20,7 +20,7 @@ namespace ASMS.Queries.InstituteClasses.Handlers
 
         public async Task<BaseApiResponse<PagedList<InstituteClassListDto>>> Handle(GetInstituteClasses request, CancellationToken cancellationToken)
         {
-            return await _instituteClassService.GetAllAsync(request, x => x.Blocks.Any(x => x.ClassStatus == ClassStatus.New), x => x.Include(x => x.Blocks));
+            return await _instituteClassService.GetAllAsync(request, x => x.Blocks.Any(x => x.ClassStatus == ClassStatus.Pending || x.ClassStatus == ClassStatus.Active), x => x.Include(x => x.Blocks));
         }
     }
 }

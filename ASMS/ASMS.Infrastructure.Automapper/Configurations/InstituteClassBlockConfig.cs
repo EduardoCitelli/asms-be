@@ -19,7 +19,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             profile.CreateMap<InstituteClassCreateDto, InstituteClassBlock>()
                    .ForMember(entity => entity.StartDateTime, config => config.MapFrom(SetNotRecurrenceDateQuery()))
                    .AfterMap((dto, entity) => entity.FinishDateTime = entity.StartDateTime.AddMinutes(dto.MinutesDuration))
-                   .AfterMap((dto, entity) => entity.ClassStatus = ClassStatus.New);
+                   .AfterMap((dto, entity) => entity.ClassStatus = ClassStatus.Pending);
 
             profile.CreateMap<InstituteClassUpdateDto, IEnumerable<InstituteClassBlock>>()
                    .ConvertUsing<InstituteClassUpdateDtoToClassBlockConverter>();

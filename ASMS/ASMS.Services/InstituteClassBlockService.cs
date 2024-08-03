@@ -34,9 +34,9 @@ namespace ASMS.Services
             return await _repository.FindExistAsync(query, include);
         }
 
-        public async Task UpdateStatusFromNewToFinished()
+        public async Task UpdateStatusFromActiveToFinished()
         {
-            var response = await _repository.Find(x => x.ClassStatus == ClassStatus.New && x.StartDateTime < DateTime.UtcNow)
+            var response = await _repository.Find(x => x.ClassStatus == ClassStatus.Active && x.StartDateTime < DateTime.UtcNow)
                                             .ToListAsync();
 
             if (response.Any())
@@ -47,6 +47,26 @@ namespace ASMS.Services
                 await _repository.UpdateCollectionAsync(response);
                 await _uow.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<InstituteClassBlock>> GetInactiveClassesToCancel()
+        {
+            return await _repository.Find(x => x.ClassStatus == ClassStatus.Pending && x.StartDateTime < DateTime.UtcNow)
+                                    .ToListAsync();
+        }
+
+        public async Task<bool> UpdateEntityAsync(InstituteClassBlock entity)
+        {
+            await _repository.UpdateAsync(entity);
+            var success = await _uow.SaveChangesAsync() > 0;
+
+            if (!success)
+            {
+                var message = $"Problem while saving institute class block changes";
+                throw new InternalErrorException(message);
+            }
+
+            return success;
         }
 
         public async Task<BaseApiResponse<PagedList<InstituteClassBlockListDto>>> GetAllDtosPaginatedAsync(PagedFilterRequestDto request,
@@ -89,8 +109,8 @@ namespace ASMS.Services
             return await dtos.ToListAsync();
         }
 
-        private async Task<InstituteClassBlock> TryGetExistentEntityAsync(long key,
-                                                                                Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null)
+        public async Task<InstituteClassBlock> TryGetExistentEntityAsync(long key,
+                                                                         Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>>? include = null)
         {
             var existentEntity = await _repository.GetByIdAsync(key, include);
 

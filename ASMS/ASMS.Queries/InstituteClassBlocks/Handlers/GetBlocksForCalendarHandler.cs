@@ -1,4 +1,5 @@
-﻿using ASMS.CrossCutting.Extensions;
+﻿using ASMS.CrossCutting.Enums;
+using ASMS.CrossCutting.Extensions;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.InstituteClassBlocks;
 using ASMS.Infrastructure;
@@ -33,7 +34,8 @@ namespace ASMS.Queries.InstituteClassBlocks.Handlers
         {
             return GetByRoomId(request.RoomId)
                    .And(GetFromDate(request.From))
-                   .And(GetToDate(request.To));
+                   .And(GetToDate(request.To))
+                   .And(GetNotCancelledClasses());
         }
 
         private static Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>> GetInclude()
@@ -49,5 +51,7 @@ namespace ASMS.Queries.InstituteClassBlocks.Handlers
         private static Expression<Func<InstituteClassBlock, bool>> GetFromDate(DateTime from) => x => x.StartDateTime >= from;
 
         private static Expression<Func<InstituteClassBlock, bool>> GetByRoomId(long roomId) => x => x.RoomId == roomId;
+
+        private static Expression<Func<InstituteClassBlock, bool>> GetNotCancelledClasses() => x => x.ClassStatus == ClassStatus.Active || x.ClassStatus == ClassStatus.Pending;
     }
 }
