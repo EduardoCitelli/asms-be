@@ -3,7 +3,7 @@ using ASMS.Domain.Abstractions;
 
 namespace ASMS.Domain.Entities
 {
-    public class InstituteClassBlock : AuditEntity<long>, IIsInstituteEntity
+    public partial class InstituteClassBlock : AuditEntity<long>, IIsInstituteEntity
     {
         public long InstituteId { get; set; }
 

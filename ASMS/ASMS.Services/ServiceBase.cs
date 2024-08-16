@@ -302,5 +302,16 @@ namespace ASMS.Services
         {
             return await _repository.FindExistAsync(expression, include);
         }
+
+        /// <summary>
+        /// Base method to check if entity exist by key array
+        /// </summary>
+        /// <param name="keys">Array of keys</param>
+        /// <returns></returns>
+        protected async Task<bool> ExistBaseAsync(IEnumerable<TKey> keys)
+        {
+            var count = await _repository.GetCountAsync(x => keys.Contains(x.Id));
+            return count == keys.Count();
+        }
     }
 }

@@ -2,7 +2,6 @@
 using ASMS.Domain.Entities;
 using ASMS.DTOs.InstituteMembers;
 using ASMS.DTOs.Shared;
-using AutoMapper;
 using System.Linq.Expressions;
 
 namespace ASMS.Infrastructure.Automapper.Configurations
@@ -44,6 +43,7 @@ namespace ASMS.Infrastructure.Automapper.Configurations
                    .ForMember(dto => dto.RemainingPayment, conf => conf.MapFrom(GetRemainingPaymentQuery()))
                    .ForMember(dto => dto.MembershipPrice, conf => conf.MapFrom(GetMembershipPriceQuery()))
                    .ForMember(dto => dto.NeedToPayMembership, conf => conf.MapFrom(GetNeedToPayQuery()));
+
             #endregion
 
             return profile;
@@ -56,7 +56,11 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
         private static Expression<Func<InstituteMember, decimal?>> GetRemainingPaymentQuery()
         {
-            return entity => entity.Memberships.SingleOrDefault(x => x.IsActiveMembership) == null ? 0 : entity.Memberships.SingleOrDefault(x => x.IsActiveMembership).RemainingPayment;
+            return entity => entity.Memberships.SingleOrDefault(x => x.IsActiveMembership) == null ?
+            0 :
+            entity.Memberships.SingleOrDefault(x => x.IsActiveMembership).NeedToPay ?
+            entity.Memberships.SingleOrDefault(x => x.IsActiveMembership).Membership.Price :
+            entity.Memberships.SingleOrDefault(x => x.IsActiveMembership).RemainingPayment;
         }
 
         private static Expression<Func<InstituteMember, decimal?>> GetMembershipPriceQuery()

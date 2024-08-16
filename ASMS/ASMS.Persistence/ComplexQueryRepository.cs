@@ -74,7 +74,7 @@ namespace ASMS.Persistence
                                             .SingleOrDefaultAsync(query);
             }
 
-            var queryable = orderBy == null ? include(_dbSet.AsQueryable()) 
+            var queryable = orderBy == null ? include(_dbSet.AsQueryable())
                                             : isDesc
                                             ? include(_dbSet.OrderByDescending(orderBy).AsQueryable())
                                             : include(_dbSet.OrderBy(orderBy).AsQueryable());
@@ -90,6 +90,16 @@ namespace ASMS.Persistence
                 response = response.Where(query).AsNoTracking();
 
             return response.Count();
+        }
+
+        public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? query = null)
+        {
+            var response = _dbSet.AsNoTracking();
+
+            if (query != null)
+                response = response.Where(query).AsNoTracking();
+
+            return await response.CountAsync();
         }
     }
 }

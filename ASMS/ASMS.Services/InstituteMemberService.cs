@@ -32,12 +32,32 @@ namespace ASMS.Services
             return await GetOneDtoBaseAsync(id, x => x.Include(x => x.User));
         }
 
+        public async Task<IList<InstituteMember>> GetEntityListAsync(Expression<Func<InstituteMember, bool>>? query = null,
+                                                                     Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null,
+                                                                     Expression<Func<InstituteMember, object>>? orderBy = null,
+                                                                     bool isDesc = false)
+        {
+            var result = query is null ? _repository.GetAll(include, orderBy, isDesc) : _repository.Find(query, include, orderBy, isDesc);
+            return await result.ToListAsync();
+        }
+
+        public async Task<bool> ExistAsync(Expression<Func<InstituteMember, bool>> query,
+                                           Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null)
+        {
+            return await ExistBaseAsync(query, include);
+        }
+
+        public async Task<bool> ExistIdsAsync(IEnumerable<long> ids)
+        {
+            return await ExistBaseAsync(ids);
+        }
+
         public async Task<BaseApiResponse<InstituteMemberSingleDto>> CreateAsync(InstituteMemberCreateDto dto)
         {
             return await CreateBaseAsync(dto);
         }
 
-        public async Task<BaseApiResponse<InstituteMemberSingleDto>> UpdateAsync(InstituteMemberUpdateDto dto, 
+        public async Task<BaseApiResponse<InstituteMemberSingleDto>> UpdateAsync(InstituteMemberUpdateDto dto,
                                                                                  Action<InstituteMemberUpdateDto, InstituteMember>? beforeToSaveAction = null)
         {
             return await UpdateBaseAsync(dto, dto.Id, beforeToSaveAction, x => x.Include(x => x.User));

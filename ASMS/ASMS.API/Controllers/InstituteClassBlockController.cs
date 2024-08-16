@@ -42,5 +42,23 @@ namespace ASMS.API.Controllers
         {
             return await _mediator.Send(new CancelBlock(id));
         }
+
+        [HttpPut("{id}/[action]")]
+        public async Task<BaseApiResponse<bool>> AddMember([FromRoute] long id)
+        {
+            return await _mediator.Send(new AddMember(id));
+        }
+
+        [HttpPut("{id}/[action]")]
+        public async Task<BaseApiResponse<bool>> RemoveMember([FromRoute] long id)
+        {
+            return await _mediator.Send(new RemoveMember(id));
+        }
+
+        [HttpPut("{id}/[action]")]
+        public async Task<BaseApiResponse<bool>> UpdateMembers([FromRoute] long id, [FromBody] IList<long> members)
+        {
+            return await _mediator.Send(new UpdateMembers(id, members));
+        }
     }
 }

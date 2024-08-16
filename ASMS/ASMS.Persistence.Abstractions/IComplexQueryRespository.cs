@@ -24,5 +24,6 @@ namespace ASMS.Persistence.Abstractions
                                   Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
 
         int GetCount(Expression<Func<TEntity, bool>>? query = null);
+        Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? query = null);
     }
 }

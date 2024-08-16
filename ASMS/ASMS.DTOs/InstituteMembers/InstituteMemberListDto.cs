@@ -8,7 +8,7 @@
 
         public string Phone { get; set; } = string.Empty;
 
-        public bool? NeedToPayMembership { get; set; }
+        public bool NeedToPayMembership { get; set; }
 
         public bool HasMembership { get; set; }
 

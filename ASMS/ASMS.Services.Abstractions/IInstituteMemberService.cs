@@ -28,5 +28,11 @@ namespace ASMS.Services.Abstractions
         Task SetActivitiesToInstituteMemberWithoutSaveAsync(long instituteMemberId, IEnumerable<long> activities);
 
         Task<InstituteMember> GetEntityByIdAsync(long key, Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null);
+
+        Task<IList<InstituteMember>> GetEntityListAsync(Expression<Func<InstituteMember, bool>>? query = null, Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null, Expression<Func<InstituteMember, object>>? orderBy = null, bool isDesc = false);
+
+        Task<bool> ExistAsync(Expression<Func<InstituteMember, bool>> query, Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null);
+
+        Task<bool> ExistIdsAsync(IEnumerable<long> ids);
     }
 }
