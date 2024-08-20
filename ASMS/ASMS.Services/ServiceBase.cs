@@ -113,10 +113,13 @@ namespace ASMS.Services
         /// Base method to get all entities as combo values
         /// </summary>
         /// <returns></returns>
-        protected async Task<BaseApiResponse<IEnumerable<ComboDto<TKey>>>> GetForComboBaseAsync()
+        protected async Task<BaseApiResponse<IEnumerable<ComboDto<TKey>>>> GetForComboBaseAsync(Expression<Func<TEntity, bool>>? query = null,
+                                                                                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null)
         {
-            var result = _repository.GetAll();
+            var result = query is null ? _repository.GetAll(include) : _repository.Find(query, include);
+
             var dtos = _mapper.ProjectTo<ComboDto<TKey>>(result);
+
             var response = await dtos.ToListAsync();
 
             return new BaseApiResponse<IEnumerable<ComboDto<TKey>>>(response);
@@ -126,10 +129,13 @@ namespace ASMS.Services
         /// Base method to get all entities as combo values with other type
         /// </summary>
         /// <returns></returns>
-        protected async Task<BaseApiResponse<IEnumerable<TDto>>> GetForComboBaseAsync<TDto>() where TDto : ComboDto<TKey>
+        protected async Task<BaseApiResponse<IEnumerable<TDto>>> GetForComboBaseAsync<TDto>(Expression<Func<TEntity, bool>>? query = null,
+                                                                                            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null) where TDto : ComboDto<TKey>
         {
-            var result = _repository.GetAll();
+            var result = query is null ? _repository.GetAll(include) : _repository.Find(query, include);
+
             var dtos = _mapper.ProjectTo<TDto>(result);
+
             var response = await dtos.ToListAsync();
 
             return new BaseApiResponse<IEnumerable<TDto>>(response);

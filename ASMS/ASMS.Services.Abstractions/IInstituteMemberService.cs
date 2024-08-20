@@ -1,6 +1,7 @@
 ﻿using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.InstituteMembers;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -34,5 +35,7 @@ namespace ASMS.Services.Abstractions
         Task<bool> ExistAsync(Expression<Func<InstituteMember, bool>> query, Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null);
 
         Task<bool> ExistIdsAsync(IEnumerable<long> ids);
+
+        Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetForComboAsync(Expression<Func<InstituteMember, bool>>? query = null, Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null);
     }
 }

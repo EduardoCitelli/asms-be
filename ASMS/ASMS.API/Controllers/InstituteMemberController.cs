@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Enums;
 using ASMS.CrossCutting.Utils;
 using ASMS.DTOs.InstituteMembers;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Queries.InstituteMembers.Requests;
 using MediatR;
@@ -60,6 +61,13 @@ namespace ASMS.API.Controllers
         {
             command.Id = instituteMemberId;
             return await _mediator.Send(command);
+        }
+
+        [HttpGet("combos")]
+        [Authorize(Roles = $"{RoleTypes.SuperAdmin},{RoleTypes.Manager},{RoleTypes.StaffMember}")]
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetCombo([FromQuery] GetInstituteMembersForCombo request)
+        {
+            return await _mediator.Send(request);
         }
     }
 }

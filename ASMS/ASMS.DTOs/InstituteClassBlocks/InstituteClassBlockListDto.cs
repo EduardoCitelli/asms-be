@@ -10,6 +10,8 @@ namespace ASMS.DTOs.InstituteClassBlocks
 
         public string PrincipalCoachName { get; set; } = string.Empty;
 
+        public long ActivityId { get; set; }
+
         public DateTime StartDateTime { get; set; }
 
         public DateTime FinishDateTime { get; set; }

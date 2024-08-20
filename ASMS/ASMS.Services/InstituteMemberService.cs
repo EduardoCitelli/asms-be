@@ -2,6 +2,7 @@
 using ASMS.CrossCutting.Utils;
 using ASMS.Domain.Entities;
 using ASMS.DTOs.InstituteMembers;
+using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
@@ -39,6 +40,12 @@ namespace ASMS.Services
         {
             var result = query is null ? _repository.GetAll(include, orderBy, isDesc) : _repository.Find(query, include, orderBy, isDesc);
             return await result.ToListAsync();
+        }
+
+        public async Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetForComboAsync(Expression<Func<InstituteMember, bool>>? query = null,
+                                                                                         Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null)
+        {
+            return await GetForComboBaseAsync(query, include);
         }
 
         public async Task<bool> ExistAsync(Expression<Func<InstituteMember, bool>> query,

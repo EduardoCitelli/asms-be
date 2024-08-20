@@ -37,6 +37,9 @@ namespace ASMS.Infrastructure.Automapper.Configurations
 
             profile.CreateMap<InstituteMember, PersonalInfoDto>();
 
+            profile.CreateMap<InstituteMember, ComboDto<long>>()
+                   .ForMember(dto => dto.Name, config => config.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"));
+
             profile.CreateMap<InstituteMember, InstituteMemberListDto>()
                    .ForMember(dto => dto.FullName, conf => conf.MapFrom(entity => $"{entity.User.LastName}, {entity.User.FirstName}"))
                    .ForMember(dto => dto.HasMembership, conf => conf.MapFrom(entity => entity.Memberships.Any(x => x.IsActiveMembership)))
