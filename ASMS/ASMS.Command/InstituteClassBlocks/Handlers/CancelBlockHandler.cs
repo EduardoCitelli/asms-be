@@ -25,7 +25,7 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
                                                                                                        .ThenInclude(y => y.Membership)
                                                                                                        .ThenInclude(y => y.MembershipType));
 
-            if (entity.FinishDateTime < DateTime.UtcNow)
+            if (entity.FinishDateTime < DateTime.UtcNow && !request.IsDailyCancel)
                 throw new BadRequestException("You can not cancel an older class");
 
             var membersToRemove = entity.InstituteMembers.Select(x => x.InstituteMember);

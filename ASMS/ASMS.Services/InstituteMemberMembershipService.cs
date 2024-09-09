@@ -56,7 +56,7 @@ namespace ASMS.Services
 
             entities.ForEach(x => x.IsActiveMembership = false);
 
-            await _repository.UpdateCollectionAsync(entities);
+            await _repository.UpdateAsync(entities);
         }
 
         public async Task UpdateWithoutSaveAsync(InstituteMemberMembership entity)

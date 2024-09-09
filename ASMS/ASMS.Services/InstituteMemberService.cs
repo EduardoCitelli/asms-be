@@ -15,7 +15,9 @@ namespace ASMS.Services
 {
     public class InstituteMemberService : ServiceBase<InstituteMember, long, InstituteMemberSingleDto, InstituteMemberListDto>, IInstituteMemberService
     {
-        public InstituteMemberService(IUnitOfWork uow, IMapper mapper, IInstituteIdService instituteIdService)
+        public InstituteMemberService(IUnitOfWork uow, 
+                                      IMapper mapper, 
+                                      IInstituteIdService instituteIdService)
             : base(uow, nameof(InstituteMember), mapper, instituteIdService)
         {
         }

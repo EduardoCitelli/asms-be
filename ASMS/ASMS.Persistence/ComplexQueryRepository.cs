@@ -18,13 +18,13 @@ namespace ASMS.Persistence
                                           Expression<Func<TEntity, object>>? orderBy = null,
                                           bool isDesc = false)
         {
-            var response = _dbSet.AsQueryable().AsNoTracking();
+            var response = _dbSet.AsQueryable();
 
             if (include != null)
                 response = include(response);
 
             if (orderBy != null)
-                response = isDesc ? response.OrderByDescending(orderBy).AsNoTracking() : response.OrderBy(orderBy).AsNoTracking();
+                response = isDesc ? response.OrderByDescending(orderBy) : response.OrderBy(orderBy);
 
             return response;
         }
@@ -34,13 +34,13 @@ namespace ASMS.Persistence
                                         Expression<Func<TEntity, object>>? orderBy = null,
                                         bool isDesc = false)
         {
-            var response = _dbSet.Where(query).AsNoTracking();
+            var response = _dbSet.Where(query);
 
             if (include != null)
                 response = include(response);
 
             if (orderBy != null)
-                response = isDesc ? response.OrderByDescending(orderBy).AsNoTracking() : response.OrderBy(orderBy).AsNoTracking();
+                response = isDesc ? response.OrderByDescending(orderBy) : response.OrderBy(orderBy);
 
             return response;
         }
@@ -94,10 +94,10 @@ namespace ASMS.Persistence
 
         public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? query = null)
         {
-            var response = _dbSet.AsNoTracking();
+            var response = _dbSet.AsQueryable();
 
             if (query != null)
-                response = response.Where(query).AsNoTracking();
+                response = response.Where(query);
 
             return await response.CountAsync();
         }

@@ -11,14 +11,12 @@ namespace ASMS.Persistence.Configurations
             builder.HasOne(x => x.InstituteMember)
                    .WithMany(x => x.Classes)
                    .HasForeignKey(x => x.InstituteMemberId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(x => x.ClassTaked)
                    .WithMany(x => x.InstituteMembers)
                    .HasForeignKey(x => x.InstituteClassBlockId)
-                   .OnDelete(DeleteBehavior.ClientCascade);
-
-            builder.HasAlternateKey(x => new { x.InstituteMemberId, x.InstituteClassBlockId });
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

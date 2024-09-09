@@ -24,7 +24,7 @@ namespace ASMS.Services.Schedules
             var blocks = await _instituteClassBlockService.GetInactiveClassesToCancel();
 
             foreach (var block in blocks)
-                await _mediator.Send(new CancelBlock(block.Id));
+                await _mediator.Send(new CancelBlock(block.Id, true));
         }
     }
 }

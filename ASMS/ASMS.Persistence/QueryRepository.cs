@@ -1,16 +1,14 @@
 ﻿using ASMS.Domain;
-using ASMS.Domain.Entities;
 using ASMS.Persistence.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
 
 namespace ASMS.Persistence
 {
     public abstract class QueryRepository<TEntity, TKey>
         : CommandRepository<TEntity>, IQueryRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
-        protected QueryRepository(ASMSDbContext dbContext) 
+        protected QueryRepository(ASMSDbContext dbContext)
             : base(dbContext)
         {
         }
@@ -27,10 +25,7 @@ namespace ASMS.Persistence
 
             var response = include is null ?
                 await _dbSet.FindAsync(id) :
-                await  include(_dbSet.AsNoTracking()).SingleOrDefaultAsync(x => x.Id!.Equals(id));
-
-            if (response != null)
-                _dbContext.Entry(response).State = EntityState.Detached;
+                await include(_dbSet).SingleOrDefaultAsync(x => x.Id!.Equals(id));
 
             return response;
         }

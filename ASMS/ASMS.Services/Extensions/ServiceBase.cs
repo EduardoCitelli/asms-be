@@ -21,5 +21,43 @@ namespace ASMS.Services
                 throw new NotFoundException(message);
             }
         }
+
+        public async Task UpdateEntity(TEntity entity,
+                                       IEnumerable<object>? entitesToDetach = null)
+        {
+            if (entitesToDetach != null && entitesToDetach.Any())
+                _repository.DetachEntity(entitesToDetach);
+
+            await _repository.UpdateAsync(entity);
+        }
+
+        public async Task UpdateEntityAsync(IEnumerable<TEntity> entity,
+                                            IEnumerable<object>? entitesToDetach = null)
+        {
+            if (entitesToDetach != null && entitesToDetach.Any())
+                _repository.DetachEntity(entitesToDetach);
+
+            await _repository.UpdateAsync(entity);
+        }
+
+        public async Task AddEntityAsync(TEntity entity)
+        {
+            await _repository.AddAsync(entity);
+        }
+
+        public async Task AddEntityAsync(IEnumerable<TEntity> entity)
+        {
+            await _repository.AddAsync(entity);
+        }
+
+        public async Task DeleteEntityAsync(TEntity entity)
+        {
+            await _repository.DeleteAsync(entity);
+        }
+
+        public async Task DeleteEntityAsync(IEnumerable<TEntity> entity)
+        {
+            await _repository.DeleteAsync(entity);
+        }
     }
 }

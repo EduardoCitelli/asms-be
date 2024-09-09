@@ -46,7 +46,12 @@ namespace ASMS.Persistence
                     entity.SetQueryFilter((LambdaExpression)filter);
                 }
             }
+        }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         private static LambdaExpression GetInsituteIdFilter<TEntity>(ASMSDbContext context) where TEntity : class, IIsInstituteEntity

@@ -2,5 +2,7 @@
 {
     public class InstituteClassBlockCalendarDto : InstituteClassBlockListDto
     {
-    }
-}
+        public IEnumerable<long> MemberIds { get; set; } = new List<long>();
+
+        public int RoomCapacity { get; set; }
+    }}

@@ -37,5 +37,7 @@ namespace ASMS.Services.Abstractions
         Task<bool> ExistIdsAsync(IEnumerable<long> ids);
 
         Task<BaseApiResponse<IEnumerable<ComboDto<long>>>> GetForComboAsync(Expression<Func<InstituteMember, bool>>? query = null, Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null);
+
+        Task UpdateEntityAsync(IEnumerable<InstituteMember> members, IEnumerable<object>? entitiesToDetach = null);
     }
 }

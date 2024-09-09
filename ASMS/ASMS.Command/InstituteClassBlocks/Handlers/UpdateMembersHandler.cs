@@ -31,11 +31,11 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
 
             var existentMemberIds = entity.InstituteMembers.Select(x => x.InstituteMemberId);
 
-            ReturnClassForMembersToBeRemoved(request.MembersId, entity, existentMemberIds);
+            var toDeleteMembers = await ReturnClassForMembersToBeRemoved(request.MembersId, entity, existentMemberIds);
 
-            await HandleNewMembersToAddInClass(request.MembersId, entity, existentMemberIds);
+            var toAddMembers = await HandleNewMembersToAddInClass(request.MembersId, entity, existentMemberIds);
 
-            SetMembersIntoClassAndUpdateStatus(request, entity);
+            SetMembersIntoClassAndUpdateStatus(request, entity, toDeleteMembers, toAddMembers);
 
             var response = await _instituteClassBlockService.UpdateEntityAsync(entity);
 
@@ -56,20 +56,22 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
                 throw new BadRequestException("Some of the institute members you're trying to assign don't exist");
         }
 
-        private static void ReturnClassForMembersToBeRemoved(IEnumerable<long> newMembersId, InstituteClassBlock entity, IEnumerable<long> existentMemberIds)
+        private async Task<IEnumerable<InstituteMember>> ReturnClassForMembersToBeRemoved(IEnumerable<long> newMembersId, InstituteClassBlock entity, IEnumerable<long> existentMemberIds)
         {
             var toRemoveMemberIds = existentMemberIds.Except(newMembersId);
 
-            var toReturnClassMembers = entity.InstituteMembers.Where(x => toRemoveMemberIds.Contains(x.InstituteMemberId) &&
-                                                                          x.InstituteMember.ActiveMembership != null &&
-                                                                          x.InstituteMember.ActiveMembership.Membership.MembershipType.IsByQuantity)
-                                                              .Select(x => x.InstituteMember);
+            var toReturnClassMembers = await _instituteMemberService.GetEntityListAsync(x => toRemoveMemberIds.Contains(x.Id) &&
+                                                                                             x.Memberships.SingleOrDefault(x => x.IsActiveMembership) != null &&
+                                                                                             x.Memberships.SingleOrDefault(x => x.IsActiveMembership)!.Membership.MembershipType.IsByQuantity,
+                                                                                             GetIncludeForInstituteMembersToRemove());
 
             foreach (var member in toReturnClassMembers)
                 member.ActiveMembership!.RemainingClasses++;
+
+            return toReturnClassMembers.ToList();
         }
 
-        private async Task HandleNewMembersToAddInClass(IEnumerable<long> newMembersId, InstituteClassBlock entity, IEnumerable<long> existentMemberIds)
+        private async Task<IEnumerable<InstituteMember>> HandleNewMembersToAddInClass(IEnumerable<long> newMembersId, InstituteClassBlock entity, IEnumerable<long> existentMemberIds)
         {
             var toAddMemberIds = newMembersId.Except(existentMemberIds);
 
@@ -82,6 +84,8 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
             ValidateUsersWithNoPremiumMembership(entity, toAddInClass);
 
             DiscountClassForMembersWithByQuantityMembership(toAddInClass);
+
+            return toAddInClass;
         }
 
         private static void ValidateDisabledMembers(IList<InstituteMember> toAddInClass)
@@ -109,7 +113,7 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
         private static void ValidateUsersWithNoPremiumMembership(InstituteClassBlock entity, IList<InstituteMember> toAddInClass)
         {
             var notPremiumUsers = toAddInClass.Where(x => !x.ActiveMembership!.Membership.IsPremium &&
-                                                          !x.AllowedActivities.Select(x => x.Id).Contains(entity.ActivityId));
+                                                          !x.AllowedActivities.Select(x => x.ActivityId).Contains(entity.ActivityId));
 
             if (notPremiumUsers.Any())
             {
@@ -129,15 +133,35 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
             }
         }
 
-        private static void SetMembersIntoClassAndUpdateStatus(UpdateMembers request, InstituteClassBlock entity)
+        private static void SetMembersIntoClassAndUpdateStatus(UpdateMembers request, 
+                                                               InstituteClassBlock entity,
+                                                               IEnumerable<InstituteMember> toRemoveMembers,
+                                                               IEnumerable<InstituteMember> toAddMembers)
         {
-            entity.InstituteMembers.Clear();
-            entity.InstituteMembers = request.MembersId.Select(x => new InstituteMemberInstituteClassBlock()
+            if (toRemoveMembers.Any())
             {
-                InstituteMemberId = x,
-            }).ToList();
+                foreach (var member in toRemoveMembers)
+                {
+                    var instituteMember = entity.InstituteMembers.SingleOrDefault(x => x.InstituteMemberId == member.Id);
 
-            entity.ClassStatus = entity.InstituteMembers.Count < entity.Activity.MemberMinQuantity ? ClassStatus.Pending : ClassStatus.Active;
+                    if (instituteMember != null)
+                        entity.InstituteMembers.Remove(instituteMember);
+                }
+            }
+
+            if (toAddMembers.Any())
+            {
+                foreach (var member in toAddMembers)
+                {
+                    entity.InstituteMembers.Add(new InstituteMemberInstituteClassBlock
+                    {
+                        InstituteMemberId = member.Id,
+                        InstituteMember = member,
+                    });
+                }
+            }
+
+            entity.ClassStatus = entity.InstituteMembers.Count < entity.Header.Activity.MemberMinQuantity ? ClassStatus.Pending : ClassStatus.Active;
         }
 
         private static Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>> GetIncludeForInstituteMembers()
@@ -147,18 +171,23 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
                          .ThenInclude(x => x.Membership)
                          .ThenInclude(x => x.MembershipType)
                          .Include(x => x.Memberships)
-                         .ThenInclude(x => x.Payments);
+                         .ThenInclude(x => x.Payments)
+                         .Include(x => x.User);
+        }
+
+        private static Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>> GetIncludeForInstituteMembersToRemove()
+        {
+            return x => x.Include(x => x.Memberships)
+                         .ThenInclude(x => x.Membership)
+                         .ThenInclude(x => x.MembershipType);
         }
 
         private static Func<IQueryable<InstituteClassBlock>, IIncludableQueryable<InstituteClassBlock, object?>> GetIncludeQuery()
         {
             return x => x.Include(x => x.Header)
+                         .ThenInclude(x => x.Activity)
                          .Include(x => x.Room)
-                         .Include(x => x.InstituteMembers)
-                         .ThenInclude(x => x.InstituteMember)
-                         .ThenInclude(x => x.Memberships)
-                         .ThenInclude(x => x.Membership)
-                         .ThenInclude(x => x.MembershipType);
+                         .Include(x => x.InstituteMembers);
         }
     }
 }

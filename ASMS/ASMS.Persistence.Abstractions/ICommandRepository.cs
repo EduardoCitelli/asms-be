@@ -8,10 +8,13 @@
 
         Task DeleteAsync(TEntity entity);
 
-        Task AddCollectionAsync(IEnumerable<TEntity> entities);
+        Task AddAsync(IEnumerable<TEntity> entities);
 
-        Task UpdateCollectionAsync(IEnumerable<TEntity> entities);
+        Task UpdateAsync(IEnumerable<TEntity> entities);
 
-        Task DeleteCollectionAsync(IEnumerable<TEntity> entities);
+        Task DeleteAsync(IEnumerable<TEntity> entities);
+        void DetachEntity<TCommonEntity>(TCommonEntity entity) where TCommonEntity : class;
+
+        void DetachEntity<TCommonEntity>(IEnumerable<TCommonEntity> entities) where TCommonEntity : class;
     }
 }

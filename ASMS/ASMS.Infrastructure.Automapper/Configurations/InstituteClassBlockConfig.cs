@@ -50,7 +50,9 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             profile.CreateMap<InstituteClassBlock, InstituteClassBlockCalendarDto>()
                    .ForMember(dto => dto.PrincipalCoachName, config => config.MapFrom(entity => $"{entity.PrincipalCoach.User.LastName}, {entity.PrincipalCoach.User.FirstName}"))
                    .ForMember(dto => dto.ActivityId, config => config.MapFrom(entity => entity.Header.ActivityId))
-                   .ForMember(dto => dto.Description, config => config.MapFrom(entity => entity.Header.Description));
+                   .ForMember(dto => dto.Description, config => config.MapFrom(entity => entity.Header.Description))
+                   .ForMember(dto => dto.MemberIds, config => config.MapFrom(entity => entity.InstituteMembers.Select(x => x.InstituteMemberId)))
+                   .ForMember(dto => dto.RoomCapacity, config => config.MapFrom(entity => entity.Room.MembersCapacity));
             #endregion
 
             return profile;

@@ -44,7 +44,7 @@ namespace ASMS.Services
                 foreach (var block in response)
                     block.ClassStatus = ClassStatus.Finished;
 
-                await _repository.UpdateCollectionAsync(response);
+                await _repository.UpdateAsync(response);
                 await _uow.SaveChangesAsync();
             }
         }
