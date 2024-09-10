@@ -44,6 +44,9 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
 
         private async Task BasicValidation(UpdateMembers request, InstituteClassBlock entity)
         {
+            if (entity.StartDateTime <= DateTime.UtcNow)
+                throw new BadRequestException("You cannot update members from a class that it's already finished");
+
             if (notActiveStatus.Contains(entity.ClassStatus))
                 throw new BadRequestException("You cannot add members to an inactive class");
 
@@ -133,7 +136,7 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
             }
         }
 
-        private static void SetMembersIntoClassAndUpdateStatus(UpdateMembers request, 
+        private static void SetMembersIntoClassAndUpdateStatus(UpdateMembers request,
                                                                InstituteClassBlock entity,
                                                                IEnumerable<InstituteMember> toRemoveMembers,
                                                                IEnumerable<InstituteMember> toAddMembers)

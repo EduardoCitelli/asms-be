@@ -40,8 +40,7 @@ namespace ASMS.Command.InstituteMemberMemberships.Handlers
             {
                 x.ExpirationDate = x.StartDate.AddMonths(membership.MembershipType.MonthQuantity);
 
-                if (membership.MembershipType.IsByQuantity)
-                    x.RemainingClasses = membership.MembershipType.ClassQuantity;
+                x.RemainingClasses = membership.MembershipType.IsByQuantity ? membership.MembershipType.ClassQuantity : null;
             });
         }
 
