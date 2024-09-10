@@ -1,10 +1,12 @@
-﻿using ASMS.Domain.Entities;
+﻿using ASMS.CrossCutting.Services.Abstractions;
+using ASMS.Domain.Entities;
 using ASMS.DTOs.InstitutePlan;
 using ASMS.Infrastructure;
 using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace ASMS.Services
 {
@@ -13,12 +15,16 @@ namespace ASMS.Services
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         private readonly IRepository<InstitutePlan, long> _repository;
+        private readonly IInstituteIdService _instituteIdService;
 
-        public InstitutePlanService(IUnitOfWork unitOfWork, IMapper mapper)
+        public InstitutePlanService(IUnitOfWork unitOfWork,
+                                    IMapper mapper,
+                                    IInstituteIdService instituteIdService)
         {
             _uow = unitOfWork;
             _mapper = mapper;
             _repository = _uow.GetRepository<InstitutePlan, long>();
+            _instituteIdService = instituteIdService;
         }
 
         public async Task<BaseApiResponse<bool>> SetNewPlanToInstituteAsync(InstitutePlanCreateDto request)
@@ -38,6 +44,13 @@ namespace ASMS.Services
             var message = $"Problem while saving instute plan changes";
 
             throw new InternalErrorException(message);
+        }
+
+        public async Task<InstitutePlan> GetActivePlan(Func<IQueryable<InstitutePlan>, IIncludableQueryable<InstitutePlan, object>>? include = null)
+        {
+            var plan = await _repository.FindSingleAsync(x => x.IsCurrentPlan && x.InstituteId == _instituteIdService.InstituteId, include);
+
+            return plan ?? throw new BadRequestException("The institute doesn't have an active plan");
         }
 
         private async Task GetAndFinishOldPlan(InstitutePlanCreateDto request)

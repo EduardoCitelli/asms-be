@@ -70,5 +70,28 @@ namespace ASMS.Services
             var message = $"Problem while saving {_entityName} changes";
             throw new InternalErrorException(message);
         }
+
+        public async Task ValidateCanAddMembers()
+        {
+            var institute = await TryGetExistentEntityBaseAsync(_instituteIdService.InstituteId, InstituteInclude());
+
+            if (!institute.IsEnabled)
+                throw new BadRequestException("The institute is disabled");
+
+            var activePlan = institute.InstitutePlans.FirstOrDefault(x => x.IsCurrentPlan);
+
+            if (activePlan == null)
+                throw new BadRequestException("The institue doesn't have an active plan");
+
+            if (activePlan.Plan.AllowedUsers <= institute.InstituteMembers.Where(x => x.IsEnabled).Count())
+                throw new BadRequestException("Institute members limit exceed");
+        }
+
+        private static Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>> InstituteInclude()
+        {
+            return x => x.Include(x => x.InstitutePlans)
+                         .ThenInclude(x => x.Plan)
+                         .Include(x => x.InstituteMembers);
+        }
     }
 }

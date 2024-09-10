@@ -26,5 +26,9 @@ namespace ASMS.Services.Abstractions
                                                                         Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null);
 
         Task<BaseApiResponse<bool>> SetDisableInstitute(long instituteId, Action<Institute> businessLogic);
+
+        Task<Institute> GetEntityByIdAsync(long id, Func<IQueryable<Institute>, IIncludableQueryable<Institute, object>>? include = null);
+
+        Task ValidateCanAddMembers();
     }
 }
