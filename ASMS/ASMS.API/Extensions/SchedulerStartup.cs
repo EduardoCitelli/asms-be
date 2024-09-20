@@ -16,7 +16,7 @@ namespace ASMS.API.Extensions
             app.Services.UseScheduler(scheduler =>
             {
                 scheduler.Schedule<UpdateClassesStatusDaily>()
-                .DailyAt(00, 00);
+                         .HourlyAt(00);
             });
 
             return app;
