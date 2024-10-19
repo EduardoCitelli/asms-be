@@ -13,10 +13,16 @@ namespace ASMS.Infrastructure.Automapper.Configurations
             #endregion
 
             #region Map from entity
-            profile.CreateMap<Payment, PaymentSingleDto>();
+            profile.CreateMap<Payment, PaymentSingleDto>()
+                   .ForMember(dto => dto.PayBy, config => config.MapFrom(entity => $"{entity.MembershipPayment.InstituteMember.User.LastName}, {entity.MembershipPayment.InstituteMember.User.FirstName}"))
+                   .ForMember(dto => dto.MembershipName, config => config.MapFrom(entity => entity.MembershipPayment.Membership.Name))
+                   .ForMember(dto => dto.MembershipTypeName, config => config.MapFrom(entity => entity.MembershipPayment.Membership.MembershipType.Name));
+
             profile.CreateMap<Payment, PaymentDto>()
                    .ReverseMap();
-            profile.CreateMap<Payment, PaymentListDto>();
+
+            profile.CreateMap<Payment, PaymentListDto>()
+                   .ForMember(dto => dto.PayBy, config => config.MapFrom(entity => $"{entity.MembershipPayment.InstituteMember.User.LastName}, {entity.MembershipPayment.InstituteMember.User.FirstName}"));
             #endregion
 
             return profile;

@@ -3,6 +3,8 @@ using ASMS.CrossCutting.Services.Abstractions;
 using ASMS.CrossCutting.Utils;
 using ASMS.Domain;
 using ASMS.Domain.Abstractions;
+using ASMS.Domain.Entities;
+using ASMS.DTOs.InstituteClassBlocks;
 using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
 using ASMS.Infrastructure.Exceptions;
@@ -71,18 +73,21 @@ namespace ASMS.Services
         }
 
         /// <summary>
-        /// Base method to get all entities paginated as dtos with filters
+        /// Base method to get all entities paginated as dtos with filters and order by
         /// </summary>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
+        /// <param name="request"></param>
         /// <param name="query"></param>
         /// <param name="include"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="isDesc"></param>
         /// <returns></returns>
         protected async Task<BaseApiResponse<PagedList<TListDto>>> GetAllDtosPaginatedBaseAsync(PagedFilterRequestDto request,
                                                                                                 Expression<Func<TEntity, bool>>? query = null,
-                                                                                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null)
+                                                                                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null, 
+                                                                                                Expression<Func<TEntity, object>>? orderBy = null,
+                                                                                                bool isDesc = false)
         {
-            var result = query is null ? _repository.GetAll(include, null) : _repository.Find(query, include, null);
+            var result = query is null ? _repository.GetAll(include, orderBy, isDesc) : _repository.Find(query, include, orderBy, isDesc);
 
             if (request.RootFilter != null)
                 result = result.ApplyFilter(request.RootFilter);
