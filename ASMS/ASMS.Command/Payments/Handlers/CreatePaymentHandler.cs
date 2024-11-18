@@ -28,16 +28,21 @@ namespace ASMS.Command.Payments.Handlers
         {
             await _instituteMemberService.ValidateExistingAsync(request.InstituteMemberId);
 
-            var instituteMemberMembership = await _instituteMemberMembershipService.GetEntityActiveByInstituteMemberAsync(request.InstituteMemberId,
-                                                                                                                          x => x.Include(x => x.Payments)
-                                                                                                                                .Include(x => x.Membership)
-                                                                                                                                .ThenInclude(x => x.MembershipType));
+            var instituteMemberMembership = await GetMemberActiveMembership(request);
 
             var membership = ValidateAsync(request, instituteMemberMembership);
 
             await UpdateMembershipForFullPayment(request, instituteMemberMembership, membership);
 
             return await _service.CreateAsync(request, SetInstituteMemberMembershipId(instituteMemberMembership.Id));
+        }
+
+        private async Task<InstituteMemberMembership> GetMemberActiveMembership(CreatePayment request)
+        {
+            return await _instituteMemberMembershipService.GetEntityActiveByInstituteMemberAsync(request.InstituteMemberId,
+                                                                                                 x => x.Include(x => x.Payments)
+                                                                                                       .Include(x => x.Membership)
+                                                                                                       .ThenInclude(x => x.MembershipType));
         }
 
         private static Membership ValidateAsync(CreatePayment request, InstituteMemberMembership instituteMemberMembership)

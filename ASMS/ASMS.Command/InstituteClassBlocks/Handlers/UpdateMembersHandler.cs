@@ -35,7 +35,7 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
 
             var toAddMembers = await HandleNewMembersToAddInClass(request.MembersId, entity, existentMemberIds);
 
-            SetMembersIntoClassAndUpdateStatus(request, entity, toDeleteMembers, toAddMembers);
+            SetMembersIntoClassAndUpdateStatus(entity, toDeleteMembers, toAddMembers);
 
             var response = await _instituteClassBlockService.UpdateEntityAsync(entity);
 
@@ -136,8 +136,7 @@ namespace ASMS.Command.InstituteClassBlocks.Handlers
             }
         }
 
-        private static void SetMembersIntoClassAndUpdateStatus(UpdateMembers request,
-                                                               InstituteClassBlock entity,
+        private static void SetMembersIntoClassAndUpdateStatus(InstituteClassBlock entity,
                                                                IEnumerable<InstituteMember> toRemoveMembers,
                                                                IEnumerable<InstituteMember> toAddMembers)
         {

@@ -33,12 +33,17 @@ namespace ASMS.Command.InstituteMemberMemberships.Handlers
 
             await SetActivitiesToInstituteMember(request, membership);
 
-            return await _service.CreateAsync(request, x =>
+            return await _service.CreateAsync(request, entity =>
             {
-                x.ExpirationDate = x.StartDate.AddMonths(membership.MembershipType.MonthQuantity);
-
-                x.RemainingClasses = membership.MembershipType.IsByQuantity ? membership.MembershipType.ClassQuantity : null;
+                HandleExpirationMembership(entity, membership);
             });
+        }
+
+        private static void HandleExpirationMembership(InstituteMemberMembership entity, Membership membership)
+        {
+            entity.ExpirationDate = entity.StartDate.AddMonths(membership.MembershipType.MonthQuantity);
+
+            entity.RemainingClasses = membership.MembershipType.IsByQuantity ? membership.MembershipType.ClassQuantity : null;
         }
 
         private async Task RunValidations(AssignMembershipCommand request, Membership membership)

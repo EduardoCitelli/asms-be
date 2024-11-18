@@ -24,11 +24,11 @@ namespace ASMS.Command.Institutes.Handlers
             await _userService.ValidateExistentInfo(request.User.UserName, request.User.Email);
             var errors = await ValidateInstitute(request);
 
-            request.User.Password = request.User.Password.ToHash();
-            request.User.Email = request.User.Email.ToLower();
-
             if (errors.Any())
                 throw new BadRequestException(errors);
+
+            request.User.Password = request.User.Password.ToHash();
+            request.User.Email = request.User.Email.ToLower();
 
             var response = await _instituteService.Create(request);
 
