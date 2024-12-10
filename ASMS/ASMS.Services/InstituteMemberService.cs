@@ -4,6 +4,7 @@ using ASMS.Domain.Entities;
 using ASMS.DTOs.InstituteMembers;
 using ASMS.DTOs.Shared;
 using ASMS.Infrastructure;
+using ASMS.Infrastructure.Exceptions;
 using ASMS.Persistence.Abstractions;
 using ASMS.Services.Abstractions;
 using AutoMapper;
@@ -15,8 +16,8 @@ namespace ASMS.Services
 {
     public class InstituteMemberService : ServiceBase<InstituteMember, long, InstituteMemberSingleDto, InstituteMemberListDto>, IInstituteMemberService
     {
-        public InstituteMemberService(IUnitOfWork uow, 
-                                      IMapper mapper, 
+        public InstituteMemberService(IUnitOfWork uow,
+                                      IMapper mapper,
                                       IInstituteIdService instituteIdService)
             : base(uow, nameof(InstituteMember), mapper, instituteIdService)
         {
@@ -94,6 +95,18 @@ namespace ASMS.Services
             }).ToList();
 
             await _repository.UpdateAsync(entity);
+        }
+
+        public async Task<InstituteMember> GetEntityByUserId(long userId,
+                                                             Func<IQueryable<InstituteMember>, IIncludableQueryable<InstituteMember, object>>? include = null)
+        {
+            var entity = await _repository.FindSingleAsync(x => x.UserId == userId, include);
+
+            if (entity != null)
+                return entity;
+
+            var message = $"User for institute member does not exist";
+            throw new NotFoundException(message);
         }
     }
 }
